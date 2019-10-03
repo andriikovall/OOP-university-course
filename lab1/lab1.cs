@@ -8,10 +8,7 @@ namespace lab1
     {
         static void Main(string[] args)
         {
-            // XmlTextWriter textWriter = new XmlTextWriter("data.xml", null);  
-            // textWriter.Formatting = System.Xml.Formatting.Indented;   
-            // textWriter.Close();
-            
+               
         }
     }
 }

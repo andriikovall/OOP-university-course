@@ -1,22 +1,28 @@
 using System;
 
-namespace Account {
+namespace AccountNameSpace {
     class Account {
         public readonly long id;
         public readonly string currency;
-        private long amount;
-        public void IncreaseAmount(long value) => this.amount += value;
+        public readonly long nextId;
+        private long moneyAmount;
+        public void IncreaseAmount(long value) => this.moneyAmount += value;
         public void DecreaseAmount(long value) {
-            if (value > amount) {
+            if (value > moneyAmount) {
                 Console.WriteLine("Unable to procces transaction");
-                Console.WriteLine("Not enough credits amount");
+                Console.WriteLine("Not enough credits moneyAmount");
                 return;
             }
-            amount -= value;
+            moneyAmount -= value;
         }
 
-        private void showAmount() {
-            Console.WriteLine($"{id} {amount} {currency}");
+        public Account(long moneyAmount, string currency) {
+            this.moneyAmount = moneyAmount;
+            this.currency = currency;
+        }
+
+        public void ShowAmount() {
+            Console.WriteLine($"{id} {moneyAmount} {currency}");
         }
     }
 }
