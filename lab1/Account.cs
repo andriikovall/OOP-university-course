@@ -10,7 +10,7 @@ namespace AccountNameSpace {
         public void DecreaseAmount(long value) {
             if (value > moneyAmount) {
                 Console.WriteLine("Unable to procces transaction");
-                Console.WriteLine("Not enough credits moneyAmount");
+                Console.WriteLine($"Not enough credits {moneyAmount}");
                 return;
             }
             moneyAmount -= value;
