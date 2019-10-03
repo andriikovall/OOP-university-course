@@ -3,10 +3,14 @@ using System;
 namespace Human {
     // basic user with no rights
     class User {
+        //public
         public readonly long id;
         public readonly string firstName;
         public readonly string lastName;
         public static long nextId;
+        //private
+        private string login;
+        private string password;
 
 
         static User() {
@@ -17,12 +21,19 @@ namespace Human {
             this.firstName = "";
             this.lastName = "";
         }
+
+        public User(string firstName, string lastName) {
+            this.id = nextId++;
+            this.firstName = firstName;
+            this.lastName = lastName;
+        }
         public User(long id, string firstName = "", string lastName = "") {
             if (id < nextId) {
                 Console.WriteLine($"Unable to create user with id {id}");
                 Console.WriteLine($"Assigning id value {nextId}");
                 id = nextId;
             }
+
             this.id = id;
             long newNextId = id + 1;
             nextId = newNextId;
@@ -37,5 +48,4 @@ namespace Human {
             Console.WriteLine($"{this.id} - '{this.fullName}'");
         }
     }
-
 }

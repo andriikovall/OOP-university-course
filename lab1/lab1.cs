@@ -1,4 +1,6 @@
 ﻿using System;
+using Human;
+using System.Xml;
 
 namespace lab1
 {
@@ -6,7 +8,10 @@ namespace lab1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello world");
+            // XmlTextWriter textWriter = new XmlTextWriter("data.xml", null);  
+            // textWriter.Formatting = System.Xml.Formatting.Indented;   
+            // textWriter.Close();
+            
         }
     }
 }

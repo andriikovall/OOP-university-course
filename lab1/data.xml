@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<Student>
+  <r:RECORD xmlns:r="urn:record">
+    <Name>Student</Name>
+    <Address>Colony</Address>
+    <Char>arc</Char>
+  </r:RECORD>
+</Student>
