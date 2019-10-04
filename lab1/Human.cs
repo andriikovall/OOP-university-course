@@ -1,19 +1,19 @@
 using System;
-using AccountNameSpace;
 using System.Collections.Generic;
 using Utils;
+using Bank;
 
 namespace Human {
     // basic user with no rights
     class User {
-        //public
+
         public readonly long id;
         public readonly string firstName;
         public readonly string lastName;
-        public static long nextId;
-        //private
+
         protected string login;
         protected string password;
+        protected static long nextId;
 
 
         public User CreateUser() {
@@ -22,10 +22,8 @@ namespace Human {
             string login = ConsoleInput.GetInputOnText("Enter login");
             string password = "";
             do {
-                Console.WriteLine("Enter password");
-                password = ConsoleInput.GetHiddenConsoleInput();
-                Console.WriteLine("Enter password again");
-                string passwordToCheck = ConsoleInput.GetHiddenConsoleInput();
+                password = ConsoleInput.GetHiddenConsoleInput("Enter password");
+                string passwordToCheck = ConsoleInput.GetHiddenConsoleInput("Enter password again");
                 if (passwordToCheck != password) {
                     Console.WriteLine("Error: passwords differ");
                     continue;
@@ -35,13 +33,9 @@ namespace Human {
             return new User(firstName, lastName, login, password);
         }
         static User() {
-            nextId = 1;
+            nextId = 0;
         }
         
-        public User(string firstName, string lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
         protected User(string firstName, string lastName, string login, string password) {
             this.id = nextId++;
             this.firstName = firstName;
@@ -73,17 +67,16 @@ namespace Human {
     }
 
     class BankClient: User {
-        private List<Account> accounts; 
+        private List<int> accountsIds; //agregation
         //@todo add acc
         private string secretQuestion;
         private string secretAnswer;
 
-        public override void ShowInfo() {
+        public new void ShowInfo() { //to let noone read client info
             base.ShowInfo();
-            foreach (var acc in accounts)
+            foreach (var accId in accountsIds)
             {   
-                Console.Write($"{acc.id}");
-                acc.ShowAmount();
+                Bank.BankSystem.GetAccountById(accId).ShowAmount();
             }
         }
 
@@ -92,13 +85,40 @@ namespace Human {
                            string login,
                            string password,
                            string secretQuestion,
-                           string secretAnswer) : base(firstName, lastName, login, password) {}
+                           string secretAnswer) : base(firstName, lastName, login, password) {
+                               this.secretAnswer   = secretAnswer;
+                               this.secretQuestion = secretQuestion;
+                           }
+
 
         public BankClient CreateBankClient() {
             BankClient clinet = (BankClient)base.CreateUser();
-            this.secretQuestion = ConsoleInput.GetInputOnText("Enter secret question");
-            this.secretAnswer   = ConsoleInput.GetInputOnText("Enter secret answer");
-            return new BankClient(secretQuestion, secretAnswer, clinet.firstName, clinet.lastName, clinet.login, clinet.password);
+            string secretQuestion = ConsoleInput.GetInputOnText("Enter secret question");
+            string secretAnswer   = ConsoleInput.GetInputOnText("Enter secret answer");
+            return new BankClient(clinet.firstName, clinet.lastName, clinet.login, clinet.password, secretQuestion, secretAnswer);
+        }
+    }
+    class BankEmployee: User {
+        
+        private string position {get;}
+
+        public override void ShowInfo() {
+            base.ShowInfo();
+            Console.WriteLine($"Position {this.position}");
+        }
+
+        private BankEmployee(string firstName,
+                             string lastName,
+                             string login,
+                             string password,
+                             string position) : base(firstName, lastName, login, password) {
+            this.position = position;
+        }
+
+        public BankEmployee createBankEmployee() {
+            BankEmployee employee = (BankEmployee)base.CreateUser(); 
+            string position = ConsoleInput.GetInputOnText("Enter your position in bank");
+            return new BankEmployee(employee.firstName, employee.lastName, employee.login, employee.password, position);
         }
     }
 }

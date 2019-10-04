@@ -1,6 +1,10 @@
 ﻿using System;
+
+// lab
 using Human;
-using System.Xml;
+using Bank;
+//
+
 
 namespace lab1
 {

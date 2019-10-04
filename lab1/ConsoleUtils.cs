@@ -6,8 +6,9 @@ namespace Utils
     static class ConsoleInput
     {
 
-        public static string GetHiddenConsoleInput()
+        public static string GetHiddenConsoleInput(string textBeforeInput = "")
         {
+            Console.WriteLine(textBeforeInput);
             StringBuilder input = new StringBuilder();
             while (true)
             {
@@ -19,8 +20,8 @@ namespace Utils
             return input.ToString();
         }
 
-        public static string GetInputOnText(string str) {
-            Console.WriteLine(str);
+        public static string GetInputOnText(string textBeforeInput = "") {
+            Console.WriteLine(textBeforeInput);
             return Console.ReadLine();
         }
     }
