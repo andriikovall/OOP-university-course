@@ -1,41 +1,39 @@
 using System;
 using System.Collections.Generic;
 
-using Data;
 using Human;
 
 namespace Bank
 {
     static class BankSystem
     {
-        private const  string SecretBankPassword = "Bank228";
-        // private static long authorizedUserId;
-        private static List<Account> accounts;
-        private static List<User> users;
+        public const string SecretPassword = "Bank228";
         
+        private static Dictionary<int, Account> accounts;
+        private static Dictionary<int, User> users;
+
         public static int UsersСount => users.Count;
 
         public static Account GetAccountById(long accId)
         {
-            Account foundAcc = accounts[(int)accId]; 
+            Account foundAcc = accounts[(int)accId];
             return foundAcc;
         }
 
-        public static void AddUser(User user) {
-            users.Add(user);
+        public static void AddUser(User user)
+        {
+            users[(int)user.id] = user;
         }
 
-        public static void AddAccount(Account acc) {
-            accounts.Add(acc);
+        public static void AddAccount(Account acc)
+        {
+            accounts[(int)acc.id] = acc;
         }
 
-        static BankSystem() {
-            accounts = new List<Account>();
-            users =    new List<User>();
-            // foreach (var acc in Data.BankData.accounts)
-            // {
-            //     AddAccount(acc);
-            // }
+        static BankSystem()
+        {
+            users = new Dictionary<int, User>();
+            accounts = new Dictionary<int, Account>();
         }
 
     }
@@ -44,9 +42,9 @@ namespace Bank
     {
         public readonly long id;
         public readonly string currency;
-        public readonly long nextId = 0;
-        public void IncreaseAmount(long value) => this.moneyAmount += value;
+        private static long nextId = 0;
 
+        public void IncreaseAmount(long value) => this.moneyAmount += value;
 
         public void DecreaseAmount(long value)
         {
@@ -59,19 +57,50 @@ namespace Bank
             moneyAmount -= value;
         }
 
-        public long moneyAmount; 
+        private long moneyAmount;
+        public long MoneyAmount
+        {
+            get { return moneyAmount; }
+            set
+            {
+                if (value < 0)
+                {
+                    Console.WriteLine("Error: invalid money amount value");
+                    return;
+                }
+                moneyAmount = value;
+            }
+        }
 
-        public Account(long moneyAmount, string currency)
+        public Account() {
+            this.moneyAmount = 0;
+            this.currency = "uah";
+            this.id = nextId++;
+        }
+
+
+        public static Account CreateAccount(long moneyAmount, string currency) {
+            Account acc = new Account(moneyAmount, currency);
+            BankSystem.AddAccount(acc);
+            return acc;
+        }
+
+        private Account(long moneyAmount, string currency)
         {
             this.id = nextId++;
-            this.moneyAmount = moneyAmount;
+            if (moneyAmount < 0) {
+                this.moneyAmount = 0;
+            } else {
+                this.moneyAmount = moneyAmount;
+            }
             this.currency = currency;
-            BankSystem.AddAccount(this);
         }
 
         public void ShowAmount()
         {
-            Console.WriteLine($"{id} {moneyAmount} {currency}");
+            Console.WriteLine($"amount");
+            Console.WriteLine($"id - {id}  money - {moneyAmount} {currency}");
+            Console.WriteLine($"amount");
         }
     }
 }

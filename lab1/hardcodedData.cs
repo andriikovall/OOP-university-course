@@ -6,15 +6,13 @@ using Bank;
 
 namespace Data {
     static class BankData {
-        public static List<User> users;
-        public static List<Account> accounts;
+        public static List<User> users ;
+        
 
-        static BankData() {
-            accounts  = new List<Account>();
-            users = new List<User>();
-            //@todo fix
+        // static BankData() {
+        //     accounts 
 
-        }
+        // }
 
     }
 }

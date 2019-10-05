@@ -13,6 +13,7 @@ namespace Human {
 
         public string login {get;}
         public string password {get;}
+        
         protected static long nextId;
 
         private User() {}
@@ -31,7 +32,8 @@ namespace Human {
                 }
                 break;
             } while(true);
-            return new User(firstName, lastName, login, password);
+            User newUser = new User(firstName, lastName, login, password);
+            return newUser;
         }
         static User() {
             nextId = 0;
@@ -69,16 +71,17 @@ namespace Human {
 
     class BankClient: User {
         private List<long> accountsIds; //agregation
-        //@todo add acc
         private string secretQuestion;
         private string secretAnswer;
 
-        public new void ShowInfo() { //to let noone read client info
+        public new void ShowInfo() {
+            Console.WriteLine("Client info-------");
             base.ShowInfo();
             foreach (var accId in accountsIds)
             {   
                 Bank.BankSystem.GetAccountById(accId).ShowAmount();
             }
+            Console.WriteLine("Client info-------");
         }
 
         private BankClient(string firstName,
@@ -106,7 +109,20 @@ namespace Human {
     }
     class BankEmployee: User {
         
-        private string Position {get;}
+        public string Position {get;}
+
+        private Boolean hasRights;
+
+        public int systemUsersCount {
+            get {
+                if (this.hasRights) {
+                    return BankSystem.UsersСount;
+                } else {
+                    return -1;
+                }
+            }
+        }
+
 
         public override void ShowInfo() {
             base.ShowInfo();
@@ -117,14 +133,22 @@ namespace Human {
                              string lastName,
                              string login,
                              string password,
-                             string Position) : base(firstName, lastName, login, password) {
+                             string Position, 
+                             Boolean hasRights) : base(firstName, lastName, login, password) {
             this.Position = Position;
+            this.hasRights = hasRights;
         }
 
         public BankEmployee createBankEmployee() {
             BankEmployee employee = (BankEmployee)CreateUser(); 
-            string Position = ConsoleInput.GetInputOnText("Enter your Position in bank");
-            return new BankEmployee(employee.firstName, employee.lastName, employee.login, employee.password, Position);
+            string Position =    ConsoleInput.GetInputOnText("Enter your Position in bank");
+            string bankPassword =ConsoleInput.GetInputOnText("Enter SUPER SECRET BANK PASSWORD");
+            Boolean hasRights = (bankPassword == BankSystem.SecretPassword);
+            if (hasRights)
+                Console.WriteLine("Corerct password, access given");
+            else 
+                Console.WriteLine("Wrong password, access denied");
+            return new BankEmployee(employee.firstName, employee.lastName, employee.login, employee.password, Position, hasRights);
         }
     }
 }
