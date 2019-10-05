@@ -10,44 +10,50 @@ namespace lab1
 {
     class Program
     {
-        static void initAccounts() {
-            // hardcode ((
-            Account.CreateAccount(625, "uah"); // id 1
-            Account.CreateAccount(5454, "uah"); //   2 
-            Account.CreateAccount(6425, "usd"); //   .
-            Account.CreateAccount(62445, "uah");//   . 
-            Account.CreateAccount(62544, "usd");
-            new Account();
-            new Account();
-        }
         static void Main(string[] args)
         {
-            // initAccounts();
             //head od hierarchy
-            Account acc1 = Account.CreateAccount(625, "uah"); // id 1
+            Account acc1 = Account.CreateAccount(100, "uah"); // id 1
             Account acc2 = Account.CreateAccount(5454, "uah"); //   2 
-            Account acc3 = Account.CreateAccount(6425, "usd"); //   .
-            Account acc4 = Account.CreateAccount(62445, "uah");//   . 
-            Account acc5 = Account.CreateAccount(62544, "usd");
+            Account acc3 = Account.CreateAccount(200, "usd"); //   .
+            Account acc4 = Account.CreateAccount(123, "uah");  //   . 
+            Account acc5 = Account.CreateAccount(1, "usd");
             Account acc6 = new Account();//@todo override with string number
             Account acc7 = new Account();
 
-           User basicUser = new User(1, "Andrii", "Koval", "login", "password");
-            BankSystem.AddUser(basicUser);
-
-           basicUser.ShowInfo();
+            // basic user with no power
+            User basicUser = new User(1, "Andrii", "Koval", "login", "password");
 
            //bank client is able to have bank accounts
-            BankClient client = BankClient.CreateBankClient();
+            BankClient   client = BankClient.CreateBankClient();
 
             // a piece of hardcode (((
             client.AddAccountId(acc1.id);
             client.AddAccountId(acc3.id);
             client.AddAccountId(acc5.id);
-
             client.ShowInfo();
 
 
+            BankEmployee employee = BankEmployee.CreateBankEmployee();
+
+            BankSystem.AddUser(employee);
+            BankSystem.AddUser(client);
+            BankSystem.AddUser(basicUser);
+
+
+            Console.WriteLine("------------------------------------All users in system");
+            foreach(var user in BankSystem.Users.Values) {
+                user.ShowInfo();
+            }
+            Console.WriteLine("------------------------------------All users in system");
+
+            acc1.IncreaseAmount(100);
+            acc3.IncreaseAmount(100);
+            acc5.DecreaseAmount(50000);
+            client.ShowInfo("CLIENT OVERRIDEN METHOD", "CLIENT OVERRIDEN METHOD");
+
+
+            Console.WriteLine(employee.systemUsersCount);
         }
     }
 }

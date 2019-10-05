@@ -65,7 +65,8 @@ namespace Human {
             get { return $"{this.firstName} {this.lastName}";}
         }
         public virtual void ShowInfo() {
-            Console.WriteLine($"{this.id} - '{this.FullName}'");
+
+            Console.WriteLine($"User info {this.id} - '{this.FullName}'");
         }
     }
 
@@ -74,7 +75,7 @@ namespace Human {
         private string secretQuestion;
         private string secretAnswer;
 
-        public new void ShowInfo() {
+        public override void ShowInfo() {
             Console.WriteLine("Client info-------");
             base.ShowInfo();
             foreach (var accId in accountsIds)
@@ -82,6 +83,16 @@ namespace Human {
                 Bank.BankSystem.GetAccountById(accId).ShowAmount();
             }
             Console.WriteLine("Client info-------");
+        }
+
+        public void ShowInfo(string beginStr = "", string finishStr = "") {
+            Console.WriteLine(beginStr);
+            base.ShowInfo();
+            foreach (var accId in accountsIds)
+            {   
+                Bank.BankSystem.GetAccountById(accId).ShowAmount();
+            }
+            Console.WriteLine(finishStr);
         }
 
         private BankClient(string firstName,
@@ -125,8 +136,17 @@ namespace Human {
 
 
         public override void ShowInfo() {
+            Console.WriteLine("Employee info-----");
             base.ShowInfo();
             Console.WriteLine($"Position {this.Position}");
+            Console.WriteLine("Employee info-----");
+        }
+
+        public void ShowInfo(string beginStr = "", string finishStr = "") {
+            Console.WriteLine(beginStr);
+            base.ShowInfo();
+            Console.WriteLine($"Position {this.Position}");
+            Console.WriteLine(finishStr);
         }
 
         private BankEmployee(string firstName,
@@ -139,8 +159,8 @@ namespace Human {
             this.hasRights = hasRights;
         }
 
-        public BankEmployee createBankEmployee() {
-            BankEmployee employee = (BankEmployee)CreateUser(); 
+        public static BankEmployee CreateBankEmployee() {
+            User employee = CreateUser(); 
             string Position =    ConsoleInput.GetInputOnText("Enter your Position in bank");
             string bankPassword =ConsoleInput.GetInputOnText("Enter SUPER SECRET BANK PASSWORD");
             Boolean hasRights = (bankPassword == BankSystem.SecretPassword);

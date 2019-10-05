@@ -8,9 +8,16 @@ namespace Bank
     static class BankSystem
     {
         public const string SecretPassword = "Bank228";
-        
+
         private static Dictionary<int, Account> accounts;
         private static Dictionary<int, User> users;
+        public static Dictionary<int, User> Users
+        {
+            get
+            {
+                return users;
+            }
+        }
 
         public static int UsersСount => users.Count;
 
@@ -72,14 +79,15 @@ namespace Bank
             }
         }
 
-        public Account() {
+        public Account()
+        {
             this.moneyAmount = 0;
             this.currency = "uah";
             this.id = nextId++;
         }
 
-
-        public static Account CreateAccount(long moneyAmount, string currency) {
+        public static Account CreateAccount(long moneyAmount, string currency)
+        {
             Account acc = new Account(moneyAmount, currency);
             BankSystem.AddAccount(acc);
             return acc;
@@ -88,9 +96,12 @@ namespace Bank
         private Account(long moneyAmount, string currency)
         {
             this.id = nextId++;
-            if (moneyAmount < 0) {
+            if (moneyAmount < 0)
+            {
                 this.moneyAmount = 0;
-            } else {
+            }
+            else
+            {
                 this.moneyAmount = moneyAmount;
             }
             this.currency = currency;
@@ -98,9 +109,7 @@ namespace Bank
 
         public void ShowAmount()
         {
-            Console.WriteLine($"amount");
             Console.WriteLine($"id - {id}  money - {moneyAmount} {currency}");
-            Console.WriteLine($"amount");
         }
     }
 }
