@@ -11,12 +11,13 @@ namespace Human {
         public readonly string firstName;
         public readonly string lastName;
 
-        protected string login;
-        protected string password;
+        public string login {get;}
+        public string password {get;}
         protected static long nextId;
 
+        private User() {}
 
-        public User CreateUser() {
+        public static User CreateUser() {
             string firstName = ConsoleInput.GetInputOnText("Enter first name");
             string lastName = ConsoleInput.GetInputOnText("Enter last name");
             string login = ConsoleInput.GetInputOnText("Enter login");
@@ -42,7 +43,7 @@ namespace Human {
             this.lastName = lastName;
             this.password = password;
         }
-        private User(long id, string firstName, string lastName,string login, string password) {
+        public User(long id, string firstName, string lastName,string login, string password) {
             if (id < nextId) {
                 Console.WriteLine($"Unable to create user with id {id}");
                 Console.WriteLine($"Assigning id value {nextId}");
@@ -58,16 +59,16 @@ namespace Human {
             this.login = login;
             this.password = password;
         }
-        public string fullName {
+        public string FullName {
             get { return $"{this.firstName} {this.lastName}";}
         }
         public virtual void ShowInfo() {
-            Console.WriteLine($"{this.id} - '{this.fullName}'");
+            Console.WriteLine($"{this.id} - '{this.FullName}'");
         }
     }
 
     class BankClient: User {
-        private List<int> accountsIds; //agregation
+        private List<long> accountsIds; //agregation
         //@todo add acc
         private string secretQuestion;
         private string secretAnswer;
@@ -88,37 +89,42 @@ namespace Human {
                            string secretAnswer) : base(firstName, lastName, login, password) {
                                this.secretAnswer   = secretAnswer;
                                this.secretQuestion = secretQuestion;
+                               this.accountsIds = new List<long>();
                            }
 
 
-        public BankClient CreateBankClient() {
-            BankClient clinet = (BankClient)base.CreateUser();
+        public static BankClient CreateBankClient() {
+            User user = CreateUser();
             string secretQuestion = ConsoleInput.GetInputOnText("Enter secret question");
             string secretAnswer   = ConsoleInput.GetInputOnText("Enter secret answer");
-            return new BankClient(clinet.firstName, clinet.lastName, clinet.login, clinet.password, secretQuestion, secretAnswer);
+            return new BankClient(user.firstName, user.lastName, user.login, user.password, secretQuestion, secretAnswer);
+        }
+
+        public void AddAccountId(long accId) {
+            this.accountsIds.Add(accId);
         }
     }
     class BankEmployee: User {
         
-        private string position {get;}
+        private string Position {get;}
 
         public override void ShowInfo() {
             base.ShowInfo();
-            Console.WriteLine($"Position {this.position}");
+            Console.WriteLine($"Position {this.Position}");
         }
 
         private BankEmployee(string firstName,
                              string lastName,
                              string login,
                              string password,
-                             string position) : base(firstName, lastName, login, password) {
-            this.position = position;
+                             string Position) : base(firstName, lastName, login, password) {
+            this.Position = Position;
         }
 
         public BankEmployee createBankEmployee() {
-            BankEmployee employee = (BankEmployee)base.CreateUser(); 
-            string position = ConsoleInput.GetInputOnText("Enter your position in bank");
-            return new BankEmployee(employee.firstName, employee.lastName, employee.login, employee.password, position);
+            BankEmployee employee = (BankEmployee)CreateUser(); 
+            string Position = ConsoleInput.GetInputOnText("Enter your Position in bank");
+            return new BankEmployee(employee.firstName, employee.lastName, employee.login, employee.password, Position);
         }
     }
 }
