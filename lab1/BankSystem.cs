@@ -37,8 +37,10 @@ namespace Bank
             accounts[(int)acc.id] = acc;
         }
 
-        public static void AddAccounts(Account[] accArr) {
-            foreach(var acc in accArr) {
+        public static void AddAccounts(Account[] accArr)
+        {
+            foreach (var acc in accArr)
+            {
                 AddAccount(acc);
             }
         }

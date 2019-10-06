@@ -1,5 +1,5 @@
 using System;
-using System.Text; 
+using System.Text;
 
 namespace Utils
 {
@@ -20,7 +20,8 @@ namespace Utils
             return input.ToString();
         }
 
-        public static string GetInputOnText(string textBeforeInput = "") {
+        public static string GetInputOnText(string textBeforeInput = "")
+        {
             Console.WriteLine("> " + textBeforeInput);
             return Console.ReadLine();
         }

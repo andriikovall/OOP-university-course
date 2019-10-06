@@ -140,7 +140,6 @@ namespace Human
     }
     class BankEmployee : User
     {
-
         public string Position { get; }
 
         private Boolean hasRights;
@@ -194,7 +193,7 @@ namespace Human
             string Position = ConsoleInput.GetInputOnText("Enter your Position in bank");
             string bankPassword = ConsoleInput.GetInputOnText("Enter SUPER SECRET BANK PASSWORD");
             Boolean hasRights = (bankPassword == BankSystem.SecretPassword);
-            
+
             if (hasRights)
                 Console.WriteLine("Corerct password, access given");
             else

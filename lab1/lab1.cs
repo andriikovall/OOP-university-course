@@ -22,13 +22,13 @@ namespace lab1
             Account acc7 = new Account();
 
             //  so we add explisitly
-            BankSystem.AddAccounts(new Account[]{acc6, acc7});
+            BankSystem.AddAccounts(new Account[] { acc6, acc7 });
 
             // head od hierarchy
             // basic user with no power
             User basicUser = new User(1, "Andrii", "Koval", "login", "password");
 
-           //bank client is able to have bank accounts
+            //bank client is able to have bank accounts
             Console.WriteLine("---------------------Creatinh Bank Client");
             BankClient client = BankClient.CreateBankClient();
             Console.WriteLine("---------------------Creatinh Bank Client");
@@ -49,7 +49,8 @@ namespace lab1
 
 
             Console.WriteLine("\n------------------------------------All users in system");
-            foreach(var user in BankSystem.Users.Values) {
+            foreach (var user in BankSystem.Users.Values)
+            {
                 user.ShowInfo();
             }
             Console.WriteLine("------------------------------------All users in system\n");
