@@ -9,8 +9,8 @@ namespace Bank
     {
         public const string SecretPassword = "Bank228";
 
-        private static Dictionary<int, Account> accounts;
-        private static Dictionary<int, User> users;
+        private static Dictionary<int, Account> accounts; // composition
+        private static Dictionary<int, User> users; // composition
         public static Dictionary<int, User> Users
         {
             get
