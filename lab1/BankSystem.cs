@@ -61,6 +61,8 @@ namespace Bank
         public const string DEFAULT_CURRENCY = "uah";
 
         private static long nextId = 0;
+        
+        private long moneyAmount;
 
         public void IncreaseAmount(long value) => this.moneyAmount += value;
 
@@ -75,7 +77,6 @@ namespace Bank
             moneyAmount -= value;
         }
 
-        private long moneyAmount;
         public long MoneyAmount
         {
             get { return moneyAmount; }
