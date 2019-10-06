@@ -37,6 +37,12 @@ namespace Bank
             accounts[(int)acc.id] = acc;
         }
 
+        public static void AddAccounts(Account[] accArr) {
+            foreach(var acc in accArr) {
+                AddAccount(acc);
+            }
+        }
+
         static BankSystem()
         {
             users = new Dictionary<int, User>();
@@ -49,6 +55,9 @@ namespace Bank
     {
         public readonly long id;
         public readonly string currency;
+
+        public const string DEFAULT_CURRENCY = "uah";
+
         private static long nextId = 0;
 
         public void IncreaseAmount(long value) => this.moneyAmount += value;
@@ -82,7 +91,7 @@ namespace Bank
         public Account()
         {
             this.moneyAmount = 0;
-            this.currency = "uah";
+            this.currency = DEFAULT_CURRENCY;
             this.id = nextId++;
         }
 

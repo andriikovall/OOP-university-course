@@ -8,7 +8,7 @@ namespace Utils
 
         public static string GetHiddenConsoleInput(string textBeforeInput = "")
         {
-            Console.WriteLine(textBeforeInput);
+            Console.WriteLine("> " + textBeforeInput);
             StringBuilder input = new StringBuilder();
             while (true)
             {
@@ -21,7 +21,7 @@ namespace Utils
         }
 
         public static string GetInputOnText(string textBeforeInput = "") {
-            Console.WriteLine(textBeforeInput);
+            Console.WriteLine("> " + textBeforeInput);
             return Console.ReadLine();
         }
     }
