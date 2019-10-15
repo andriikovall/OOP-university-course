@@ -20,7 +20,14 @@ namespace Human
         public readonly long id;
 
         protected string firstName;
-        protected string lastName; 
+        protected string lastName;
+
+        protected static readonly List<string> DefaultQuestions = new List<string>(){
+            "Enter first name",
+            "Enter last name",
+            "Enter login",
+            "Enter password"
+        };
 
         public override string FirstName {
             get 
@@ -75,7 +82,6 @@ namespace Human
             this.password = password;
         }
 
-
         public string FullName
         {
             get { return $"{this.FirstName} {this.LastName}"; }
@@ -85,6 +91,21 @@ namespace Human
         public override void ShowInfo()
         {
             Console.WriteLine($"User info {this.id} - '{this.FullName}'");
+        }
+
+        protected static List<string> AnswerQuestions(List<string> questions) {
+            var answers = new List<string>();
+            foreach(var q in questions) {
+                string lowerCaseQuestion = q.ToLower();
+                string ans;
+                if (lowerCaseQuestion.Contains("password")) {
+                    ans = String_IO.GetHiddenConsoleInput(q);
+                } else {
+                    ans = String_IO.GetInputOnText(q);
+                }
+                answers.Add(ans);
+            }
+            return answers;
         }
     }
 
@@ -131,10 +152,10 @@ namespace Human
 
         public static BankClient CreateBankClient()
         {
-            User user = CreateUser(); //@todo finished here
+            var    basicAnswers = User.AnswerQuestions(User.DefaultQuestions);
             string secretQuestion = String_IO.GetInputOnText("Enter secret question");
-            string secretAnswer = String_IO.GetInputOnText("Enter secret answer");
-            return new BankClient(user.FirstName, user.LastName, user.login, user.password, secretQuestion, secretAnswer);
+            string secretAnswer = String_IO.GetHiddenConsoleInput("Enter secret answer");
+            return new BankClient(basicAnswers[0], basicAnswers[1], basicAnswers[2], basicAnswers[3], secretQuestion, secretAnswer);
         }
 
         public void AddAccountId(long accId)
@@ -193,9 +214,10 @@ namespace Human
 
         public static BankEmployee CreateBankEmployee()
         {
-            User employee = CreateUser();
-            string Position = String_IO.GetInputOnText("Enter your Position in bank");
-            string bankPassword = String_IO.GetInputOnText("Enter SUPER SECRET BANK PASSWORD");
+            var    basicAnswers = User.AnswerQuestions(User.DefaultQuestions);
+            string position = String_IO.GetInputOnText("Enter your Position in bank");
+            string bankPassword = String_IO.GetHiddenConsoleInput("Enter SUPER SECRET BANK PASSWORD");
+
             Boolean hasRights = (bankPassword == BankSystem.SecretPassword);
 
             if (hasRights)
@@ -203,7 +225,7 @@ namespace Human
             else
                 Console.WriteLine("Wrong password, access denied");
 
-            return new BankEmployee(employee.firstName, employee.lastName, employee.login, employee.password, Position, hasRights);
+            return new BankEmployee(basicAnswers[0], basicAnswers[1], basicAnswers[2], basicAnswers[3], position, hasRights);
         }
     }
 }
