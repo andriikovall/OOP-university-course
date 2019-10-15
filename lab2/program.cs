@@ -20,47 +20,50 @@ namespace lab1
             Account acc6 = new Account(); // this acc is not added to bank system initially
             Account acc7 = new Account();
 
-            //  so we add explisitly
-            BankSystem.AddAccounts(new Account[] { acc6, acc7 });
+            // //  so we add explisitly
+            // BankSystem.AddAccounts(new Account[] { acc6, acc7 });
 
-            // head od hierarchy
-            // basic user with no power
-            User basicUser = new User("Andrii", "Koval", "login", "password");
+            // // head od hierarchy
+            // // basic user with no power
+            // User basicUser = new User("Andrii", "Koval", "login", "password");
 
-            //bank client is able to have bank accounts
-            Console.WriteLine("---------------------Creatinh Bank Client");
-            BankClient client = BankClient.CreateBankClient();
-            Console.WriteLine("---------------------Creatinh Bank Client");
+            // //bank client is able to have bank accounts
+            // Console.WriteLine("---------------------Creatinh Bank Client");
+            // BankClient client = BankClient.CreateBankClient();
+            // Console.WriteLine("---------------------Creatinh Bank Client");
 
-            // a piece of hardcode (((
-            client.AddAccountId(acc1.id);
-            client.AddAccountId(acc3.id);
-            client.AddAccountId(acc5.id);
-            client.ShowInfo();
+            // // a piece of hardcode (((
+            // client.AddAccountId(acc1.id);
+            // client.AddAccountId(acc3.id);
+            // client.AddAccountId(acc5.id);
+            // client.ShowInfo();
 
-            Console.WriteLine("---------------------Creatinh Bank Exmployee");
-            BankEmployee employee = BankEmployee.CreateBankEmployee();
-            Console.WriteLine("---------------------Creating Bank Exmployee");
+            // Console.WriteLine("---------------------Creatinh Bank Exmployee");
+            // BankEmployee employee = BankEmployee.CreateBankEmployee();
+            // Console.WriteLine("---------------------Creating Bank Exmployee");
 
-            BankSystem.AddUser(employee);
-            BankSystem.AddUser(client);
-            BankSystem.AddUser(basicUser);
-
-
-            Console.WriteLine("\n------------------------------------All users in system");
-            foreach (var user in BankSystem.Users.Values)
-            {
-                user.ShowInfo();
-            }
-            Console.WriteLine("------------------------------------All users in system\n");
-
-            acc1.IncreaseAmount(100);
-            acc3.IncreaseAmount(100);
-            acc5.DecreaseAmount(50000);
-            client.ShowInfo("CLIENT OVERRIDEN METHOD", "CLIENT OVERRIDEN METHOD");
+            // BankSystem.AddUser(employee);
+            // BankSystem.AddUser(client);
+            // BankSystem.AddUser(basicUser);
 
 
-            Console.WriteLine(employee.systemUsersCount);
+            // Console.WriteLine("\n------------------------------------All users in system");
+            // foreach (var user in BankSystem.Users.Values)
+            // {
+            //     user.ShowInfo();
+            // }
+            // Console.WriteLine("------------------------------------All users in system\n");
+
+            // acc1.IncreaseAmount(100);
+            // acc3.IncreaseAmount(100);
+            // acc5.DecreaseAmount(50000);
+            // client.ShowInfo("CLIENT OVERRIDEN METHOD", "CLIENT OVERRIDEN METHOD");
+
+            var acc = BankSystem.GetAccountById(455);
+            if (acc == null) {
+                Console.WriteLine("Null");
+            } 
+            // Console.WriteLine(employee.systemUsersCount);
         }
     }
 }

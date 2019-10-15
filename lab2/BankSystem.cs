@@ -10,9 +10,9 @@ namespace Bank
         public const string SecretPassword = "Bank228";
 
         private static Dictionary<int, Account> accounts; // composition
-        private static Dictionary<int, User> users; // composition
-        
-        public  static Dictionary<int, User> Users
+        private static Dictionary<int, User>    users; // composition
+
+        public static Dictionary<int, User> Users
         {
             get
             {
@@ -24,13 +24,39 @@ namespace Bank
 
         public static Account GetAccountById(long accId)
         {
-            Account foundAcc = accounts[(int)accId];
-            return foundAcc;
+            try
+            {
+                Account foundAcc = accounts[(int)accId];
+                return foundAcc;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
 
         public static void AddUser(User user)
         {
             users[(int)user.id] = user;
+        }
+
+        public static bool RemoveUser(User user) {
+            try {
+                users.Remove((int)user.id);
+                return true;
+            } catch( Exception ) {
+                return false;
+            }
+        }
+        
+        public static bool RemoveUser(int userId) {
+            try {
+                users.Remove(userId);
+                return true;
+            } catch( Exception ) {
+                return false;
+            }
         }
 
         public static void AddAccount(Account acc)
@@ -83,15 +109,16 @@ namespace Bank
             this.currency = currency;
         }
 
-        public void DecreaseAmount(long value)
+        public bool DecreaseAmount(long value)
         {
             if (value > moneyAmount)
             {
                 Console.WriteLine("Unable to procces transaction");
                 Console.WriteLine($"Not enough credits -> {moneyAmount} {currency}");
-                return;
+                return false;
             }
             moneyAmount -= value;
+            return true;
         }
 
         public long MoneyAmount

@@ -1,17 +1,18 @@
 using System;
 
 
-namespace UserClassIntefrace 
+namespace BankUserIntefrace 
 {   
+
     interface IMoney {
-        int  TakeCredit(int moneyAmount);
-        bool ExchangeMoney(int accountSrcId, int accountDstId);
+        int TakeCredit(int moneyAmount);
+        bool ExchangeMoney(int accountSrcId, int accountDstId, int moneyAmount);
         void ICouldntImagineSameMethodSoHereItIs();
     }
 
     interface ISystem {
         bool LeaveSystem();
-        bool ShowPossibleActions();
+        void ShowPossibleActions();
         void ICouldntImagineSameMethodSoHereItIs();
     }
 

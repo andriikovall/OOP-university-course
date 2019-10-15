@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+
 using Utils;
 using Bank;
+using BankUserIntefrace;
+
 
 namespace Human
 {
@@ -109,7 +112,7 @@ namespace Human
         }
     }
 
-    class BankClient : User
+    class BankClient : User, IMoney, ISystem
     {
         private List<long> accountsIds; //agregation
         private string secretQuestion;
@@ -162,8 +165,61 @@ namespace Human
         {
             this.accountsIds.Add(accId);
         }
+
+        public int TakeCredit(int moneyValue) {
+            if (moneyValue <= 0) return 0;
+
+            int accountIdWithCredit = -1;
+
+            foreach(var accId in this.accountsIds) {
+                var acc = BankSystem.GetAccountById(accId);
+                if (acc.MoneyAmount > moneyValue) {
+                    acc.IncreaseAmount(moneyValue);
+                    accountIdWithCredit = (int)acc.id;
+                    break;
+                }
+            }
+
+            return accountIdWithCredit; 
+        }
+
+        public bool ExchangeMoney(int accountSrcId, int accountDstId, int MoneyAmount) {
+            var accSrc = BankSystem.GetAccountById(accountSrcId);
+            var accDst = BankSystem.GetAccountById(accountDstId);
+
+            if (!this.accountsIds.Contains(accountSrcId))
+                return false;
+
+            if (accSrc == null || accDst == null)
+                return false;
+            
+            if (accSrc.DecreaseAmount(MoneyAmount)) {
+                accDst.IncreaseAmount(MoneyAmount);
+            } else {
+                return false;
+            }
+            return true;
+        }
+
+        public bool LeaveSystem() {
+            return BankSystem.RemoveUser((int)this.id);
+        }
+
+        public void ShowPossibleActions() {
+            Console.WriteLine("AddAccountId()\n" + 
+            "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n"+
+            "ShowInfo() - show user info");
+        }
+
+        void IMoney.ICouldntImagineSameMethodSoHereItIs() {
+            Console.WriteLine("Some IMoney method overriden in BankCLient");
+        }
+
+        void ISystem.ICouldntImagineSameMethodSoHereItIs() {
+            Console.WriteLine("Some ISystem method overriden in BankCLient");
+        }
     }
-    class BankEmployee : User
+    class BankEmployee : User, IMoney, ISystem
     {
         public string Position { get; }
 
@@ -227,5 +283,57 @@ namespace Human
 
             return new BankEmployee(basicAnswers[0], basicAnswers[1], basicAnswers[2], basicAnswers[3], position, hasRights);
         }
+
+
+
+        // interface inheritance
+        // IMoney
+        public int TakeCredit(int moneyValue) {
+            Console.WriteLine("ERROR: bank employee is not alowed to use its bank services");
+            return -1;
+        }
+
+        public bool ExchangeMoney(int accountSrcId, int accountDstId, int MoneyAmount) {
+            if (!this.hasRights)
+                return false;
+
+            var accSrc = BankSystem.GetAccountById(accountSrcId);
+            var accDst = BankSystem.GetAccountById(accountDstId);
+
+            if (accSrc == null || accDst == null) {
+                return false;
+            }
+            if (accSrc.DecreaseAmount(MoneyAmount)) {
+                accDst.IncreaseAmount(MoneyAmount);
+            } else {
+                return false;
+            }
+            return true;
+        }
+        //IMoney
+
+        // ISystem
+        public bool LeaveSystem() {
+            return BankSystem.RemoveUser((int)this.id);
+        }
+
+        public void ShowPossibleActions() {
+            Console.WriteLine("AddAccountId()\n" + 
+            "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n"+
+            "ShowInfo() - show user info");
+        }
+        // ISystem
+
+        void IMoney.ICouldntImagineSameMethodSoHereItIs() {
+            Console.WriteLine("Some IMoney method overriden in BankEmployee");
+        }
+
+        void ISystem.ICouldntImagineSameMethodSoHereItIs() {
+            Console.WriteLine("Some ISystem method overriden in BankEmployee");
+        }
+
+//     interface
+
+
     }
 }
