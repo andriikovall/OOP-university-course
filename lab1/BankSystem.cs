@@ -10,8 +10,8 @@ namespace Bank
         public const string SecretPassword = "Bank228";
 
         private static Dictionary<int, Account> accounts; // composition
-        private static Dictionary<int, User> users; // composition
-        public static Dictionary<int, User> Users
+        private static Dictionary<int, User>    users; // composition
+        public  static Dictionary<int, User>    Users
         {
             get
             {
@@ -61,7 +61,7 @@ namespace Bank
         public const string DEFAULT_CURRENCY = "uah";
 
         private static long nextId = 0;
-        
+
         private long moneyAmount;
 
         public void IncreaseAmount(long value) => this.moneyAmount += value;
