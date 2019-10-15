@@ -5,80 +5,84 @@ using Bank;
 
 namespace Human
 {
-    // basic user with no rights
-    class User
-    {
+    // just a human and nothing more
+    abstract class Person {
 
+        public abstract string FirstName { get; }
+        public abstract string LastName  { get; }
+
+        public abstract void ShowInfo();
+    }
+
+    // basic user with no rights
+    class User : Person
+    {
         public readonly long id;
-        public readonly string firstName;
-        public readonly string lastName;
+
+        protected string firstName;
+        protected string lastName; 
+
+        public override string FirstName {
+            get 
+            {
+                return String_IO.strFirstCharToUpper(firstName);
+            }
+        }
+
+        public override string LastName {
+            get 
+            {
+                return String_IO.strFirstCharToUpper(lastName);
+            }
+        }
 
         public string login { get; }
         public string password { get; }
 
         protected static long nextId;
 
-        private User() { }
-
-        public static User CreateUser()
-        {
-            string firstName = ConsoleInput.GetInputOnText("Enter first name");
-            string lastName = ConsoleInput.GetInputOnText("Enter last name");
-            string login = ConsoleInput.GetInputOnText("Enter login");
-            string password = "";
-            do
-            {
-                password = ConsoleInput.GetHiddenConsoleInput("Enter password");
-                string passwordToCheck = ConsoleInput.GetHiddenConsoleInput("Enter password again");
-                if (passwordToCheck != password)
-                {
-                    Console.WriteLine("Error: passwords differ");
-                    continue;
-                }
-                break;
-            } while (true);
-            User newUser = new User(firstName, lastName, login, password);
-            return newUser;
-        }
+        // public static User CreateUser()
+        // {
+        //     string firstName = String_IO.GetInputOnText("Enter first name");
+        //     string lastName = String_IO.GetInputOnText("Enter last name");
+        //     string login = String_IO.GetInputOnText("Enter login");
+        //     string password = "";
+        //     do
+        //     {
+        //         password = String_IO.GetHiddenString_IO("Enter password");
+        //         string passwordToCheck = String_IO.GetHiddenString_IO("Enter password again");
+        //         if (passwordToCheck != password)
+        //         {
+        //             Console.WriteLine("Error: passwords differ");
+        //             continue;
+        //         }
+        //         break;
+        //     } while (true);
+        //     User newUser = new User(firstName, lastName, login, password);
+        //     return newUser;
+        // }
+        
         static User()
         {
             nextId = 0;
         }
-        // protected for inherited classes
-        protected User(string firstName, string lastName, string login, string password)
-        {
-            this.id = nextId++;
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.password = password;
-        }
-        // for explicit creating user
-        public User(long id, string firstName, string lastName, string login, string password)
-        {
-            if (id < nextId)
-            {
-                Console.WriteLine($"Unable to create user with id {id}");
-                Console.WriteLine($"Assigning id value {nextId}");
-                id = nextId;
-            }
 
-            this.id = id;
-            long newNextId = id + 1;
-            nextId = newNextId;
-
+        public User(string firstName, string lastName, string login, string password)
+        {
             this.firstName = firstName;
             this.lastName = lastName;
             this.login = login;
             this.password = password;
         }
 
+
         public string FullName
         {
-            get { return $"{this.firstName} {this.lastName}"; }
+            get { return $"{this.FirstName} {this.LastName}"; }
         }
 
         //method to override
-        public virtual void ShowInfo()
+        public override void ShowInfo()
         {
             Console.WriteLine($"User info {this.id} - '{this.FullName}'");
         }
@@ -127,10 +131,10 @@ namespace Human
 
         public static BankClient CreateBankClient()
         {
-            User user = CreateUser();
-            string secretQuestion = ConsoleInput.GetInputOnText("Enter secret question");
-            string secretAnswer = ConsoleInput.GetInputOnText("Enter secret answer");
-            return new BankClient(user.firstName, user.lastName, user.login, user.password, secretQuestion, secretAnswer);
+            User user = CreateUser(); //@todo finished here
+            string secretQuestion = String_IO.GetInputOnText("Enter secret question");
+            string secretAnswer = String_IO.GetInputOnText("Enter secret answer");
+            return new BankClient(user.FirstName, user.LastName, user.login, user.password, secretQuestion, secretAnswer);
         }
 
         public void AddAccountId(long accId)
@@ -190,8 +194,8 @@ namespace Human
         public static BankEmployee CreateBankEmployee()
         {
             User employee = CreateUser();
-            string Position = ConsoleInput.GetInputOnText("Enter your Position in bank");
-            string bankPassword = ConsoleInput.GetInputOnText("Enter SUPER SECRET BANK PASSWORD");
+            string Position = String_IO.GetInputOnText("Enter your Position in bank");
+            string bankPassword = String_IO.GetInputOnText("Enter SUPER SECRET BANK PASSWORD");
             Boolean hasRights = (bankPassword == BankSystem.SecretPassword);
 
             if (hasRights)

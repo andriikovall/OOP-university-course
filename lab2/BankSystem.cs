@@ -10,8 +10,9 @@ namespace Bank
         public const string SecretPassword = "Bank228";
 
         private static Dictionary<int, Account> accounts; // composition
-        private static Dictionary<int, User>    users; // composition
-        public  static Dictionary<int, User>    Users
+        private static Dictionary<int, User> users; // composition
+        
+        public  static Dictionary<int, User> Users
         {
             get
             {
@@ -66,6 +67,22 @@ namespace Bank
 
         public void IncreaseAmount(long value) => this.moneyAmount += value;
 
+        public Account() : this(0, DEFAULT_CURRENCY) { }
+
+        private Account(long moneyAmount, string currency)
+        {
+            this.id = nextId++;
+            if (moneyAmount < 0)
+            {
+                this.moneyAmount = 0;
+            }
+            else
+            {
+                this.moneyAmount = moneyAmount;
+            }
+            this.currency = currency;
+        }
+
         public void DecreaseAmount(long value)
         {
             if (value > moneyAmount)
@@ -91,32 +108,11 @@ namespace Bank
             }
         }
 
-        public Account()
-        {
-            this.moneyAmount = 0;
-            this.currency = DEFAULT_CURRENCY;
-            this.id = nextId++;
-        }
-
         public static Account CreateAccount(long moneyAmount, string currency)
         {
             Account acc = new Account(moneyAmount, currency);
             BankSystem.AddAccount(acc);
             return acc;
-        }
-
-        private Account(long moneyAmount, string currency)
-        {
-            this.id = nextId++;
-            if (moneyAmount < 0)
-            {
-                this.moneyAmount = 0;
-            }
-            else
-            {
-                this.moneyAmount = moneyAmount;
-            }
-            this.currency = currency;
         }
 
         public void ShowAmount()

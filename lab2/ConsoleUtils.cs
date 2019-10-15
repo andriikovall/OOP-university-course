@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Utils
 {
-    static class ConsoleInput
+    static class String_IO
     {
 
         public static string GetHiddenConsoleInput(string textBeforeInput = "")
@@ -24,6 +24,12 @@ namespace Utils
         {
             Console.WriteLine("> " + textBeforeInput);
             return Console.ReadLine();
+        }
+
+        public static string strFirstCharToUpper(string str) {
+            var strBuilder = new System.Text.StringBuilder(str);
+            strBuilder[0] = Char.ToUpper(strBuilder[0]);
+            return strBuilder.ToString();
         }
     }
 }
