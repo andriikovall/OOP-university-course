@@ -65,7 +65,7 @@ namespace lab1
                 Console.WriteLine(employee.systemUsersCount);
             } catch (EmployeeAccessException exp) {
                 Console.WriteLine("Error");
-                Console.WriteLine(exp.Message);
+                Console.WriteLine(exp.args.Message);
             }
         }
     }
