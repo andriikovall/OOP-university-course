@@ -89,6 +89,21 @@ namespace Bank
             accounts = new Dictionary<int, Account>();
         }
 
+        public static string GetEmployeeRigths() {
+            string rigths = "AddAccountId()\n" +
+            "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
+            "ShowInfo() - show employee info\n" +
+            "systemUsersCount - get users count in system. Permission reqired";
+            return rigths;
+        }
+
+        public static string GetClietnRights() {
+            string rigths = "AddAccountId()\n" + 
+            "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n"+
+            "ShowInfo() - show user info";
+            return rigths;
+        }
+
     }
 
     public class Account

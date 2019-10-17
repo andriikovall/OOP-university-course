@@ -17,4 +17,6 @@ namespace BankEvent
     }
 
     public delegate void AccountHandle(BankEventArg bankArg);
+
+    public delegate string HandleSystemUserInfoRequest();
 }

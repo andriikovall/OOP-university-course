@@ -5,7 +5,7 @@ namespace BankUserIntefrace
 {   
 
     interface IMoney {
-        int TakeCredit(int moneyAmount);
+        int  TakeCredit(int moneyAmount);
         bool ExchangeMoney(int accountSrcId, int accountDstId, int moneyAmount);
         void ICouldntImagineSameMethodSoHereItIs();
     }

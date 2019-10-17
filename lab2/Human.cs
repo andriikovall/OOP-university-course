@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using Utils;
 using Bank;
 using BankUserIntefrace;
+using BankEvent;
+using CustomException;
 
 
 namespace Human
 {
     // just a human and nothing more
-    abstract class Person {
+    abstract class Person
+    {
 
         public abstract string FirstName { get; }
-        public abstract string LastName  { get; }
+        public abstract string LastName { get; }
 
         public abstract void ShowInfo();
     }
@@ -25,6 +28,11 @@ namespace Human
         protected string firstName;
         protected string lastName;
 
+        public string login { get; }
+        public string password { get; }
+
+        protected static long nextId;
+
         protected static readonly List<string> DefaultQuestions = new List<string>(){
             "Enter first name",
             "Enter last name",
@@ -32,24 +40,22 @@ namespace Human
             "Enter password"
         };
 
-        public override string FirstName {
-            get 
+        public override string FirstName
+        {
+            get
             {
                 return String_IO.strFirstCharToUpper(firstName);
             }
         }
 
-        public override string LastName {
-            get 
+        public override string LastName
+        {
+            get
             {
                 return String_IO.strFirstCharToUpper(lastName);
             }
         }
 
-        public string login { get; }
-        public string password { get; }
-
-        protected static long nextId;
 
         // public static User CreateUser()
         // {
@@ -71,7 +77,7 @@ namespace Human
         //     User newUser = new User(firstName, lastName, login, password);
         //     return newUser;
         // }
-        
+
         static User()
         {
             nextId = 0;
@@ -79,6 +85,7 @@ namespace Human
 
         public User(string firstName, string lastName, string login, string password)
         {
+            this.id = nextId++;
             this.firstName = firstName;
             this.lastName = lastName;
             this.login = login;
@@ -96,14 +103,19 @@ namespace Human
             Console.WriteLine($"User info {this.id} - '{this.FullName}'");
         }
 
-        protected static List<string> AnswerQuestions(List<string> questions) {
+        protected static List<string> AnswerQuestions(List<string> questions)
+        {
             var answers = new List<string>();
-            foreach(var q in questions) {
+            foreach (var q in questions)
+            {
                 string lowerCaseQuestion = q.ToLower();
                 string ans;
-                if (lowerCaseQuestion.Contains("password")) {
+                if (lowerCaseQuestion.Contains("password"))
+                {
                     ans = String_IO.GetHiddenConsoleInput(q);
-                } else {
+                }
+                else
+                {
                     ans = String_IO.GetInputOnText(q);
                 }
                 answers.Add(ans);
@@ -117,6 +129,8 @@ namespace Human
         private List<long> accountsIds; //agregation
         private string secretQuestion;
         private string secretAnswer;
+
+        public event HandleSystemUserInfoRequest InfoReqEvent;
 
         public override void ShowInfo()
         {
@@ -150,12 +164,13 @@ namespace Human
             this.secretAnswer = secretAnswer;
             this.secretQuestion = secretQuestion;
             this.accountsIds = new List<long>();
+            this.InfoReqEvent = new HandleSystemUserInfoRequest(BankSystem.GetEmployeeRigths);
         }
 
 
         public static BankClient CreateBankClient()
         {
-            var    basicAnswers = User.AnswerQuestions(User.DefaultQuestions);
+            var basicAnswers = User.AnswerQuestions(User.DefaultQuestions);
             string secretQuestion = String_IO.GetInputOnText("Enter secret question");
             string secretAnswer = String_IO.GetHiddenConsoleInput("Enter secret answer");
             return new BankClient(basicAnswers[0], basicAnswers[1], basicAnswers[2], basicAnswers[3], secretQuestion, secretAnswer);
@@ -166,24 +181,28 @@ namespace Human
             this.accountsIds.Add(accId);
         }
 
-        public int TakeCredit(int moneyValue) {
+        public int TakeCredit(int moneyValue)
+        {
             if (moneyValue <= 0) return 0;
 
             int accountIdWithCredit = -1;
 
-            foreach(var accId in this.accountsIds) {
+            foreach (var accId in this.accountsIds)
+            {
                 var acc = BankSystem.GetAccountById(accId);
-                if (acc.MoneyAmount > moneyValue) {
+                if (acc.MoneyAmount > moneyValue)
+                {
                     acc.IncreaseAmount(moneyValue);
                     accountIdWithCredit = (int)acc.id;
                     break;
                 }
             }
 
-            return accountIdWithCredit; 
+            return accountIdWithCredit;
         }
 
-        public bool ExchangeMoney(int accountSrcId, int accountDstId, int MoneyAmount) {
+        public bool ExchangeMoney(int accountSrcId, int accountDstId, int MoneyAmount)
+        {
             var accSrc = BankSystem.GetAccountById(accountSrcId);
             var accDst = BankSystem.GetAccountById(accountDstId);
 
@@ -192,30 +211,43 @@ namespace Human
 
             if (accSrc == null || accDst == null)
                 return false;
-            
-            if (accSrc.DecreaseAmount(MoneyAmount)) {
+
+            if (accSrc.DecreaseAmount(MoneyAmount))
+            {
                 accDst.IncreaseAmount(MoneyAmount);
-            } else {
+            }
+            else
+            {
                 return false;
             }
             return true;
         }
 
-        public bool LeaveSystem() {
+        public bool LeaveSystem()
+        {
             return BankSystem.RemoveUser((int)this.id);
         }
 
-        public void ShowPossibleActions() {
-            Console.WriteLine("AddAccountId()\n" + 
-            "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n"+
-            "ShowInfo() - show user info");
+        public void ShowPossibleActions()
+        {
+            if (InfoReqEvent != null)
+            {
+                string actions = InfoReqEvent();
+                Console.WriteLine(actions);
+            }
+            else
+            {   
+                Console.WriteLine("No answer from system");
+            }
         }
 
-        void IMoney.ICouldntImagineSameMethodSoHereItIs() {
+        void IMoney.ICouldntImagineSameMethodSoHereItIs()
+        {
             Console.WriteLine("Some IMoney method overriden in BankCLient");
         }
 
-        void ISystem.ICouldntImagineSameMethodSoHereItIs() {
+        void ISystem.ICouldntImagineSameMethodSoHereItIs()
+        {
             Console.WriteLine("Some ISystem method overriden in BankCLient");
         }
     }
@@ -235,10 +267,12 @@ namespace Human
                 }
                 else
                 {
-                    return -1;
+                    throw new EmployeeAccessException(this, "Current employee has no rights");
                 }
             }
         }
+
+        public event HandleSystemUserInfoRequest InfoReqEvent;
 
 
         public override void ShowInfo()
@@ -266,11 +300,12 @@ namespace Human
         {
             this.Position = Position;
             this.hasRights = hasRights;
+            this.InfoReqEvent = new HandleSystemUserInfoRequest(BankSystem.GetEmployeeRigths);
         }
 
         public static BankEmployee CreateBankEmployee()
         {
-            var    basicAnswers = User.AnswerQuestions(User.DefaultQuestions);
+            var basicAnswers = User.AnswerQuestions(User.DefaultQuestions);
             string position = String_IO.GetInputOnText("Enter your Position in bank");
             string bankPassword = String_IO.GetHiddenConsoleInput("Enter SUPER SECRET BANK PASSWORD");
 
@@ -288,24 +323,30 @@ namespace Human
 
         // interface inheritance
         // IMoney
-        public int TakeCredit(int moneyValue) {
+        public int TakeCredit(int moneyValue)
+        {
             Console.WriteLine("ERROR: bank employee is not alowed to use its bank services");
             return -1;
         }
 
-        public bool ExchangeMoney(int accountSrcId, int accountDstId, int MoneyAmount) {
+        public bool ExchangeMoney(int accountSrcId, int accountDstId, int MoneyAmount)
+        {
             if (!this.hasRights)
-                return false;
+                throw new EmployeeAccessException(this, "Current employee has no rights");
 
             var accSrc = BankSystem.GetAccountById(accountSrcId);
             var accDst = BankSystem.GetAccountById(accountDstId);
 
-            if (accSrc == null || accDst == null) {
+            if (accSrc == null || accDst == null)
+            {
                 return false;
             }
-            if (accSrc.DecreaseAmount(MoneyAmount)) {
+            if (accSrc.DecreaseAmount(MoneyAmount))
+            {
                 accDst.IncreaseAmount(MoneyAmount);
-            } else {
+            }
+            else
+            {
                 return false;
             }
             return true;
@@ -313,28 +354,35 @@ namespace Human
         //IMoney
 
         // ISystem
-        public bool LeaveSystem() {
+        public bool LeaveSystem()
+        {
             return BankSystem.RemoveUser((int)this.id);
         }
 
-        public void ShowPossibleActions() {
-            Console.WriteLine("AddAccountId()\n" + 
-            "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n"+
-            "ShowInfo() - show user info\n" + 
-            "systemUsersCount - get users count in system. Permission reqired");
+        public void ShowPossibleActions()
+        {
+            if (InfoReqEvent != null)
+            {
+                string actions = InfoReqEvent();
+                Console.WriteLine(actions);
+            }
+            else
+            {   
+                Console.WriteLine("No answer from system");
+            }
         }
         // ISystem
 
-        void IMoney.ICouldntImagineSameMethodSoHereItIs() {
+        void IMoney.ICouldntImagineSameMethodSoHereItIs()
+        {
             Console.WriteLine("Some IMoney method overriden in BankEmployee");
         }
 
-        void ISystem.ICouldntImagineSameMethodSoHereItIs() {
+        void ISystem.ICouldntImagineSameMethodSoHereItIs()
+        {
             Console.WriteLine("Some ISystem method overriden in BankEmployee");
         }
 
         // interfacew
-
-
     }
 }
