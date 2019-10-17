@@ -2,19 +2,30 @@ using System;
 
 using Human;
 
-namespace CustomException {
+namespace CustomException
+{
+    class EmployeeAccessExceptionArgs
+    {
+        public User User;
+        public string Message;
+
+        public EmployeeAccessExceptionArgs(string Msg, User user) {
+            this.Message = Msg;
+            this.User = user;
+        }
+
+        public EmployeeAccessExceptionArgs(User user, string Msg = "") {
+            this.Message = Msg;
+            this.User = user;
+        }
+    }
 
     class EmployeeAccessException : Exception
     {
-        public User User;
-        public EmployeeAccessException(string message, User errUser) : base(message)
+        public EmployeeAccessExceptionArgs args;
+        public EmployeeAccessException(EmployeeAccessExceptionArgs args) : base(args.Message)
         {
-            this.User = errUser;
-        }
-
-        public EmployeeAccessException(User errUser, string message = "") : base(message)
-        {
-            this.User = errUser;
+            this.args = args;
         }
 
     }

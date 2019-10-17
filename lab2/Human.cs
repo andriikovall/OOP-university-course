@@ -267,7 +267,7 @@ namespace Human
                 }
                 else
                 {
-                    throw new EmployeeAccessException(this, "Current employee has no rights");
+                    throw new EmployeeAccessException(new EmployeeAccessExceptionArgs(this, "Current employee has no rights"));
                 }
             }
         }
@@ -332,7 +332,7 @@ namespace Human
         public bool ExchangeMoney(int accountSrcId, int accountDstId, int MoneyAmount)
         {
             if (!this.hasRights)
-                throw new EmployeeAccessException(this, "Current employee has no rights");
+                throw new EmployeeAccessException(new EmployeeAccessExceptionArgs(this, "Current employee has no rights"));
 
             var accSrc = BankSystem.GetAccountById(accountSrcId);
             var accDst = BankSystem.GetAccountById(accountDstId);
