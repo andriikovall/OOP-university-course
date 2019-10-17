@@ -46,6 +46,9 @@ namespace lab1
             BankSystem.AddUser(client);
             BankSystem.AddUser(basicUser);
 
+            employee.ShowPossibleActions();
+            client.ShowPossibleActions();
+
 
             Console.WriteLine("\n------------------------------------All users in system");
             foreach (var user in BankSystem.Users.Values)

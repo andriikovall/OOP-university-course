@@ -130,7 +130,7 @@ namespace Human
         private string secretQuestion;
         private string secretAnswer;
 
-        public event HandleSystemUserInfoRequest InfoReqEvent;
+        private event HandleSystemUserInfoRequest InfoReqEvent;
 
         public override void ShowInfo()
         {
@@ -272,7 +272,7 @@ namespace Human
             }
         }
 
-        public event HandleSystemUserInfoRequest InfoReqEvent;
+        private event HandleSystemUserInfoRequest InfoReqEvent;
 
 
         public override void ShowInfo()

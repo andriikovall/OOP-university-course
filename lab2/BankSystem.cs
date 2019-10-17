@@ -13,8 +13,6 @@ namespace Bank
         private static Dictionary<int, Account> accounts; // composition
         private static Dictionary<int, User>    users; // composition
 
-        public static event AccountHandle AccountActivatingEvent;
-
         public static Dictionary<int, User> Users
         {
             get
@@ -90,17 +88,17 @@ namespace Bank
         }
 
         public static string GetEmployeeRigths() {
-            string rigths = "AddAccountId()\n" +
+            string rigths = "\nAddAccountId()\n" +
             "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
             "ShowInfo() - show employee info\n" +
-            "systemUsersCount - get users count in system. Permission reqired";
+            "systemUsersCount - get users count in system. Permission reqired\n";
             return rigths;
         }
 
         public static string GetClietnRights() {
-            string rigths = "AddAccountId()\n" + 
+            string rigths = "\nAddAccountId()\n" + 
             "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n"+
-            "ShowInfo() - show user info";
+            "ShowInfo() - show user info\n";
             return rigths;
         }
 
@@ -117,7 +115,7 @@ namespace Bank
 
         private long moneyAmount;
 
-        public event AccountHandle AccountActivatingEvent;
+        private event AccountHandle AccountActivatingEvent;
 
         public void IncreaseAmount(long value) => this.moneyAmount += value;
 
@@ -175,13 +173,6 @@ namespace Bank
                 moneyAmount = value;
             }
         }
-
-        // public Account Account(long moneyAmount, string currency)
-        // {
-        //     Account acc = new Account(moneyAmount, currency);
-        //     BankSystem.AddAccount(acc);
-        //     return acc;
-        // }
 
         public void ShowAmount()
         {
