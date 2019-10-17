@@ -320,7 +320,8 @@ namespace Human
         public void ShowPossibleActions() {
             Console.WriteLine("AddAccountId()\n" + 
             "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n"+
-            "ShowInfo() - show user info");
+            "ShowInfo() - show user info\n" + 
+            "systemUsersCount - get users count in system. Permission reqired");
         }
         // ISystem
 
@@ -332,7 +333,7 @@ namespace Human
             Console.WriteLine("Some ISystem method overriden in BankEmployee");
         }
 
-//     interface
+        // interfacew
 
 
     }

@@ -12,13 +12,18 @@ namespace lab1
     {
         static void Main(string[] args)
         {
-            Account acc1 = Account.CreateAccount(100, "uah"); // id 1
-            Account acc2 = Account.CreateAccount(5454, "uah"); //   2 
-            Account acc3 = Account.CreateAccount(200, "usd"); //   .
-            Account acc4 = Account.CreateAccount(123, "uah");  //   . 
-            Account acc5 = Account.CreateAccount(1, "usd");
+            // Account acc1 = Account.CreateAccount(100, "uah"); // id 1
+            // Account acc2 = Account.CreateAccount(5454, "uah"); //   2 
+            // Account acc3 = Account.CreateAccount(200, "usd"); //   .
+            // Account acc4 = Account.CreateAccount(123, "uah");  //   . 
+            // Account acc5 = Account.CreateAccount(1, "usd");
             Account acc6 = new Account(); // this acc is not added to bank system initially
             Account acc7 = new Account();
+
+            acc6.Activate("Bank228");
+            acc7.Activate("Bank228dsd");
+            
+
 
             // //  so we add explisitly
             // BankSystem.AddAccounts(new Account[] { acc6, acc7 });
@@ -58,11 +63,6 @@ namespace lab1
             // acc3.IncreaseAmount(100);
             // acc5.DecreaseAmount(50000);
             // client.ShowInfo("CLIENT OVERRIDEN METHOD", "CLIENT OVERRIDEN METHOD");
-
-            var acc = BankSystem.GetAccountById(455);
-            if (acc == null) {
-                Console.WriteLine("Null");
-            } 
             // Console.WriteLine(employee.systemUsersCount);
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using Human;
+using BankEvent;
 
 namespace Bank
 {
@@ -11,6 +12,8 @@ namespace Bank
 
         private static Dictionary<int, Account> accounts; // composition
         private static Dictionary<int, User>    users; // composition
+
+        public static event AccountHandle AccountActivatingEvent;
 
         public static Dictionary<int, User> Users
         {
@@ -59,11 +62,6 @@ namespace Bank
             }
         }
 
-        public static void AddAccount(Account acc)
-        {
-            accounts[(int)acc.id] = acc;
-        }
-
         public static void AddAccounts(Account[] accArr)
         {
             foreach (var acc in accArr)
@@ -71,6 +69,19 @@ namespace Bank
                 AddAccount(acc);
             }
         }
+
+        // overloads
+        public static void AddAccount(Account acc)
+        {
+            accounts[(int)acc.id] = acc;
+        }
+
+        public static void AddAccount(BankEventArg bankArg) 
+        {
+            AddAccount(bankArg.account);
+            Console.WriteLine("Reacted on activating account.\n Adding it into system...\nSuccesfully added");
+        } 
+        // overloads
 
         static BankSystem()
         {
@@ -80,7 +91,7 @@ namespace Bank
 
     }
 
-    class Account
+    public class Account
     {
         public readonly long id;
         public readonly string currency;
@@ -91,11 +102,13 @@ namespace Bank
 
         private long moneyAmount;
 
+        public event AccountHandle AccountActivatingEvent;
+
         public void IncreaseAmount(long value) => this.moneyAmount += value;
 
         public Account() : this(0, DEFAULT_CURRENCY) { }
 
-        private Account(long moneyAmount, string currency)
+        public Account(long moneyAmount, string currency)
         {
             this.id = nextId++;
             if (moneyAmount < 0)
@@ -107,6 +120,19 @@ namespace Bank
                 this.moneyAmount = moneyAmount;
             }
             this.currency = currency;
+            this.AccountActivatingEvent += new AccountHandle(BankSystem.AddAccount);
+        }
+
+        public void Activate(string bankPassword) {
+            Console.WriteLine($"Activating new acconut with id - {this.id}");
+            if (bankPassword == BankSystem.SecretPassword) {
+                if (AccountActivatingEvent != null) {
+                    AccountActivatingEvent(new BankEventArg(this));
+                }
+                Console.WriteLine("Account succesfully activated");
+            } else {
+                Console.WriteLine("ERROR: bank password is wrong, aborting account activating");
+            }
         }
 
         public bool DecreaseAmount(long value)
@@ -135,12 +161,12 @@ namespace Bank
             }
         }
 
-        public static Account CreateAccount(long moneyAmount, string currency)
-        {
-            Account acc = new Account(moneyAmount, currency);
-            BankSystem.AddAccount(acc);
-            return acc;
-        }
+        // public Account Account(long moneyAmount, string currency)
+        // {
+        //     Account acc = new Account(moneyAmount, currency);
+        //     BankSystem.AddAccount(acc);
+        //     return acc;
+        // }
 
         public void ShowAmount()
         {
