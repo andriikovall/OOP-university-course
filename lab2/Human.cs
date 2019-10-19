@@ -326,7 +326,7 @@ namespace Human
         public int TakeCredit(int moneyValue)
         {
             Console.WriteLine("ERROR: bank employee is not alowed to use its bank services");
-            return -1;
+            throw new EmployeeAccessException(new EmployeeAccessExceptionArgs(this, "Current employee has no rights"));
         }
 
         public bool ExchangeMoney(int accountSrcId, int accountDstId, int MoneyAmount)

@@ -61,11 +61,32 @@ namespace lab1
             acc3.IncreaseAmount(100);
             acc4.DecreaseAmount(550000);
             client.ShowInfo("CLIENT OVERRIDEN METHOD", "CLIENT OVERRIDEN METHOD");
-            try {
+            try
+            {
                 Console.WriteLine(employee.systemUsersCount);
-            } catch (EmployeeAccessException exp) {
+            }
+            catch (EmployeeAccessException exp)
+            {
                 Console.WriteLine("Error");
                 Console.WriteLine(exp.args.Message);
+            }
+
+            try
+            {
+                employee.TakeCredit(45);
+            }
+            catch (EmployeeAccessException exp)
+            {
+                Console.WriteLine(exp.Message);
+            }
+
+            try
+            {
+                employee.ExchangeMoney(45, 5, 545);
+            }
+            catch (EmployeeAccessException exp)
+            {
+                Console.WriteLine(exp.Message);
             }
         }
     }
