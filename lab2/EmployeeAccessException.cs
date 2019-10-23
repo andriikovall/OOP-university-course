@@ -9,12 +9,14 @@ namespace CustomException
         public User User;
         public string Message;
 
-        public EmployeeAccessExceptionArgs(string Msg, User user) {
+        public EmployeeAccessExceptionArgs(string Msg, User user)
+        {
             this.Message = Msg;
             this.User = user;
         }
 
-        public EmployeeAccessExceptionArgs(User user, string Msg = "") {
+        public EmployeeAccessExceptionArgs(User user, string Msg = "")
+        {
             this.Message = Msg;
             this.User = user;
         }

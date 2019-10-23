@@ -236,7 +236,7 @@ namespace Human
                 Console.WriteLine(actions);
             }
             else
-            {   
+            {
                 Console.WriteLine("No answer from system");
             }
         }
@@ -255,13 +255,13 @@ namespace Human
     {
         public string Position { get; }
 
-        private Boolean hasRights;
+        private Boolean HasRights;
 
-        public int systemUsersCount
+        public int SystemUsersCount
         {
             get
             {
-                if (this.hasRights)
+                if (this.HasRights)
                 {
                     return BankSystem.UsersСount;
                 }
@@ -296,10 +296,10 @@ namespace Human
                              string login,
                              string password,
                              string Position,
-                             Boolean hasRights) : base(firstName, lastName, login, password)
+                             Boolean HasRights) : base(firstName, lastName, login, password)
         {
             this.Position = Position;
-            this.hasRights = hasRights;
+            this.HasRights = HasRights;
             this.InfoReqEvent = new HandleSystemUserInfoRequest(BankSystem.GetEmployeeRigths);
         }
 
@@ -309,14 +309,14 @@ namespace Human
             string position = String_IO.GetInputOnText("Enter your Position in bank");
             string bankPassword = String_IO.GetHiddenConsoleInput("Enter SUPER SECRET BANK PASSWORD");
 
-            Boolean hasRights = (bankPassword == BankSystem.SecretPassword);
+            Boolean HasRights = (bankPassword == BankSystem.SecretPassword);
 
-            if (hasRights)
+            if (HasRights)
                 Console.WriteLine("Corerct password, access given");
             else
                 Console.WriteLine("Wrong password, access denied");
 
-            return new BankEmployee(basicAnswers[0], basicAnswers[1], basicAnswers[2], basicAnswers[3], position, hasRights);
+            return new BankEmployee(basicAnswers[0], basicAnswers[1], basicAnswers[2], basicAnswers[3], position, HasRights);
         }
 
 
@@ -331,7 +331,7 @@ namespace Human
 
         public bool ExchangeMoney(int accountSrcId, int accountDstId, int MoneyAmount)
         {
-            if (!this.hasRights)
+            if (!this.HasRights)
                 throw new EmployeeAccessException(new EmployeeAccessExceptionArgs(this, "Current employee has no rights"));
 
             var accSrc = BankSystem.GetAccountById(accountSrcId);
@@ -367,7 +367,7 @@ namespace Human
                 Console.WriteLine(actions);
             }
             else
-            {   
+            {
                 Console.WriteLine("No answer from system");
             }
         }

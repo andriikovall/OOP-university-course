@@ -13,10 +13,10 @@ namespace lab1
     {
         static void Main(string[] args)
         {
-            Account acc1 = new Account(100, "uah"); // id 1
-            Account acc2 = new Account(5454, "uah"); //   2 
-            Account acc3 = new Account(200, "usd"); //   .
-            Account acc4 = new Account(1, "usd");
+            var acc1 = new Account(100, "uah"); // id 1
+            var acc2 = new Account(5454, "uah"); //   2 
+            var acc3 = new Account(200, "usd"); //   .
+            var acc4 = new Account(1, "usd");
 
             acc1.Activate("Bank228");
             acc2.Activate("Bank228");
@@ -39,7 +39,7 @@ namespace lab1
             client.ShowInfo();
 
             Console.WriteLine("---------------------Creating Bank Exmployee");
-            BankEmployee employee = BankEmployee.CreateBankEmployee();
+            var employee = BankEmployee.CreateBankEmployee();
             Console.WriteLine("---------------------Creating Bank Exmployee");
 
             BankSystem.AddUser(employee);
@@ -63,7 +63,7 @@ namespace lab1
             client.ShowInfo("CLIENT OVERRIDEN METHOD", "CLIENT OVERRIDEN METHOD");
             try
             {
-                Console.WriteLine(employee.systemUsersCount);
+                Console.WriteLine(employee.SystemUsersCount);
             }
             catch (EmployeeAccessException exp)
             {

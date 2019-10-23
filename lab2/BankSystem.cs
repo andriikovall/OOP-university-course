@@ -8,10 +8,12 @@ namespace Bank
 {
     static class BankSystem
     {
+        private static Dictionary<int, Account> accounts; // composition
+        private static Dictionary<int, User> users; // composition
+        public  static int UsersСount => users.Count;
+
         public const string SecretPassword = "Bank228";
 
-        private static Dictionary<int, Account> accounts; // composition
-        private static Dictionary<int, User>    users; // composition
 
         public static Dictionary<int, User> Users
         {
@@ -21,7 +23,6 @@ namespace Bank
             }
         }
 
-        public static int UsersСount => users.Count;
 
         public static Account GetAccountById(long accId)
         {
@@ -42,20 +43,28 @@ namespace Bank
             users[(int)user.id] = user;
         }
 
-        public static bool RemoveUser(User user) {
-            try {
+        public static bool RemoveUser(User user)
+        {
+            try
+            {
                 users.Remove((int)user.id);
                 return true;
-            } catch( Exception ) {
+            }
+            catch (Exception)
+            {
                 return false;
             }
         }
-        
-        public static bool RemoveUser(int userId) {
-            try {
+
+        public static bool RemoveUser(int userId)
+        {
+            try
+            {
                 users.Remove(userId);
                 return true;
-            } catch( Exception ) {
+            }
+            catch (Exception)
+            {
                 return false;
             }
         }
@@ -74,11 +83,11 @@ namespace Bank
             accounts[(int)acc.id] = acc;
         }
 
-        public static void AddAccount(BankEventArg bankArg) 
+        public static void AddAccount(BankEventArg bankArg)
         {
             AddAccount(bankArg.account);
-            Console.WriteLine("Reacted on activating account.\n Adding it into system...\nSuccesfully added");
-        } 
+            Console.WriteLine("Reacted on activating account.\nAdding it into system...\nSuccesfully added");
+        }
         // overloads
 
         static BankSystem()
@@ -87,7 +96,8 @@ namespace Bank
             accounts = new Dictionary<int, Account>();
         }
 
-        public static string GetEmployeeRigths() {
+        public static string GetEmployeeRigths()
+        {
             string rigths = "\nAddAccountId()\n" +
             "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
             "ShowInfo() - show employee info\n" +
@@ -95,9 +105,10 @@ namespace Bank
             return rigths;
         }
 
-        public static string GetClietnRights() {
-            string rigths = "\nAddAccountId()\n" + 
-            "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n"+
+        public static string GetClietnRights()
+        {
+            string rigths = "\nAddAccountId()\n" +
+            "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
             "ShowInfo() - show user info\n";
             return rigths;
         }
@@ -109,7 +120,7 @@ namespace Bank
         public readonly long id;
         public readonly string currency;
 
-        public const string DEFAULT_CURRENCY = "uah";
+        public const string DefaultCurrency = "uah";
 
         private static long nextId = 0;
 
@@ -119,7 +130,7 @@ namespace Bank
 
         public void IncreaseAmount(long value) => this.moneyAmount += value;
 
-        public Account() : this(0, DEFAULT_CURRENCY) { }
+        public Account() : this(0, DefaultCurrency) { }
 
         public Account(long moneyAmount, string currency)
         {
@@ -136,14 +147,19 @@ namespace Bank
             this.AccountActivatingEvent += new AccountHandle(BankSystem.AddAccount);
         }
 
-        public void Activate(string bankPassword) {
+        public void Activate(string bankPassword)
+        {
             Console.WriteLine($"Activating new acconut with id - {this.id}");
-            if (bankPassword == BankSystem.SecretPassword) {
-                if (AccountActivatingEvent != null) {
+            if (bankPassword == BankSystem.SecretPassword)
+            {
+                if (AccountActivatingEvent != null)
+                {
                     AccountActivatingEvent(new BankEventArg(this));
                 }
                 Console.WriteLine("Account succesfully activated");
-            } else {
+            }
+            else
+            {
                 Console.WriteLine("ERROR: bank password is wrong, aborting account activating");
             }
         }

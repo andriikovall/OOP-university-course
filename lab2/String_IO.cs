@@ -26,7 +26,8 @@ namespace Utils
             return Console.ReadLine();
         }
 
-        public static string strFirstCharToUpper(string str) {
+        public static string strFirstCharToUpper(string str)
+        {
             var strBuilder = new System.Text.StringBuilder(str);
             strBuilder[0] = Char.ToUpper(strBuilder[0]);
             return strBuilder.ToString();
