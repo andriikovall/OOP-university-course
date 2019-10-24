@@ -15,11 +15,8 @@ namespace CustomException
             this.User = user;
         }
 
-        public EmployeeAccessExceptionArgs(User user, string Msg = "")
-        {
-            this.Message = Msg;
-            this.User = user;
-        }
+        public EmployeeAccessExceptionArgs(User user, string Msg = "") : this(Msg, user) 
+        {}
     }
 
     class EmployeeAccessException : Exception

@@ -25,12 +25,13 @@ namespace Human
     {
         public readonly long id;
 
-        protected string firstName;
-        protected string lastName;
 
         public string login { get; }
         public string password { get; }
 
+        protected string firstName;
+        protected string lastName;
+        
         protected static long nextId;
 
         protected static readonly List<string> DefaultQuestions = new List<string>(){
@@ -255,7 +256,6 @@ namespace Human
     {
         public string Position { get; }
 
-        private Boolean HasRights;
 
         public int SystemUsersCount
         {
@@ -271,6 +271,8 @@ namespace Human
                 }
             }
         }
+
+        private Boolean HasRights;
 
         private event HandleSystemUserInfoRequest InfoReqEvent;
 
