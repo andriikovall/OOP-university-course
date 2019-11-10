@@ -28,6 +28,7 @@ namespace Utils
 
         public static string strFirstCharToUpper(string str)
         {
+            if (str.Length == 0) return str;
             var strBuilder = new System.Text.StringBuilder(str);
             strBuilder[0] = Char.ToUpper(strBuilder[0]);
             return strBuilder.ToString();

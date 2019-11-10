@@ -11,7 +11,7 @@ using CustomException;
 namespace Human
 {
     // just a human and nothing more
-    abstract class Person
+    public abstract class Person
     {
 
         public abstract string FirstName { get; }
@@ -21,7 +21,7 @@ namespace Human
     }
 
     // basic user with no rights
-    class User : Person
+    public class User : Person, IComparable
     {
         public readonly long id;
 
@@ -54,6 +54,19 @@ namespace Human
             get
             {
                 return String_IO.strFirstCharToUpper(lastName);
+            }
+        }
+
+        public int CompareTo(object obj)
+        {
+            User user = obj as User;
+            if (user != null) 
+            {
+                return this.id.CompareTo(user.id);
+            }
+            else
+            {
+                throw new Exception("Impossible to compare two users. Probably type error");
             }
         }
 

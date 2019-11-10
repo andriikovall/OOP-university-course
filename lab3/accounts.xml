@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ArrayOfAccount xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Account>
+    <currency>uah</currency>
+    <MoneyAmount>100</MoneyAmount>
+  </Account>
+  <Account>
+    <currency>uah</currency>
+    <MoneyAmount>5454</MoneyAmount>
+  </Account>
+  <Account>
+    <currency>usd</currency>
+    <MoneyAmount>200</MoneyAmount>
+  </Account>
+</ArrayOfAccount>

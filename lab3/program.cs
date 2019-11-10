@@ -1,9 +1,13 @@
 ﻿using System;
 
+using System.IO;
+using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+
 // lab
 using Human;
 using Bank;
-using CustomException;
+using CustomUserCollection;
 //
 
 
@@ -31,9 +35,10 @@ namespace lab1
             //bank client is able to have bank accounts
             Console.WriteLine("---------------------Creating Bank Client");
             BankClient client = BankClient.CreateBankClient();
+            BankClient client2 = BankClient.CreateBankClient();
             Console.WriteLine("---------------------Creating Bank Client");
 
-            // a piece of hardcode (((
+            
             client.AddAccountId(acc1.id);
             client.AddAccountId(acc3.id);
             client.ShowInfo();
@@ -43,50 +48,97 @@ namespace lab1
             Console.WriteLine("---------------------Creating Bank Exmployee");
 
             BankSystem.AddUser(employee);
-            BankSystem.AddUser(client);
+            BankSystem.AddUser(client); //1
+            BankSystem.AddUser(client2);//2
             BankSystem.AddUser(basicUser);
 
             employee.ShowPossibleSystemActions();
             client.ShowPossibleSystemActions();
 
+            //extension
+            Console.WriteLine(BankSystem.Users.GetBankClientsCount());
 
-            Console.WriteLine("\n------------------------------------All users in system");
-            foreach (var user in BankSystem.Users.Values)
-            {
-                user.ShowInfo();
-            }
-            Console.WriteLine("------------------------------------All users in system\n");
+            SerializationDemoXML();
+            SerializationDemoBIN();
+        }
 
-            acc1.IncreaseAmount(100);
-            acc3.IncreaseAmount(100);
-            acc4.DecreaseAmount(550000);
-            client.ShowInfo("CLIENT OVERRIDEN METHOD", "CLIENT OVERRIDEN METHOD");
-            try
-            {
-                Console.WriteLine(employee.SystemUsersCount);
-            }
-            catch (EmployeeAccessException exp)
-            {
-                Console.WriteLine("Error");
-                Console.WriteLine(exp.args.Message);
-            }
+        public static void SerializationDemoXML()
+        {
+            Account[] accArray = new Account[BankSystem.Accounts.Count];
+            BankSystem.Accounts.Values.CopyTo(accArray, 0);
 
-            try
+            XmlSerializer formatter = new XmlSerializer(typeof(Account[]));
+
+            using (FileStream fs = new FileStream("accounts.xml", FileMode.OpenOrCreate))
             {
-                employee.TakeCredit(45);
-            }
-            catch (EmployeeAccessException exp)
-            {
-                Console.WriteLine(exp.Message);
+                try 
+                {
+                    formatter.Serialize(fs, accArray); 
+                    Console.WriteLine("Serialization done");
+                }
+                catch (Exception exp) 
+                {
+                    Console.WriteLine("Serialization Error");
+                    Console.WriteLine(exp.Message);
+                }
             }
 
-            try
+            using (FileStream fs = new FileStream("accounts.xml", FileMode.OpenOrCreate))
             {
-                employee.ExchangeMoney(45, 5, 545);
+                try 
+                {
+                    var accountsDeserialized = (Account[])formatter.Deserialize(fs);
+                    Console.WriteLine("Deserialization done");
+                    foreach(var acc in accountsDeserialized) 
+                    {
+                        acc.ShowAmount();
+                    }
+                }
+                catch (Exception exp)
+                {
+                    Console.WriteLine("Deserialization error");
+                    Console.WriteLine(exp.Message);
+                }
             }
-            catch (EmployeeAccessException exp)
+        }
+
+        public static void SerializationDemoBIN()
+        {
+            Account[] accArray = new Account[BankSystem.Accounts.Count];
+            BankSystem.Accounts.Values.CopyTo(accArray, 0);
+
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            using (FileStream fs = new FileStream("accounts.dat", FileMode.OpenOrCreate))
             {
-                Console.WriteLine(exp.Message);
+                try 
+                {
+                    formatter.Serialize(fs, accArray); 
+                    Console.WriteLine("Serialization done");
+                }
+                catch (Exception exp) 
+                {
+                    Console.WriteLine("Serialization Error");
+                    Console.WriteLine(exp.Message);
+                }
+            }
+
+            using (FileStream fs = new FileStream("accounts.dat", FileMode.OpenOrCreate))
+            {
+                try 
+                {
+                    var accountsDeserialized = (Account[])formatter.Deserialize(fs);
+                    Console.WriteLine("Deserialization done");
+                    foreach(var acc in accountsDeserialized) 
+                    {
+                        acc.ShowAmount();
+                    }
+                }
+                catch (Exception exp)
+                {
+                    Console.WriteLine("Deserialization error");
+                    Console.WriteLine(exp.Message);
+                }
             }
         }
     }

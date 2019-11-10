@@ -3,26 +3,26 @@ using System.Collections.Generic;
 
 using Human;
 using BankEvent;
+using CustomUserCollection;
 
 namespace Bank
 {
     static class BankSystem
     {
-        private static Dictionary<int, Account> accounts; // composition
-        private static Dictionary<int, User> users; // composition
-        public  static int UsersСount => users.Count;
+        
 
         public const string SecretPassword = "Bank228";
 
+        public static Action<BankEventArg> AddAccountOnEvent;
+        public static Func<string> GetEmployeeRigths;
+        public static Func<string> GetClientRigths;
 
-        public static Dictionary<int, User> Users
-        {
-            get
-            {
-                return users;
-            }
-        }
+        public static int UsersСount => users.Count;
+        public static UserCollection Users => users;
+        public static Dictionary<int, Account> Accounts => accounts;
 
+        private static Dictionary<int, Account> accounts; // composition
+        private static UserCollection users; // composition
 
         public static Account GetAccountById(long accId)
         {
@@ -31,7 +31,7 @@ namespace Bank
                 Account foundAcc = accounts[(int)accId];
                 return foundAcc;
             }
-            catch (Exception)
+            catch
             {
                 return null;
             }
@@ -40,7 +40,7 @@ namespace Bank
 
         public static void AddUser(User user)
         {
-            users[(int)user.id] = user;
+            users.Insert(user);
         }
 
         public static bool RemoveUser(User user)
@@ -50,7 +50,7 @@ namespace Bank
                 users.Remove((int)user.id);
                 return true;
             }
-            catch (Exception)
+            catch
             {
                 return false;
             }
@@ -63,7 +63,7 @@ namespace Bank
                 users.Remove(userId);
                 return true;
             }
-            catch (Exception)
+            catch 
             {
                 return false;
             }
@@ -83,6 +83,8 @@ namespace Bank
             accounts[(int)acc.id] = acc;
         }
 
+
+
         public static void AddAccount(BankEventArg bankArg)
         {
             AddAccount(bankArg.account);
@@ -92,34 +94,50 @@ namespace Bank
 
         static BankSystem()
         {
-            users = new Dictionary<int, User>();
+            users = new UserCollection();
             accounts = new Dictionary<int, Account>();
+            AddAccountOnEvent = AddAccount;
+            GetEmployeeRigths = () =>
+            {
+                return "\nAddAccountId()\n" +
+                "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
+                "ShowInfo() - show employee info\n" +
+                "systemUsersCount - get users count in system. Permission reqired\n";
+            };
+
+            GetClientRigths = delegate()
+            {
+                return "\nAddAccountId()\n" +
+                "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
+                "ShowInfo() - show user info\n";
+            };
         }
 
-        public static string GetEmployeeRigths()
-        {
-            string rigths = "\nAddAccountId()\n" +
-            "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
-            "ShowInfo() - show employee info\n" +
-            "systemUsersCount - get users count in system. Permission reqired\n";
-            return rigths;
-        }
+        // public static string GetEmployeeRigths()
+        // {
+        //     string rigths = "\nAddAccountId()\n" +
+        //     "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
+        //     "ShowInfo() - show employee info\n" +
+        //     "systemUsersCount - get users count in system. Permission reqired\n";
+        //     return rigths;
+        // }
 
-        public static string GetClietnRights()
-        {
-            string rigths = "\nAddAccountId()\n" +
-            "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
-            "ShowInfo() - show user info\n";
-            return rigths;
-        }
+        // public static string GetClietnRights()
+        // {
+        //     string rigths = "\nAddAccountId()\n" +
+        //     "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
+        //     "ShowInfo() - show user info\n";
+        //     return rigths;
+        // }
 
     }
 
+    [Serializable]
     public class Account
     {
         public readonly long id;
-        public readonly string currency;
 
+        public string currency;
         public const string DefaultCurrency = "uah";
 
         private static long nextId = 0;
@@ -144,7 +162,7 @@ namespace Bank
                 this.moneyAmount = moneyAmount;
             }
             this.currency = currency;
-            this.AccountActivatingEvent += new AccountHandle(BankSystem.AddAccount);
+            this.AccountActivatingEvent += new AccountHandle(BankSystem.AddAccountOnEvent);
         }
 
         public void Activate(string bankPassword)
