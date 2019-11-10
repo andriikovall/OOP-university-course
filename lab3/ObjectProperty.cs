@@ -25,5 +25,7 @@ namespace Property
             }
         }
 
+        public object DefaultObjValue => default(T);
+
     }
 }

@@ -13,7 +13,7 @@ namespace CustomUserCollection
         private List<User> items; //@todo ask about LinkedList and so on
         private int currIndex;
 
-        public  List<User> Users {
+        public  List<User> Values {
             get => this.items; 
         }
 
@@ -133,7 +133,7 @@ namespace CustomUserCollection
         //no property extension provided
         public static int GetBankClientsCount(this UserCollection userCollection) 
         {
-            var users = userCollection.Users;
+            var users = userCollection.Values;
             int count = 0;
             users.ForEach((user) => {
                 if (user is BankClient) count++;
@@ -143,7 +143,7 @@ namespace CustomUserCollection
 
         public static int GetBankEmployeesCount(this UserCollection userCollection) 
         {
-            var users = userCollection.Users;
+            var users = userCollection.Values;
             int count = 0;
             users.ForEach((user) => {
                 if (user is BankEmployee) count++;

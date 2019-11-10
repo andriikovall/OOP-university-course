@@ -11,6 +11,7 @@ using CustomException;
 namespace Human
 {
     // just a human and nothing more
+    [Serializable]
     public abstract class Person
     {
 
@@ -20,7 +21,7 @@ namespace Human
         public abstract void ShowInfo();
     }
 
-    // basic user with no rights
+    [Serializable]
     public class User : Person, IComparable
     {
         public readonly long id;
@@ -137,7 +138,7 @@ namespace Human
             return answers;
         }
     }
-
+    [Serializable]
     class BankClient : User, IMoney, ISystem
     {
         private List<long> accountsIds; //agregation
@@ -265,6 +266,7 @@ namespace Human
             Console.WriteLine("LeaveSystem\nShowPossibleSystemActions - get possible actions to interact with system");
         }
     }
+    [Serializable]
     class BankEmployee : User, IMoney, ISystem
     {
         public string Position { get; }

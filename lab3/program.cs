@@ -26,14 +26,10 @@ namespace lab1
             acc1.Activate("Bank228");
             acc2.Activate("Bank228");
             acc3.Activate("Bank228");
-
             acc4.Activate("WorngPass");
 
-            // head od hierarchy
-            // basic user with no power
             User basicUser = new User("Andrii", "Koval", "login", "password");
 
-            //bank client is able to have bank accounts
             Console.WriteLine("---------------------Creating Bank Client");
             BankClient client = BankClient.CreateBankClient();
             BankClient client2 = BankClient.CreateBankClient();
@@ -53,8 +49,11 @@ namespace lab1
             BankSystem.AddUser(client2);//2
             BankSystem.AddUser(basicUser);
 
-            employee.ShowPossibleSystemActions();
-            client.ShowPossibleSystemActions();
+
+            User foundUser = BankSystem.Users["a"];
+            if (foundUser != null)
+                Console.WriteLine(foundUser.FullName);
+
 
             //extension
             Console.WriteLine(BankSystem.Users.GetBankClientsCount());
@@ -62,8 +61,9 @@ namespace lab1
             SerializationDemoXML();
             SerializationDemoBIN();
 
-            var props = new PropertyTypeCollection<User>(employee);
+            var props = new PropertyTypeCollection<Account>(acc2);
             props.logProperties();
+
         }
 
         public static void SerializationDemoXML()
