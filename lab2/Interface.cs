@@ -8,14 +8,14 @@ namespace BankUserIntefrace
     {
         int  TakeCredit(int moneyAmount);
         bool ExchangeMoney(int accountSrcId, int accountDstId, int moneyAmount);
-        void ICouldntImagineSameMethodSoHereItIs();
+        void ShowIntefaceActions();
     }
 
     interface ISystem
     {
         bool LeaveSystem();
-        void ShowPossibleActions();
-        void ICouldntImagineSameMethodSoHereItIs();
+        void ShowPossibleSystemActions();
+        void ShowIntefaceActions();
     }
 
 }

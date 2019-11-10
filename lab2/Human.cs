@@ -31,7 +31,7 @@ namespace Human
 
         protected string firstName;
         protected string lastName;
-        
+
         protected static long nextId;
 
         protected static readonly List<string> DefaultQuestions = new List<string>(){
@@ -229,7 +229,7 @@ namespace Human
             return BankSystem.RemoveUser((int)this.id);
         }
 
-        public void ShowPossibleActions()
+        public void ShowPossibleSystemActions()
         {
             if (InfoReqEvent != null)
             {
@@ -242,14 +242,14 @@ namespace Human
             }
         }
 
-        void IMoney.ICouldntImagineSameMethodSoHereItIs()
+        void IMoney.ShowIntefaceActions()
         {
-            Console.WriteLine("Some IMoney method overriden in BankCLient");
+            Console.WriteLine("Take credit\nExchange money\nBank employee is not allowed to do such actions");
         }
 
-        void ISystem.ICouldntImagineSameMethodSoHereItIs()
+        void ISystem.ShowIntefaceActions()
         {
-            Console.WriteLine("Some ISystem method overriden in BankCLient");
+            Console.WriteLine("LeaveSystem\nShowPossibleSystemActions - get possible actions to interact with system");
         }
     }
     class BankEmployee : User, IMoney, ISystem
@@ -361,7 +361,7 @@ namespace Human
             return BankSystem.RemoveUser((int)this.id);
         }
 
-        public void ShowPossibleActions()
+        public void ShowPossibleSystemActions()
         {
             if (InfoReqEvent != null)
             {
@@ -375,14 +375,14 @@ namespace Human
         }
         // ISystem
 
-        void IMoney.ICouldntImagineSameMethodSoHereItIs()
+        void IMoney.ShowIntefaceActions()
         {
-            Console.WriteLine("Some IMoney method overriden in BankEmployee");
+            Console.WriteLine("Take credit\nExchange money. User is allowed to do this");
         }
 
-        void ISystem.ICouldntImagineSameMethodSoHereItIs()
+        void ISystem.ShowIntefaceActions()
         {
-            Console.WriteLine("Some ISystem method overriden in BankEmployee");
+            Console.WriteLine("LeaveSystem\nShowPossibleSystemActions - get possible actions to interact with system");
         }
 
         // interfacew
