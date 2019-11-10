@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Human;
 using Bank;
 using CustomUserCollection;
+using Property;
 //
 
 
@@ -60,6 +61,9 @@ namespace lab1
 
             SerializationDemoXML();
             SerializationDemoBIN();
+
+            var props = new PropertyTypeCollection<User>(employee);
+            props.logProperties();
         }
 
         public static void SerializationDemoXML()

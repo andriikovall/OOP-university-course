@@ -9,8 +9,6 @@ namespace Bank
 {
     static class BankSystem
     {
-        
-
         public const string SecretPassword = "Bank228";
 
         public static Action<BankEventArg> AddAccountOnEvent;
@@ -82,8 +80,6 @@ namespace Bank
         {
             accounts[(int)acc.id] = acc;
         }
-
-
 
         public static void AddAccount(BankEventArg bankArg)
         {
