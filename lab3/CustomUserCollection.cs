@@ -113,7 +113,7 @@ namespace CustomUserCollection
             }
         }
 
-        public User getById(int id)
+        public User GetById(int id)
         {
             try
             {
