@@ -61,7 +61,7 @@ namespace Bank
                 users.Remove(userId);
                 return true;
             }
-            catch 
+            catch
             {
                 return false;
             }
@@ -101,7 +101,7 @@ namespace Bank
                 "systemUsersCount - get users count in system. Permission reqired\n";
             };
 
-            GetClientRigths = delegate()
+            GetClientRigths = delegate ()
             {
                 return "\nAddAccountId()\n" +
                 "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
@@ -158,7 +158,15 @@ namespace Bank
                 this.moneyAmount = moneyAmount;
             }
             this.currency = currency;
+            //
             this.AccountActivatingEvent += new AccountHandle(BankSystem.AddAccountOnEvent);
+            // or 
+            this.AccountActivatingEvent += (BankEventArg arg) =>
+            {
+                BankSystem.AddAccount(arg.account);
+                Console.WriteLine("Reacted on activating account.\nAdding it into system...\nSuccesfully added");
+            };
+            //
         }
 
         public void Activate(string bankPassword)

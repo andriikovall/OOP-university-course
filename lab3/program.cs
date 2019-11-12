@@ -61,9 +61,6 @@ namespace lab1
             SerializationDemoXML();
             SerializationDemoBIN();
 
-            var props = new PropertyTypeCollection<Account>(acc2);
-            props.logProperties();
-
         }
 
         public static void SerializationDemoXML()

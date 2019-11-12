@@ -10,12 +10,8 @@ namespace CustomUserCollection
     {
         public int Count { get { return this.items.Count; } }
 
-        private List<User> items; //@todo ask about LinkedList and so on
+        private List<User> items; 
         private int currIndex;
-
-        public  List<User> Values {
-            get => this.items; 
-        }
 
         public UserCollection(int length = 0)
         {
@@ -133,21 +129,22 @@ namespace CustomUserCollection
         //no property extension provided
         public static int GetBankClientsCount(this UserCollection userCollection) 
         {
-            var users = userCollection.Values;
             int count = 0;
-            users.ForEach((user) => {
+            foreach(User user in userCollection) 
+            {
                 if (user is BankClient) count++;
-            });
+            }
             return count;
         }
 
         public static int GetBankEmployeesCount(this UserCollection userCollection) 
         {
-            var users = userCollection.Values;
             int count = 0;
-            users.ForEach((user) => {
+
+            foreach(User user in userCollection) 
+            {
                 if (user is BankEmployee) count++;
-            });
+            }
             return count;
         }
     }
