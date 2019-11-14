@@ -3,6 +3,7 @@
 using System.IO;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Json;
 
 // lab
 using Human;
@@ -59,14 +60,20 @@ namespace lab1
             Console.WriteLine(BankSystem.Users.GetBankClientsCount());
 
             SerializationDemoXML();
-            SerializationDemoBIN();
+            SerializationDemoJSON();
 
         }
 
         public static void SerializationDemoXML()
         {
-            Account[] accArray = new Account[BankSystem.Accounts.Count];
-            BankSystem.Accounts.Values.CopyTo(accArray, 0);
+            // Account[] accArray = new Account[BankSystem.Accounts.Count];
+            // BankSystem.Accounts.Values.CopyTo(accArray, 0);
+
+            Account[] accArray = new Account[] {
+                new Account(45, "uah"), 
+                new Account(5646546, "usd"), 
+                new Account(1, "euro")
+            };
 
             XmlSerializer formatter = new XmlSerializer(typeof(Account[]));
 
@@ -103,10 +110,18 @@ namespace lab1
             }
         }
 
-        public static void SerializationDemoBIN()
+        public static void SerializationDemoJSON()
         {
-            Account[] accArray = new Account[BankSystem.Accounts.Count];
-            BankSystem.Accounts.Values.CopyTo(accArray, 0);
+            DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(Account[]));
+
+            Account[] accArray = new Account[] {
+                new Account(45, "uah"), 
+                new Account(5646546, "usd"), 
+                new Account(1, "euro")
+            };
+
+            // Account[] accArray = new Account[BankSystem.Accounts.Count];
+            // BankSystem.Accounts.Values.CopyTo(accArray, 0);
 
             BinaryFormatter formatter = new BinaryFormatter();
 

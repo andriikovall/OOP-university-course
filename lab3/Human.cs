@@ -67,7 +67,7 @@ namespace Human
             }
             else
             {
-                throw new Exception("Impossible to compare two users. Probably type error");
+                throw new InvalidCastException("Impossible to compare two users. Probably type error");
             }
         }
 
@@ -151,10 +151,10 @@ namespace Human
         {
             Console.WriteLine("Client info-------");
             base.ShowInfo();
-            foreach (var accId in accountsIds)
-            {
-                Bank.BankSystem.GetAccountById(accId).ShowAmount();
-            }
+            // foreach (var accId in accountsIds)
+            // {
+            //     Bank.BankSystem.GetAccountById(accId).ShowAmount();
+            // }
             Console.WriteLine("Client info-------");
         }
 

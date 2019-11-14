@@ -10,13 +10,13 @@ namespace CustomUserCollection
     {
         public int Count { get { return this.items.Count; } }
 
-        private List<User> items; 
+        private List<User> items;
         private int currIndex;
 
         public UserCollection(int length = 0)
         {
             this.items = new List<User>(length);
-            this.currIndex = 0;
+            this.currIndex = -1;
         }
 
         public UserCollection(IEnumerable<User> en) : this()
@@ -51,27 +51,38 @@ namespace CustomUserCollection
             }
         }
 
-        public void Remove(int userId) {
+        public void Remove(int userId)
+        {
             int index = this.items.FindIndex(user => user.id == userId);
-            try 
+            try
             {
                 this.items.RemoveAt(index);
             }
-            catch 
+            catch
             {
                 Console.WriteLine("Removing Error");
                 throw;
             }
         }
 
-        public IEnumerator GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return items.GetEnumerator();
         }
 
         Object IEnumerator.Current
         {
-            get { return this.items[currIndex]; }
+            get
+            {
+                try
+                {
+                    return this.items[currIndex];
+                }
+                catch 
+                {
+                    throw new InvalidOperationException("Probably you have forgotten to MoveNext()");
+                }
+            } 
         }
 
         bool IEnumerator.MoveNext()
@@ -85,13 +96,17 @@ namespace CustomUserCollection
 
         void IEnumerator.Reset()
         {
-            this.currIndex = 0;
+            this.currIndex = -1;
         }
 
         public User this[string name]
         {
             get
             {
+                if (name == null)
+                {
+                    throw new NullReferenceException("String to find is null");
+                }
                 var nameLowered = name.ToLower();
                 try
                 {
@@ -115,7 +130,7 @@ namespace CustomUserCollection
             {
                 return this.items.Find(user => user.id == id);
             }
-            catch 
+            catch
             {
                 return null;
             }
@@ -127,21 +142,22 @@ namespace CustomUserCollection
     public static class UserCollectionExtension
     {
         //no property extension provided
-        public static int GetBankClientsCount(this UserCollection userCollection) 
+        public static int GetBankClientsCount(this UserCollection userCollection)
         {
             int count = 0;
-            foreach(User user in userCollection) 
+
+            foreach (User user in userCollection)
             {
                 if (user is BankClient) count++;
             }
             return count;
         }
 
-        public static int GetBankEmployeesCount(this UserCollection userCollection) 
+        public static int GetBankEmployeesCount(this UserCollection userCollection)
         {
             int count = 0;
 
-            foreach(User user in userCollection) 
+            foreach (User user in userCollection)
             {
                 if (user is BankEmployee) count++;
             }

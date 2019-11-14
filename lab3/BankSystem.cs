@@ -140,7 +140,8 @@ namespace Bank
 
         private long moneyAmount;
 
-        private event AccountHandle AccountActivatingEvent;
+        // [NonSerialized]
+        // private event AccountHandle AccountActivatingEvent;
 
         public void IncreaseAmount(long value) => this.moneyAmount += value;
 
@@ -159,13 +160,13 @@ namespace Bank
             }
             this.currency = currency;
             //
-            this.AccountActivatingEvent += new AccountHandle(BankSystem.AddAccountOnEvent);
-            // or 
-            this.AccountActivatingEvent += (BankEventArg arg) =>
-            {
-                BankSystem.AddAccount(arg.account);
-                Console.WriteLine("Reacted on activating account.\nAdding it into system...\nSuccesfully added");
-            };
+            // this.AccountActivatingEvent += new AccountHandle(BankSystem.AddAccountOnEvent);
+            // // or 
+            // this.AccountActivatingEvent += (BankEventArg arg) =>
+            // {
+            //     BankSystem.AddAccount(arg.account);
+            //     Console.WriteLine("Reacted on activating account.\nAdding it into system...\nSuccesfully added");
+            // };
             //
         }
 
@@ -174,10 +175,10 @@ namespace Bank
             Console.WriteLine($"Activating new acconut with id - {this.id}");
             if (bankPassword == BankSystem.SecretPassword)
             {
-                if (AccountActivatingEvent != null)
-                {
-                    AccountActivatingEvent(new BankEventArg(this));
-                }
+                // if (AccountActivatingEvent != null)
+                // {
+                //     AccountActivatingEvent(new BankEventArg(this));
+                // }
                 Console.WriteLine("Account succesfully activated");
             }
             else

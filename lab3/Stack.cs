@@ -33,8 +33,8 @@ namespace GenericCollection
             if (items.Count == 0) 
                 throw new Exception("Stack is empty");
             var removeIndex = items.Count - 1;
+            items.RemoveRange(removeIndex, 1);
             T returnValue = items[removeIndex];
-            items.RemoveAt(removeIndex);
             return returnValue;
         }
 

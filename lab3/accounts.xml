@@ -2,14 +2,14 @@
 <ArrayOfAccount xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Account>
     <currency>uah</currency>
-    <MoneyAmount>100</MoneyAmount>
-  </Account>
-  <Account>
-    <currency>uah</currency>
-    <MoneyAmount>5454</MoneyAmount>
+    <MoneyAmount>45</MoneyAmount>
   </Account>
   <Account>
     <currency>usd</currency>
-    <MoneyAmount>200</MoneyAmount>
+    <MoneyAmount>5646546</MoneyAmount>
+  </Account>
+  <Account>
+    <currency>euro</currency>
+    <MoneyAmount>1</MoneyAmount>
   </Account>
 </ArrayOfAccount>
