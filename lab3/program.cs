@@ -10,6 +10,8 @@ using Human;
 using Bank;
 using CustomUserCollection;
 using Property;
+using BankUserIntefrace;
+using Generic;
 //
 
 
@@ -29,7 +31,6 @@ namespace lab1
             acc3.Activate("Bank228");
             acc4.Activate("WorngPass");
 
-            User basicUser = new User("Andrii", "Koval", "login", "password");
 
             Console.WriteLine("---------------------Creating Bank Client");
             BankClient client = BankClient.CreateBankClient();
@@ -45,15 +46,33 @@ namespace lab1
             var employee = BankEmployee.CreateBankEmployee();
             Console.WriteLine("---------------------Creating Bank Exmployee");
 
+            User basicUser = new User("Andrii", "Koval", "login", "password");
+
             BankSystem.AddUser(employee);
             BankSystem.AddUser(client); //1
             BankSystem.AddUser(client2);//2
             BankSystem.AddUser(basicUser);
 
+            User user2 = new User("Bodia", "bogdan", "log", "pass");
+            User user3 = new User("3", "3", "3", "3");
 
-            User foundUser = BankSystem.Users["a"];
-            if (foundUser != null)
-                Console.WriteLine(foundUser.FullName);
+            User[] IComparableDemoArray = new User[]{
+                basicUser, 
+                user3, 
+                user2
+            };
+
+            Array.Sort(IComparableDemoArray);
+            Console.WriteLine("Sorting demo");
+            foreach(User user in IComparableDemoArray) {
+                user.ShowInfo();
+            }
+            Console.WriteLine("Sorting demo");
+
+
+            // var foundUser = BankSystem.Users["a"]; 
+            // if (foundUser != null)
+            //     Console.WriteLine(foundUser.FullName);
 
 
             //extension
@@ -61,6 +80,11 @@ namespace lab1
 
             SerializationDemoXML();
             SerializationDemoJSON();
+
+            var obj = new CustomGeneric<BankEmployee>(employee);
+
+            obj.getAllPossibilities();
+
 
         }
 

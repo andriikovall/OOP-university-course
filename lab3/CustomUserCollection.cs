@@ -89,6 +89,7 @@ namespace CustomUserCollection
         {
             this.currIndex++;
             var indexIsOk = (this.currIndex < this.items.Count && this.currIndex >= 0);
+            
             if (!indexIsOk)
                 currIndex--;
             return indexIsOk;
@@ -99,7 +100,7 @@ namespace CustomUserCollection
             this.currIndex = -1;
         }
 
-        public User this[string name]
+        public List<User> this[string name]
         {
             get
             {
@@ -110,7 +111,7 @@ namespace CustomUserCollection
                 var nameLowered = name.ToLower();
                 try
                 {
-                    return items.Find((user) =>
+                    return items.FindAll((user) =>
                     {
                         return user.FirstName.ToLower().Contains(nameLowered) ||
                                 user.LastName.ToLower().Contains(nameLowered) ||
