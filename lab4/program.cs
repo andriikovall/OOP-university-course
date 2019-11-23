@@ -1,5 +1,7 @@
 ﻿using System;
 
+using System.Collections.Generic;
+
 using System.IO;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -17,7 +19,7 @@ namespace lab1
         static void Main(string[] args)
         {
             GCDemo();
-            mainDemo();
+            // mainDemo();
         }
 
         public static void SerializationDemoXML()
@@ -117,30 +119,58 @@ namespace lab1
 
         private static void GCDemo()
         {
-            Console.WriteLine("Garbage collector demo");
-
-            Console.WriteLine($"Memory used before allocating {GC.GetTotalMemory(false)}");
-
-            int sampleBigNumber = 500;
-
-            Console.WriteLine($"Allocating {sampleBigNumber} accounts");
-
-            makeGarbage();
-
-            Console.WriteLine($"Memory used after allocating {GC.GetTotalMemory(false)}");
-
-            GC.Collect();
-
-            Console.WriteLine($"Memory used after collection {GC.GetTotalMemory(false)}");
-
-            
+            GCDemoBegin();
+            GCDemoFinish();
+            LogTotalMemory("After all garbage stack frames"); // somethig strange -_-
         }
 
-        private static void makeGarbage(int count = 500) {
+        private static void GCDemoFinish() {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            LogTotalMemory("Exiting stackframe and force GC.Collect again");
+        }
+
+        private static void GCDemoBegin() {
+            Console.WriteLine("Garbage collection demo ---");
+
+            LogTotalMemory("Memory used before allocating");
+
+            int sampleBigNumber = 1000;
+            Console.WriteLine($"Allocating {sampleBigNumber} accounts");
+
+            var garbageList = makeListOfGarbage(sampleBigNumber);
+    
+            LogTotalMemory("Memory used after allocating");
+
+            garbageList.ForEach((acc) => acc.Dispose());
+
+            GC.Collect();
+            LogTotalMemory("Memory after GC.Collect disposed");
+
+            garbageList.ForEach((acc) => GC.ReRegisterForFinalize(acc));
+            garbageList = null;
+
+            GC.Collect();
+            
+            // almoust nothing changes because of "smart" GC
+            LogTotalMemory("Memory used after GC.collect in the same stack frame");
+        }
+
+        private static List<Account> makeListOfGarbage(int count) {
+            var garbageList = new List<Account>();
             var rand = new Random();
             for (int i = 0; i < count; i++) {
                 var acc = new Account(rand.Next(), "uah");
+                garbageList.Add(acc);
             }
+            return garbageList;
+        }
+
+        private static void LogTotalMemory(string s) {
+            s = s.Trim() ?? "";
+            if (s.Length == 0)
+                Console.WriteLine($"{GC.GetTotalMemory(false)}");    
+            Console.WriteLine($"{GC.GetTotalMemory(false)} - {s}");
         }
 
         private static void mainDemo()

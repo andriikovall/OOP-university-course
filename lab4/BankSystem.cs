@@ -1,4 +1,5 @@
 using System;
+using System.Runtime;
 using System.Collections.Generic;
 
 using Human;
@@ -19,8 +20,8 @@ namespace Bank
         public static UserCollection Users => users;
         public static Dictionary<int, Account> Accounts => accounts;
 
-        private static Dictionary<int, Account> accounts; 
-        private static UserCollection users; 
+        private static Dictionary<int, Account> accounts;
+        private static UserCollection users;
 
         public static Account GetAccountById(long accId)
         {
@@ -122,13 +123,14 @@ namespace Bank
 
         private static long nextId = 0;
         private long moneyAmount;
+        private bool disposed = false;
 
         private event AccountHandle AccountActivatingEvent;
 
         void IDisposable.Dispose()
         {
-            Console.WriteLine("Dispose account");
-        } 
+            Console.WriteLine($"Dispose account {this.id}");
+        }
 
 
         public Account() : this(0, DefaultCurrency) { }
@@ -145,7 +147,7 @@ namespace Bank
                 this.moneyAmount = moneyAmount;
             }
             this.currency = currency;
-            
+
             this.AccountActivatingEvent += new AccountHandle(BankSystem.AddAccountOnEvent);
             // or 
             this.AccountActivatingEvent += (BankEventArg arg) =>
@@ -153,7 +155,7 @@ namespace Bank
                 BankSystem.AddAccount(arg.account);
                 Console.WriteLine("Reacted on activating account.\nAdding it into system...\nSuccesfully added");
             };
-            
+
         }
 
         public void Activate(string bankPassword)
@@ -204,8 +206,46 @@ namespace Bank
             Console.WriteLine($"id - {id}  money - {moneyAmount} {currency}");
         }
 
-        ~Account() {
-            Console.WriteLine($"d-cor of acc with id {this.id}");
+        public void Dispose()
+        {
+            // Console.WriteLine($"Dispose method without flag {this.id}");
+
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            // Console.WriteLine($"Disposing method with flag {disposing} {this.id}");
+
+            if (this.disposed)
+                return;
+
+            if (disposing)
+            {
+                // free managed recourses
+                removeAllEventSubscriptions();
+            }
+            // free unmapped recourses
+            // @todo ask
+
+            this.disposed = true;
+        }
+
+        // CLEAN CODE - each func MUST do only one thing
+        // The best functions are parameterless
+        private void removeAllEventSubscriptions()
+        {
+            foreach (Delegate func in AccountActivatingEvent.GetInvocationList())
+            {
+                AccountActivatingEvent -= (AccountHandle)func;
+            }
+        }
+
+        ~Account()
+        {
+            Console.WriteLine($"d-ctor of acc with id {this.id}");
+            Dispose(false);
         }
     }
 }
