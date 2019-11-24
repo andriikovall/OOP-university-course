@@ -181,6 +181,7 @@ namespace lab1
             return garbageList;
         }
 
+        // CLEAN CODE - long meaningfull varibale names
         private static void LogTotalMemory(string stringAfterMemoryLogged, bool waitForFullCollectionBeforeLog = true)
         {
             // CLEAN CODE - do not repeat yourself
