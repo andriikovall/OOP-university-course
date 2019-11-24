@@ -1,16 +1,31 @@
 ﻿using System;
-
 using System.IO;
-using System.Text;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 
-// lab
 using Human;
 using Bank;
-//
 
+// CLEAN CODE - used rules
+
+/* Variable name length corresponds to its scope
+- Each func has its own level of abstraction
+- Meaningfull variable names
+- Meaningfull func names
+- Long variable and method names are better than short ones
+- Less lines in for/while/if blocks
+- More separation into funcs 
+    - Bob Martin said excactly like that 
+        "The first rule of functions is that they should be small. 
+        The second rule of functions is that they should be smaller than that. 
+        This is not an assertion that I can justify. 
+        I can’t provide any references to research that shows that very small functions are better."
+- Just make code cleaner
+    "Leave the campground cleaner than we found it..."
+- Good code doesn't need any comments 
+    (but i dont care, i need them in this lab work)
+*/
 
 namespace lab1
 {
@@ -166,15 +181,15 @@ namespace lab1
             return garbageList;
         }
 
-        private static void LogTotalMemory(string s, bool waitForFullCollectionBeforeLog = true)
+        private static void LogTotalMemory(string stringAfterMemoryLogged, bool waitForFullCollectionBeforeLog = true)
         {
             // CLEAN CODE - do not repeat yourself
-            s = checkStringAndTrim(s);
+            stringAfterMemoryLogged = checkStringAndTrim(stringAfterMemoryLogged);
             var memoryUsed = GC.GetTotalMemory(waitForFullCollectionBeforeLog);
             string output = $"{memoryUsed}";
 
-            if (s.Length != 0)
-                output += $" - {s}";
+            if (stringAfterMemoryLogged.Length != 0)
+                output += $" - {stringAfterMemoryLogged}";
 
             Console.WriteLine(output);
         }

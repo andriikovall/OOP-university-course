@@ -40,6 +40,7 @@ namespace Bank
         {
             users.Insert(user);
         }
+        
         // CLEAN CODE - camalCase function arguments naming
         public static bool RemoveUser(User user)
         {
@@ -70,6 +71,7 @@ namespace Bank
 
         public static void AddAccounts(Account[] accArr)
         {
+            // less lines in loops and conditional statements
             foreach (var acc in accArr)
             {
                 AddAccount(acc);
