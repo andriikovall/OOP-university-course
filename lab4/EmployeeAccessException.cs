@@ -14,7 +14,8 @@ namespace CustomException
             this.Message = Msg;
             this.User = user;
         }
-
+        // CLEAN CODE
+        // each func is a conctuctor and does inly one thing
         public EmployeeAccessExceptionArgs(User user, string Msg = "") : this(Msg, user) 
         {}
     }

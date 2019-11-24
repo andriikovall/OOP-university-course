@@ -1,5 +1,4 @@
 using System;
-using System.Runtime;
 using System.Collections.Generic;
 
 using Human;
@@ -12,7 +11,7 @@ namespace Bank
     {
         public const string SecretPassword = "Bank228";
 
-        public static Action<BankEventArg> AddAccountOnEvent;
+        public static Action<BankEventArg> AddAccountEvent;
         public static Func<string> GetEmployeeRigths;
         public static Func<string> GetClientRigths;
 
@@ -41,7 +40,7 @@ namespace Bank
         {
             users.Insert(user);
         }
-
+        // CLEAN CODE - camalCase function arguments naming
         public static bool RemoveUser(User user)
         {
             try
@@ -59,6 +58,7 @@ namespace Bank
         {
             try
             {
+                // throwing error is better than returning error codes, but here its more clear to undestand
                 users.Remove(userId);
                 return true;
             }
@@ -76,7 +76,7 @@ namespace Bank
             }
         }
 
-        // overloads
+
         public static void AddAccount(Account acc)
         {
             accounts[(int)acc.id] = acc;
@@ -87,13 +87,13 @@ namespace Bank
             AddAccount(bankArg.account);
             Console.WriteLine("Reacted on activating account.\nAdding it into system...\nSuccesfully added");
         }
-        // overloads
+        
 
         static BankSystem()
         {
             users = new UserCollection();
             accounts = new Dictionary<int, Account>();
-            AddAccountOnEvent = AddAccount;
+            AddAccountEvent = AddAccount;
             GetEmployeeRigths = () =>
             {
                 return "\nAddAccountId()\n" +
@@ -117,38 +117,35 @@ namespace Bank
         public readonly long id;
 
         public string currency;
-        public const string DefaultCurrency = "uah";
 
-        public void IncreaseAmount(long value) => this.moneyAmount += value;
 
-        private static long nextId = 0;
-        private long moneyAmount;
-        private bool disposed = false;
+        public void IncreaseAmount(long value) => this._moneyAmount += value;
 
-        private event AccountHandle AccountActivatingEvent;
+        private static long _nextId = 0;
+        private long _moneyAmount;
+        private bool _disposed = false;
+        
+        // no SCREAMING_CAPS for constants acording to C# namig conventions
+        private const string DefaultCurrency = "uah";
 
-        void IDisposable.Dispose()
-        {
-            Console.WriteLine($"Dispose account {this.id}");
-        }
-
+        private event AccountHandler AccountActivatingEvent;
 
         public Account() : this(0, DefaultCurrency) { }
 
         public Account(long moneyAmount, string currency)
         {
-            this.id = nextId++;
-            if (moneyAmount < 0)
+            this.id = _nextId++;
+            if (_moneyAmount < 0)
             {
-                this.moneyAmount = 0;
+                this._moneyAmount = 0;
             }
             else
             {
-                this.moneyAmount = moneyAmount;
+                this._moneyAmount = moneyAmount;
             }
             this.currency = currency;
 
-            this.AccountActivatingEvent += new AccountHandle(BankSystem.AddAccountOnEvent);
+            this.AccountActivatingEvent += new AccountHandler(BankSystem.AddAccountEvent);
             // or 
             this.AccountActivatingEvent += (BankEventArg arg) =>
             {
@@ -160,55 +157,74 @@ namespace Bank
 
         public void Activate(string bankPassword)
         {
+            // loging is only for demo
             Console.WriteLine($"Activating new acconut with id - {this.id}");
             if (bankPassword == BankSystem.SecretPassword)
             {
                 if (AccountActivatingEvent != null)
                 {
                     AccountActivatingEvent(new BankEventArg(this));
+                    Console.WriteLine("Account succesfully activated");
+                } 
+                else 
+                {
+                    throw new Exception("Couldnt activate account. Inner system error");
                 }
-                Console.WriteLine("Account succesfully activated");
             }
             else
             {
-                Console.WriteLine("ERROR: bank password is wrong, aborting account activating");
+                throw new ArgumentException("ERROR: bank password is wrong, aborting account activating");
             }
         }
 
         public bool DecreaseAmount(long value)
         {
-            if (value > moneyAmount)
+            if (value > _moneyAmount)
             {
-                Console.WriteLine("Unable to procces transaction");
-                Console.WriteLine($"Not enough credits -> {moneyAmount} {currency}");
+                // CLEAN CODE
+                // before
+                // Console.WriteLine("Unable to procces transaction");
+                // Console.WriteLine($"Not enough credits -> {_moneyAmount} {currency}");
+
+                // it's better to throw errors than log errors or return err codes but here its
+                // probaly less computationally expensive and easy to undestand
+
+                // @todo ask
+
+                // after
                 return false;
             }
-            moneyAmount -= value;
+            _moneyAmount -= value;
             return true;
         }
 
         public long MoneyAmount
         {
-            get { return moneyAmount; }
+            get { return _moneyAmount; }
             set
             {
                 if (value < 0)
                 {
-                    Console.WriteLine("Error: invalid money amount value");
-                    return;
+                    // before
+                    // Console.WriteLine("Error: invalid money amount value");
+
+                    // it's better to throw errors than log errors or return err codes
+
+                    //after
+                    throw new ArgumentException("Invalid money amount value. More than 1 required");
                 }
-                moneyAmount = value;
+                _moneyAmount = value;
             }
         }
 
         public void ShowAmount()
         {
-            Console.WriteLine($"id - {id}  money - {moneyAmount} {currency}");
+            Console.WriteLine($"id - {id}  money - {_moneyAmount} {currency}");
         }
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
-            // Console.WriteLine($"Dispose method without flag {this.id}");
+            Console.WriteLine($"Dispose method without flag {this.id}");
 
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -216,34 +232,40 @@ namespace Bank
 
         private void Dispose(bool disposing)
         {
-            // Console.WriteLine($"Disposing method with flag {disposing} {this.id}");
+            //Console.WriteLine($"Disposing method with flag {disposing} {this.id}");
 
-            if (this.disposed)
+            if (this._disposed)
                 return;
 
             if (disposing)
             {
                 // free managed recourses
+
+                // CLEAN CODE
+                // the best if statements and loops are 1-2 lines heigth
                 removeAllEventSubscriptions();
             }
             // free unmapped recourses
             // @todo ask
 
-            this.disposed = true;
+            this._disposed = true;
         }
 
         // CLEAN CODE - each func MUST do only one thing
         // The best functions are parameterless
+        // Each func should cover only one level of abstraction
         private void removeAllEventSubscriptions()
         {
             foreach (Delegate func in AccountActivatingEvent.GetInvocationList())
             {
-                AccountActivatingEvent -= (AccountHandle)func;
+                AccountActivatingEvent -= (AccountHandler)func;
             }
         }
 
         ~Account()
         {
+            // CLEAN CODE
+            // it's not apropriate to log here but its done to expliciltly show finalizer
             Console.WriteLine($"d-ctor of acc with id {this.id}");
             Dispose(false);
         }

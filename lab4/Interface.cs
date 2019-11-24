@@ -1,9 +1,5 @@
-using System;
-
-
 namespace BankUserIntefrace
 {
-
     interface IMoney
     {
         int  TakeCredit(int moneyAmount);
@@ -17,5 +13,4 @@ namespace BankUserIntefrace
         void ShowPossibleSystemActions();
         void ShowIntefaceActions();
     }
-
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 
-using System.Collections.Generic;
-
 using System.IO;
+using System.Text;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 
 // lab
@@ -19,7 +19,8 @@ namespace lab1
         static void Main(string[] args)
         {
             GCDemo();
-            // mainDemo();
+            weakReferenceDemo();
+            mainDemo();
         }
 
         public static void SerializationDemoXML()
@@ -121,56 +122,67 @@ namespace lab1
         {
             GCDemoBegin();
             GCDemoFinish();
-            LogTotalMemory("After all garbage stack frames"); // somethig strange -_-
         }
 
-        private static void GCDemoFinish() {
+        private static void GCDemoFinish()
+        {
             GC.Collect();
             GC.WaitForPendingFinalizers();
             LogTotalMemory("Exiting stackframe and force GC.Collect again");
         }
 
-        private static void GCDemoBegin() {
+        private static void GCDemoBegin()
+        {
             Console.WriteLine("Garbage collection demo ---");
 
             LogTotalMemory("Memory used before allocating");
 
-            int sampleBigNumber = 1000;
+            int sampleBigNumber = 100;
             Console.WriteLine($"Allocating {sampleBigNumber} accounts");
 
             var garbageList = makeListOfGarbage(sampleBigNumber);
-    
+            var generation = GC.GetGeneration(garbageList[0]);
+
             LogTotalMemory("Memory used after allocating");
 
-            garbageList.ForEach((acc) => acc.Dispose());
+            garbageList.ForEach((acc) => (acc as IDisposable).Dispose());
 
-            GC.Collect();
+            GC.Collect(generation);
             LogTotalMemory("Memory after GC.Collect disposed");
 
+            //this makes .net to call d-ctor of finalizer as its oficially called
             garbageList.ForEach((acc) => GC.ReRegisterForFinalize(acc));
-            garbageList = null;
-
-            GC.Collect();
-            
-            // almoust nothing changes because of "smart" GC
-            LogTotalMemory("Memory used after GC.collect in the same stack frame");
         }
 
-        private static List<Account> makeListOfGarbage(int count) {
+        private static List<Account> makeListOfGarbage(int count)
+        {
             var garbageList = new List<Account>();
             var rand = new Random();
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++)
+            {
                 var acc = new Account(rand.Next(), "uah");
                 garbageList.Add(acc);
             }
             return garbageList;
         }
 
-        private static void LogTotalMemory(string s) {
-            s = s.Trim() ?? "";
-            if (s.Length == 0)
-                Console.WriteLine($"{GC.GetTotalMemory(false)}");    
-            Console.WriteLine($"{GC.GetTotalMemory(false)} - {s}");
+        private static void LogTotalMemory(string s, bool waitForFullCollectionBeforeLog = true)
+        {
+            // CLEAN CODE - do not repeat yourself
+            s = checkStringAndTrim(s);
+            var memoryUsed = GC.GetTotalMemory(waitForFullCollectionBeforeLog);
+            string output = $"{memoryUsed}";
+
+            if (s.Length != 0)
+                output += $" - {s}";
+
+            Console.WriteLine(output);
+        }
+
+
+        private static string checkStringAndTrim(string s)
+        {
+            return (s ?? "").Trim();
         }
 
         private static void mainDemo()
@@ -180,10 +192,16 @@ namespace lab1
             var acc3 = new Account(200, "usd"); //   .
             var acc4 = new Account(1, "usd");
 
-            acc1.Activate("Bank228");
-            acc2.Activate("Bank228");
-            acc3.Activate("Bank228");
-            acc4.Activate("WorngPass");
+
+            try
+            {
+                acc1.Activate("Bank228");
+                acc2.Activate("Bank228");
+                acc3.Activate("Bank228");
+                acc4.Activate("WorngPass");
+            } catch 
+            {
+            }
 
 
 
@@ -205,9 +223,30 @@ namespace lab1
             User basicUser = new User("Andrii", "Koval", "login", "password");
 
             BankSystem.AddUser(employee);
-            BankSystem.AddUser(client); //1
-            BankSystem.AddUser(client2);//2
+            BankSystem.AddUser(client); 
+            BankSystem.AddUser(client2);
             BankSystem.AddUser(basicUser);
+        }
+
+        public static void weakReferenceDemo()
+        {
+            var weakAccountRef = new WeakReference(new Account(123123, "uah"));
+            if (weakAccountRef.IsAlive)
+            {
+                Console.WriteLine("Account ref is instansiated");
+            }
+
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+            GC.WaitForPendingFinalizers();
+
+            if (weakAccountRef.IsAlive)
+            {
+                Console.WriteLine("Account is still alive after GC.collect");
+            }
+            else
+            {
+                Console.WriteLine($"Account is dead and the value of weak account reference is {weakAccountRef}");
+            }
         }
     }
 }

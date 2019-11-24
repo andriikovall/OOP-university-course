@@ -10,8 +10,7 @@ using CustomException;
 
 namespace Human
 {
-    // just a human and nothing more
-    [Serializable]
+
     public abstract class Person
     {
 
@@ -21,11 +20,9 @@ namespace Human
         public abstract void ShowInfo();
     }
 
-    [Serializable]
-    public class User : Person, IComparable
+    public class User : Person, IComparable, IDisposable
     {
         public readonly long id;
-
 
         public string login { get; }
         public string password { get; }
@@ -35,7 +32,9 @@ namespace Human
 
         protected static long nextId;
 
-        protected static readonly List<string> DefaultQuestions = new List<string>(){
+        protected bool disposed = false;
+
+        protected static readonly List<string> DefaultQuestions = new List<string>() {
             "Enter first name",
             "Enter last name",
             "Enter login",
@@ -71,28 +70,6 @@ namespace Human
             }
         }
 
-
-        // public static User CreateUser()
-        // {
-        //     string firstName = String_IO.GetInputOnText("Enter first name");
-        //     string lastName = String_IO.GetInputOnText("Enter last name");
-        //     string login = String_IO.GetInputOnText("Enter login");
-        //     string password = "";
-        //     do
-        //     {
-        //         password = String_IO.GetHiddenString_IO("Enter password");
-        //         string passwordToCheck = String_IO.GetHiddenString_IO("Enter password again");
-        //         if (passwordToCheck != password)
-        //         {
-        //             Console.WriteLine("Error: passwords differ");
-        //             continue;
-        //         }
-        //         break;
-        //     } while (true);
-        //     User newUser = new User(firstName, lastName, login, password);
-        //     return newUser;
-        // }
-
         static User()
         {
             nextId = 0;
@@ -112,7 +89,13 @@ namespace Human
             get { return $"{this.FirstName} {this.LastName}"; }
         }
 
-        //method to override
+        public bool FullNameContainsCaseIgnored(string substring) {
+            substring = substring.ToLower().Trim();
+            return this.FirstName.ToLower().Contains(substring) ||
+                    this.LastName.ToLower().Contains(substring) ||
+                    this.FullName.ToLower().Contains(substring);
+        }
+
         public override void ShowInfo()
         {
             Console.WriteLine($"User info {this.id} - '{this.FullName}'");
@@ -121,6 +104,8 @@ namespace Human
         protected static List<string> AnswerQuestions(List<string> questions)
         {
             var answers = new List<string>();
+            // CLEAN CODE
+            // q and ans are apropriate besause the scope is pretty small
             foreach (var q in questions)
             {
                 string lowerCaseQuestion = q.ToLower();
@@ -137,24 +122,53 @@ namespace Human
             }
             return answers;
         }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+                return;
+
+            if (disposing)
+            {
+                // free managed recourses
+            }
+            // free unmapped recourses
+            // @todo ask
+
+            this.disposed = true;
+        }
+
+        ~User()
+        {
+            Console.WriteLine($"d-ctor of user with id {this.id}");
+            Dispose(false);
+        }
     }
+
     [Serializable]
     class BankClient : User, IMoney, ISystem
     {
-        private List<long> accountsIds; //agregation
+        private List<long> accountsIds; 
         private string secretQuestion;
         private string secretAnswer;
 
-        private event HandleSystemUserInfoRequest InfoReqEvent;
+        private event SystemUserInfoRequestHandler InfoReqEvent;
 
         public override void ShowInfo()
         {
             Console.WriteLine("Client info-------");
             base.ShowInfo();
-            // foreach (var accId in accountsIds)
-            // {
-            //     Bank.BankSystem.GetAccountById(accId).ShowAmount();
-            // }
+            foreach (var accId in accountsIds)
+            {
+                Bank.BankSystem.GetAccountById(accId).ShowAmount();
+            }
             Console.WriteLine("Client info-------");
         }
 
@@ -179,7 +193,7 @@ namespace Human
             this.secretAnswer = secretAnswer;
             this.secretQuestion = secretQuestion;
             this.accountsIds = new List<long>();
-            this.InfoReqEvent = new HandleSystemUserInfoRequest(BankSystem.GetEmployeeRigths);
+            this.InfoReqEvent = new SystemUserInfoRequestHandler(BankSystem.GetEmployeeRigths);
         }
 
 
@@ -218,6 +232,7 @@ namespace Human
 
         public bool ExchangeMoney(int accountSrcId, int accountDstId, int MoneyAmount)
         {
+            // it's rigth to throw exceptions but it's more clear and easy to deal with without throw and with bool
             var accSrc = BankSystem.GetAccountById(accountSrcId);
             var accDst = BankSystem.GetAccountById(accountDstId);
 
@@ -265,12 +280,40 @@ namespace Human
         {
             Console.WriteLine("LeaveSystem\nShowPossibleSystemActions - get possible actions to interact with system");
         }
+
+        protected override void Dispose(bool disposing) {
+            if (this.disposed)
+                return;
+
+            if (disposing)
+            {
+                // free managed recourses
+                removeAllEventSubscriptions();
+            }
+            // free unmapped recourses
+            // @todo ask
+
+            this.disposed = true;
+        }
+
+        private void removeAllEventSubscriptions()
+        {
+            foreach (Delegate func in InfoReqEvent.GetInvocationList())
+            {
+                InfoReqEvent -= (SystemUserInfoRequestHandler)func;
+            }
+        }
+
+        ~BankClient() {
+            // log only for demo
+            Console.WriteLine($"d-ctor BankClient {this.id}");
+            Dispose(false);
+        }
     }
     [Serializable]
-    class BankEmployee : User, IMoney, ISystem
+    class BankEmployee : User, IMoney, ISystem, IDisposable
     {
         public string Position { get; }
-
 
         public int SystemUsersCount
         {
@@ -289,7 +332,7 @@ namespace Human
 
         private Boolean HasRights;
 
-        private event HandleSystemUserInfoRequest InfoReqEvent;
+        private event SystemUserInfoRequestHandler InfoReqEvent;
 
 
         public override void ShowInfo()
@@ -307,7 +350,11 @@ namespace Human
             Console.WriteLine($"Position {this.Position}");
             Console.WriteLine(finishStr);
         }
+        
 
+        // CLEAN CODE
+        // in bool its said that functions with more than 2-3 args are depricated
+        // but i think its rights to do such a thing in constuctors
         private BankEmployee(string firstName,
                              string lastName,
                              string login,
@@ -317,7 +364,7 @@ namespace Human
         {
             this.Position = Position;
             this.HasRights = HasRights;
-            this.InfoReqEvent = new HandleSystemUserInfoRequest(BankSystem.GetEmployeeRigths);
+            this.InfoReqEvent = new SystemUserInfoRequestHandler(BankSystem.GetEmployeeRigths);
         }
 
         public static BankEmployee CreateBankEmployee()
@@ -337,13 +384,9 @@ namespace Human
         }
 
 
-
-        // interface inheritance
-        // IMoney
         public int TakeCredit(int moneyValue)
         {
-            Console.WriteLine("ERROR: bank employee is not alowed to use its bank services");
-            throw new EmployeeAccessException(new EmployeeAccessExceptionArgs(this, "Current employee has no rights"));
+            throw new EmployeeAccessException(new EmployeeAccessExceptionArgs(this, "Employee has no rights to take credit"));
         }
 
         public bool ExchangeMoney(int accountSrcId, int accountDstId, int MoneyAmount)
@@ -368,9 +411,9 @@ namespace Human
             }
             return true;
         }
-        //IMoney
+        
 
-        // ISystem
+
         public bool LeaveSystem()
         {
             return BankSystem.RemoveUser((int)this.id);
@@ -400,6 +443,32 @@ namespace Human
             Console.WriteLine("LeaveSystem\nShowPossibleSystemActions - get possible actions to interact with system");
         }
 
-        // interfacew
+        protected override void Dispose(bool disposing) {
+            if (this.disposed)
+                return;
+
+            if (disposing)
+            {
+                // free managed recourses
+                removeAllEventSubscriptions();
+            }
+            // free unmapped recourses
+            // @todo ask
+
+            this.disposed = true;
+        }
+
+        private void removeAllEventSubscriptions()
+        {
+            foreach (Delegate func in InfoReqEvent.GetInvocationList())
+            {
+                InfoReqEvent -= (SystemUserInfoRequestHandler)func;
+            }
+        }
+
+        ~BankEmployee() {
+            Dispose(false);
+            Console.WriteLine($"d-ctor BankEmployee {this.id}");
+        }
     }
 }
