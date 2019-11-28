@@ -29,20 +29,22 @@ using Bank;
 
 namespace lab1
 {
+
+
     class Program
     {
+
+        public static WeakReference weakAccountReference;
+
         static void Main(string[] args)
         {
             GCDemo();
-            weakReferenceDemo();
-            mainDemo();
+            WeakReferenceDemo();
+            // mainDemo();
         }
 
         public static void SerializationDemoXML()
         {
-            // Account[] accArray = new Account[BankSystem.Accounts.Count];
-            // BankSystem.Accounts.Values.CopyTo(accArray, 0);
-
             Account[] accArray = new Account[] {
                 new Account(45, "uah"),
                 new Account(5646546, "usd"),
@@ -86,16 +88,11 @@ namespace lab1
 
         public static void SerializationDemoBIN()
         {
-            // DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(Account[]));
-
             Account[] accArray = new Account[] {
                 new Account(45, "uah"),
                 new Account(5646546, "usd"),
                 new Account(1, "euro")
             };
-
-            // Account[] accArray = new Account[BankSystem.Accounts.Count];
-            // BankSystem.Accounts.Values.CopyTo(accArray, 0);
 
             BinaryFormatter formatter = new BinaryFormatter();
 
@@ -165,7 +162,7 @@ namespace lab1
             GC.Collect(generation);
             LogTotalMemory("Memory after GC.Collect disposed");
 
-            //this makes .net to call d-ctor of finalizer as its oficially called
+            //this makes .net to call d-ctor or a finalizer as its oficially called
             garbageList.ForEach((acc) => GC.ReRegisterForFinalize(acc));
         }
 
@@ -215,7 +212,8 @@ namespace lab1
                 acc2.Activate("Bank228");
                 acc3.Activate("Bank228");
                 acc4.Activate("WorngPass");
-            } catch 
+            }
+            catch
             {
             }
 
@@ -239,30 +237,43 @@ namespace lab1
             User basicUser = new User("Andrii", "Koval", "login", "password");
 
             BankSystem.AddUser(employee);
-            BankSystem.AddUser(client); 
+            BankSystem.AddUser(client);
             BankSystem.AddUser(client2);
             BankSystem.AddUser(basicUser);
         }
 
-        public static void weakReferenceDemo()
-        {
-            var weakAccountRef = new WeakReference(new Account(123123, "uah"));
-            if (weakAccountRef.IsAlive)
-            {
-                Console.WriteLine("Account ref is instansiated");
-            }
 
+        public static void weakReferenceCheck()
+        {
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
             GC.WaitForPendingFinalizers();
 
-            if (weakAccountRef.IsAlive)
+            if (weakAccountReference.IsAlive)
             {
                 Console.WriteLine("Account is still alive after GC.collect");
             }
             else
             {
-                Console.WriteLine($"Account is dead and the value of weak account reference is {weakAccountRef}");
+                Console.WriteLine($"Account is dead!!!!");
             }
         }
+
+        public static void CreateWeakReference()
+        {
+            weakAccountReference = new WeakReference(new Account(123123, "uah"));
+            if (weakAccountReference.IsAlive)
+            {
+                Console.WriteLine("Account ref is instansiated");
+            }
+        }
+
+        public static void WeakReferenceDemo()
+        {
+            CreateWeakReference();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            weakReferenceCheck();
+        }
     }
+
 }

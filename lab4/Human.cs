@@ -311,7 +311,7 @@ namespace Human
         }
     }
     [Serializable]
-    class BankEmployee : User, IMoney, ISystem, IDisposable
+    class BankEmployee : User, IMoney, ISystem
     {
         public string Position { get; }
 
