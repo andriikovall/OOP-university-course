@@ -40,7 +40,7 @@ namespace lab1
         {
             GCDemo();
             WeakReferenceDemo();
-            // mainDemo();
+            // MainDemo();
         }
 
         public static void SerializationDemoXML()
@@ -152,7 +152,7 @@ namespace lab1
             int sampleBigNumber = 100;
             Console.WriteLine($"Allocating {sampleBigNumber} accounts");
 
-            var garbageList = makeListOfGarbage(sampleBigNumber);
+            var garbageList = MakeListOfGarbage(sampleBigNumber);
             var generation = GC.GetGeneration(garbageList[0]);
 
             LogTotalMemory("Memory used after allocating");
@@ -167,7 +167,7 @@ namespace lab1
             garbageList.ForEach((acc) => GC.ReRegisterForFinalize(acc));
         }
 
-        private static List<Account> makeListOfGarbage(int count)
+        private static List<Account> MakeListOfGarbage(int count)
         {
             var garbageList = new List<Account>();
             var rand = new Random();
@@ -183,7 +183,7 @@ namespace lab1
         private static void LogTotalMemory(string stringAfterMemoryLogged, bool waitForFullCollectionBeforeLog = true)
         {
             // CLEAN CODE - do not repeat yourself
-            stringAfterMemoryLogged = checkStringAndTrim(stringAfterMemoryLogged);
+            stringAfterMemoryLogged = CheckStringAndTrim(stringAfterMemoryLogged);
             var memoryUsed = GC.GetTotalMemory(waitForFullCollectionBeforeLog);
             string output = $"{memoryUsed}";
 
@@ -194,12 +194,12 @@ namespace lab1
         }
 
 
-        private static string checkStringAndTrim(string s)
+        private static string CheckStringAndTrim(string s)
         {
             return (s ?? "").Trim();
         }
 
-        private static void mainDemo()
+        private static void MainDemo()
         {
             var acc1 = new Account(100, "uah"); // id 1
             var acc2 = new Account(5454, "uah"); //   2 
@@ -244,11 +244,8 @@ namespace lab1
         }
 
 
-        public static void weakReferenceCheck()
+        public static void CheckWeakReference()
         {
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-            GC.WaitForPendingFinalizers();
-
             if (weakAccountReference.IsAlive)
             {
                 Console.WriteLine("Account is still alive after GC.collect");
@@ -273,7 +270,7 @@ namespace lab1
             CreateWeakReference();
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            weakReferenceCheck();
+            CheckWeakReference();
         }
     }
 
