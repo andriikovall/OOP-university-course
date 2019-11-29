@@ -160,6 +160,7 @@ namespace lab1
             garbageList.ForEach((acc) => (acc as IDisposable).Dispose());
 
             GC.Collect(generation);
+            GC.WaitForPendingFinalizers();
             LogTotalMemory("Memory after GC.Collect disposed");
 
             //this makes .net to call d-ctor or a finalizer as its oficially called
