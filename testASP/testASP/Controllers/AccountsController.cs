@@ -40,5 +40,33 @@ namespace testASP.Controllers
             BankSystem.RemoveAccount(id);
             return Redirect("/Accounts/");
         }
+
+        [HttpPost]
+        public ActionResult DecreaseAmount(int id, int MoneyAmount)
+        {
+            try
+            {
+                var acc = BankSystem.GetAccountById(id);
+                acc.DecreaseAmount(MoneyAmount);
+            } catch
+            {
+                return Redirect("/");
+            }
+            return Redirect("/Accounts");
+        }
+
+        public ActionResult IncreaseAmount(int id, int MoneyAmount)
+        {
+            try
+            {
+                var acc = BankSystem.GetAccountById(id);
+                acc.IncreaseAmount(MoneyAmount);
+            }
+            catch
+            {
+                return Redirect("/");
+            }
+            return Redirect("/Accounts");
+        }
     }
 }
