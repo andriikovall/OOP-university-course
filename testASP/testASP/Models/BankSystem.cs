@@ -15,6 +15,7 @@ namespace Bank
         public static Func<string> GetEmployeeRigths;
         public static Func<string> GetClientRigths;
 
+
         public static int UsersСount => users.Count;
         public static UserCollection Users => users;
         public static Account[] Accounts
@@ -29,6 +30,10 @@ namespace Bank
 
         private static Dictionary<int, Account> accounts;
         private static UserCollection users;
+        public static readonly IEnumerable<string> Currencies = new List<string>
+        {
+            "UAH", "USD", "EUR", "RUB"
+        };
 
         public static Account GetAccountById(long accId)
         {

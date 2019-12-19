@@ -8,15 +8,59 @@
 
     <table class="table">
         <tr>
-            <th width="100px">ID</th>
-            <th width="150px">Currency</th>
+            <th width="100px" >ID</th>
+            <th width="150px" class="text-center">Currency</th>
             <th style="width: 200px" class="text-center">MoneyAmount</th>
         </tr>
         @foreach (var acc in ViewBag.Accounts)
         {
             <tr>
                 <td>@acc.id</td>
-                <td>@acc.currency</td>
+                <td class="text-center">
+                    <b>@acc.currency</b>
+                    <button class="btn btn-default" data-toggle="modal" data-target="#myModalCurency">Change cuurency</button>
+                    <div id="myModalCurency" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title text-left">Changing currency</h4>
+                                </div>
+                                @using (Html.BeginForm("ChangeCurrency", "Accounts", FormMethod.Post))
+                                {
+                                    <div class="modal-body text-left">
+                                        <p>Choose new currency</p>
+                                        <p>All currencies are autimaticly converted to current exchange rates</p>
+                                        <div class="form-group">
+                                            <select name="Currency" class="form-control">
+                                                @foreach (string currency in ViewBag.currencies) 
+                                                {
+                                                    if (acc.Currency == currency)
+                                                    {
+                                                        <option value="@currency" selected>@currency</option>
+                                                    } 
+                                                    else 
+                                                    {
+                                                        <option value="@currency">@currency</option>
+                                                    }
+                                                }
+                                            </select>
+                                            @*@Html.DropDownList("Currency", ViewBag.currencies as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control mt-2" })*@
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+                                        <input type="hidden" name="id" value="@acc.id" />
+                                        <button style="float: left;" class='btn btn-info' runat="server" type="submit" id="modal-btn-dec">
+                                            Go
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </td>
                 <td>
                     <div class="row text-center">@acc.MoneyAmount</div>
                     <div class="row">
@@ -114,11 +158,14 @@
             </tr>
         }
     </table>
-    <a href="/Accounts/NewAccount">
-        <button class="btn btn-default">
-            Add account
-            @*@Html.ActionLink("Add account", "NewAccount", "Accounts")*@
-        </button>
-    </a>
+    <span>
+        <a href="/Accounts/NewAccount">
+            <button class="btn btn-default">
+                Add account
+                @*@Html.ActionLink("Add account", "NewAccount", "Accounts")*@
+            </button>
+        </a>
+        <asp:Button runat="server" class="btn btn-info" onclick="Transfer_click">Transfer money</asp:Button>
+    </span>
 </div>
 
