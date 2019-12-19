@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "Accounts";
+}
+
+<div class="container">
+    <h2>Accounts</h2>
+
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Currency</th>
+            <th>MoneyAmount</th>
+        </tr>
+        @foreach (var acc in ViewBag.Accounts)
+        {
+            <tr>
+                <td>@acc.id</td>
+                <td>@acc.currency</td>
+                <td>@acc.MoneyAmount</td>
+                <td>
+
+                    <button type="button" class="btn btn btn-danger" data-toggle="modal" data-target="#myModal">Delete</button>
+
+                    <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Are you sure?</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Do you want to delelte account?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    @using (Html.BeginForm("Delete", "Accounts", FormMethod.Post))
+                                    {
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                        <input type="hidden" name="id" value="@acc.id" />
+                                        <button style="float: left;" class='btn btn-danger' runat="server" type="submit">
+                                            Yes
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+    <a href="/Accounts/NewAccount">
+
+    <button class="btn btn-default">
+        Add account
+        @*@Html.ActionLink("Add account", "NewAccount", "Accounts")*@
+    </button>
+    </a>
+</div>
+
