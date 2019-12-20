@@ -11,6 +11,11 @@ using System.Net;
 using System.IO;
 using System.Text;
 
+using System.IO;
+using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Json;
+
 namespace Bank
 {
     static class BankSystem
@@ -135,6 +140,47 @@ namespace Bank
                 "ShowInfo() - show user info\n";
             };
         }
+
+        public static void LoadAccounts(string filePath)
+        {
+            XmlSerializer formatter = new XmlSerializer(typeof(Account[]));
+
+            using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate))
+            {
+                try
+                {
+                    var accountsDeserialized = (Account[])formatter.Deserialize(fs);
+                    foreach (var acc in accountsDeserialized)
+                    {
+                        BankSystem.AddAccount(acc);
+                    }
+                }
+                catch (Exception exp)
+                {
+                    Console.WriteLine("Deserialization error: missing file or another error");
+                }
+            }
+        }
+
+        public static void SaveAccounts(string filePath)
+        {
+            XmlSerializer formatter = new XmlSerializer(typeof(Account[]));
+            Account[] accArray = BankSystem.Accounts;
+
+            using (FileStream fs = new FileStream("accounts.xml", FileMode.OpenOrCreate))
+            {
+                try
+                {
+                    formatter.Serialize(fs, accArray);
+                    Console.WriteLine("Serialization done");
+                }
+                catch (Exception exp)
+                {
+                    Console.WriteLine("Serialization Error");
+                    Console.WriteLine(exp.Message);
+                }
+            }
+        }
     }
 
     [Serializable]
@@ -207,7 +253,6 @@ namespace Bank
 
         public void Activate(string bankPassword)
         {
-            // loging is only for demo
             Console.WriteLine($"Activating new acconut with id - {this.id}");
             if (bankPassword == BankSystem.SecretPassword)
             {
@@ -259,7 +304,6 @@ namespace Bank
 
             request.Method = "GET";
             request.Accept = "application/json";
-            //request.UserAgent = "Mozilla/5.0 ....";
 
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream());
@@ -271,31 +315,15 @@ namespace Bank
             System.Diagnostics.Debug.WriteLine(koef);
             System.Diagnostics.Debug.WriteLine("here");
             return koef;
-
-
-            //if (response != null && response.IsSuccessStatusCode)
-            //{
-            //    string jsonString = await response.Content.ReadAsStringAsync();
-            //    System.Diagnostics.Debug.WriteLine(jsonString);
-            //    var result = JObject.Parse(jsonString);
-
-            //}
-            //return 1;
         }
 
         private void Dispose(bool disposing)
         {
-            //Console.WriteLine($"Disposing method with flag {disposing} {this.id}");
-
             if (this._disposed)
                 return;
 
             if (disposing)
             {
-                // free managed recourses
-
-                // CLEAN CODE
-                // the best if statements and loops are 1-2 lines heigth
                 removeAllEventSubscriptions();
             }
             // free unmapped recourses
@@ -304,9 +332,6 @@ namespace Bank
             this._disposed = true;
         }
 
-        // CLEAN CODE - each func MUST do only one thing
-        // The best functions are parameterless
-        // Each func should cover only one level of abstraction
         private void removeAllEventSubscriptions()
         {
             foreach (Delegate func in AccountActivatingEvent.GetInvocationList())
@@ -317,9 +342,6 @@ namespace Bank
 
         ~Account()
         {
-            // CLEAN CODE
-            // it's not apropriate to log here but its done to expliciltly show finalizer
-            Console.WriteLine($"d-ctor of acc with id {this.id}");
             Dispose(false);
         }
     }
