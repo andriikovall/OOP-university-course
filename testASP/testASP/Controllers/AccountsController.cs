@@ -73,38 +73,16 @@ namespace testASP.Controllers
 
         public ActionResult ChangeCurrency(int id, string Currency)
         {
-            var task = setCurrencyRateAndSetCurrency(id, Currency);
-            var res = task.Result;
+            try
+            {
+                var acc = BankSystem.GetAccountById(id);
+                acc.Currency = Currency;
+            }
+            catch
+            {
+                return Redirect("/");
+            }
             return Redirect("/Accounts");
         }
-
-        private static async Task<float> GetShangeRate(string curr1, string curr2)
-        {
-            //TODO put this into model or hardcode
-            string convetingCurrencies = $"{curr1.ToUpper()}_{curr2.ToUpper()}";
-            string url = $"https://free.currconv.com/api/v7/convert?q={convetingCurrencies}&compact=ultra&apiKey=572da0a46fffdaa1bce6";
-            System.Diagnostics.Debug.WriteLine(url);
-            var response = await client.GetAsync(url);
-            System.Diagnostics.Debug.WriteLine(response.StatusCode);
-            response.EnsureSuccessStatusCode();
-            if (response != null)
-            {
-                string jsonString = await response.Content.ReadAsStringAsync();
-                System.Diagnostics.Debug.WriteLine(jsonString);
-                var result = JObject.Parse(jsonString);
-                return result.Value<float>(convetingCurrencies);
-            }
-            return 1;
-        }
-
-        private async Task<int> setCurrencyRateAndSetCurrency(int accId, string curr2)
-        {
-            var acc = BankSystem.GetAccountById(accId);
-            float koef = await GetShangeRate(acc.Currency, curr2);
-            acc.Currency = curr2;
-            acc.MoneyAmount = acc.MoneyAmount * (long)koef;
-            return 1;
-        }
-
     }
 }

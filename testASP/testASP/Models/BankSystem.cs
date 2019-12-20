@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using Human;
 using BankEvent;
 using CustomUserCollection;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using System.Net;
+using System.IO;
+using System.Text;
 
 namespace Bank
 {
@@ -143,7 +149,9 @@ namespace Bank
             get => this.currency;
             set
             {
+                var koef = GetCurrencyConvetingCoeficient(this.currency, value);
                 this.currency = value;
+                this.MoneyAmount = (long)(this.MoneyAmount * koef);
             }
         }
         public long MoneyAmount
@@ -170,6 +178,7 @@ namespace Bank
         private const string DefaultCurrency = "uah";
 
         private event AccountHandler AccountActivatingEvent;
+        private static HttpClient httpClient = new HttpClient();
 
         public Account() : this(0, DefaultCurrency) { }
 
@@ -239,6 +248,39 @@ namespace Bank
 
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        private float GetCurrencyConvetingCoeficient(string curr1, string curr2)
+        {
+            string convetingCurrencies = $"{curr1.ToUpper()}_{curr2.ToUpper()}";
+            string url = $"https://free.currconv.com/api/v7/convert?q={convetingCurrencies}&compact=ultra&apiKey=572da0a46fffdaa1bce6";
+            HttpWebRequest request =
+            (HttpWebRequest)WebRequest.Create(url);
+
+            request.Method = "GET";
+            request.Accept = "application/json";
+            //request.UserAgent = "Mozilla/5.0 ....";
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            StreamReader reader = new StreamReader(response.GetResponseStream());
+            StringBuilder output = new StringBuilder();
+            output.Append(reader.ReadToEnd());
+            response.Close();
+            var result = JObject.Parse(output.ToString());
+            var koef = result.Value<float>(convetingCurrencies);
+            System.Diagnostics.Debug.WriteLine(koef);
+            System.Diagnostics.Debug.WriteLine("here");
+            return koef;
+
+
+            //if (response != null && response.IsSuccessStatusCode)
+            //{
+            //    string jsonString = await response.Content.ReadAsStringAsync();
+            //    System.Diagnostics.Debug.WriteLine(jsonString);
+            //    var result = JObject.Parse(jsonString);
+
+            //}
+            //return 1;
         }
 
         private void Dispose(bool disposing)
