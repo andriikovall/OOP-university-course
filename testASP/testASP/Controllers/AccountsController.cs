@@ -84,5 +84,19 @@ namespace testASP.Controllers
             }
             return Redirect("/Accounts");
         }
+
+
+        public ActionResult Save()
+        {
+            BankSystem.SaveAccounts();
+            return Redirect("/Accounts");
+        }
+
+        public ActionResult Load()
+        {
+            BankSystem.LoadAccounts();
+            return Redirect("/Accounts");
+        }
+
     }
 }

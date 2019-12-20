@@ -11,10 +11,7 @@ using System.Net;
 using System.IO;
 using System.Text;
 
-using System.IO;
 using System.Xml.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization.Json;
 
 namespace Bank
 {
@@ -25,6 +22,7 @@ namespace Bank
         public static Action<BankEventArg> AddAccountEvent;
         public static Func<string> GetEmployeeRigths;
         public static Func<string> GetClientRigths;
+        public static string AcountsFilePath { get; set; }
 
 
         public static int UsersСount => users.Count;
@@ -125,6 +123,7 @@ namespace Bank
             users = new UserCollection();
             accounts = new Dictionary<int, Account>();
             AddAccountEvent = AddAccount;
+            AcountsFilePath = "E:\\Study\\oop\\OOP_labs\\testASP\\accounts.xml";
             GetEmployeeRigths = () =>
             {
                 return "\nAddAccountId()\n" +
@@ -139,6 +138,16 @@ namespace Bank
                 "TakeCredit(moneyValue) - the money is assigned to the first account with the same or more money amount\n" +
                 "ShowInfo() - show user info\n";
             };
+        }
+
+        public static void LoadAccounts()
+        {
+            LoadAccounts(AcountsFilePath);
+        }
+
+        public static void SaveAccounts()
+        {
+            SaveAccounts(AcountsFilePath);
         }
 
         public static void LoadAccounts(string filePath)
@@ -167,7 +176,7 @@ namespace Bank
             XmlSerializer formatter = new XmlSerializer(typeof(Account[]));
             Account[] accArray = BankSystem.Accounts;
 
-            using (FileStream fs = new FileStream("accounts.xml", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate))
             {
                 try
                 {
