@@ -17,9 +17,6 @@ class IngeneerCalculator(ICalculatorAdvanced):
         print('Raising', num, 'to the power of', p)
         return num ** p
 
-from advanced_calc_interface import ICalculatorAdvanced
-
-
 
 class SimpleCalculator(ICalculatorAdvanced):
     @staticmethod
