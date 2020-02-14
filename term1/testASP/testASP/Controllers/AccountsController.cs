@@ -14,8 +14,6 @@ namespace testASP.Controllers
 {
     public class AccountsController : Controller
     {
-        static HttpClient client = new HttpClient();
-
         public ActionResult Index()
         {
             ViewBag.Accounts = BankSystem.Accounts;

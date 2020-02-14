@@ -161,7 +161,7 @@ namespace Bank
                     var accountsDeserialized = (Account[])formatter.Deserialize(fs);
                     foreach (var acc in accountsDeserialized)
                     {
-                        BankSystem.AddAccount(acc);
+                        AddAccount(acc);
                     }
                 }
                 catch (Exception exp)
@@ -174,7 +174,7 @@ namespace Bank
         public static void SaveAccounts(string filePath)
         {
             XmlSerializer formatter = new XmlSerializer(typeof(Account[]));
-            Account[] accArray = BankSystem.Accounts;
+            Account[] accArray = Accounts;
 
             using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate))
             {
@@ -186,7 +186,7 @@ namespace Bank
                 catch (Exception exp)
                 {
                     Console.WriteLine("Serialization Error");
-                    Console.WriteLine(exp.Message);
+                    System.Diagnostics.Debug.WriteLine(exp.Message);
                 }
             }
         }
@@ -197,14 +197,20 @@ namespace Bank
     {
         public readonly long id;
 
-        public string currency;
+
+        private string currency;
 
         public string Currency
         {
             get => this.currency;
             set
             {
-                var koef = GetCurrencyConvetingCoeficient(this.currency, value);
+                float koef = 1;
+                if (!IsFirstTimeInited)
+                {
+                    koef = GetCurrencyConvetingCoeficient(this.currency, value);
+                    IsFirstTimeInited = false;
+                }
                 this.currency = value;
                 this.MoneyAmount = (long)(this.MoneyAmount * koef);
             }
@@ -229,6 +235,7 @@ namespace Bank
         private static long _nextId = 0;
         private long _moneyAmount;
         private bool _disposed = false;
+        private bool IsFirstTimeInited = true;
         
         private const string DefaultCurrency = "uah";
 
