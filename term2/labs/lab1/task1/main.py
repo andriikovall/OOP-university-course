@@ -10,22 +10,22 @@ class Calculator(CalculatorAbstract):
         print('The result is', result)
 
     def add(self, *nums):
-        result = self.__implementator.add(nums)
+        result = super().add(*nums)
         self.__display_result(result)
         return result
 
     def sub(self, num1, num2):
-        result = self.__implementator.sub(num1, num2)
+        result = super().sub(num1, num2)
         self.__display_result(result)
         return result
 
     def mult(self, *nums):
-        result = self.__implementator.mult(nums)
+        result = super().mult(*nums)
         self.__display_result(result)
         return result
 
     def div(self, num1, num2):
-        result = self.__implementator.div(num1, num2)
+        result = super().div(num1, num2)
         self.__display_result(result)
         return result
     
@@ -50,3 +50,6 @@ simple = Calculator(SimpleCalculator())
 
 ingeneer.sqrt(9)
 simple.sqrt(9)
+
+ingeneer.add(123, 213)
+simple.add(123, 123)
