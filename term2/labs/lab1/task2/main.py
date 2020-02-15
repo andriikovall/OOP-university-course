@@ -2,30 +2,35 @@ from reseller import Reseller, DistributorComposite
 from item import Item
 
 def main():
-    item1 = Item('parf', 100, 150)
-    # item2 = Item('shoto', 150, 520)
+    item = Item('parf', 100, 150)
 
-    andrey = DistributorComposite('andrey', 3)
+    d1 = DistributorComposite('andrey', 0)
+    d2 = DistributorComposite('sasha', 10)
+    d3 = DistributorComposite('masha', 9)
+    d4 = DistributorComposite('volandemort', 2)
 
-    sasha = DistributorComposite('sasha', 10)
-    # ktoto = DistributorComposite('ktoto', 15)
-    boy = DistributorComposite('boy', 9)
-    sajda = DistributorComposite('sajda', 12)
+    d1.add_distibutor(d2)
 
-    andrey.add_distibutor(sasha)
-    sasha.add_distibutor(sajda)
+    d1.add_distibutor(d4)
 
-    andrey.add_distibutor(boy)
+    last = Reseller('last', 15)
+    d1.add_distibutor(d2)
+    d4.add_distibutor(d3)
 
-    last = Reseller('last', 1)
-    boy.add_distibutor(last)
-
+    d1.add_distibutor(d4)
+    
+    d3.add_distibutor(last)
 
 
-    andrey.sell_item(item1)
 
-    andrey.display_next_resellers()
+    d1.sell_item(item)
 
-main()
+
+
+    d1.display_next_resellers(d1.item)
+
+
+if __name__ == '__main__':
+    main()
 
 

@@ -6,7 +6,7 @@ class Distributor:
     @property
     def curr_item_price(self):
         if (self.item != None):
-            return self.item.current_price + (self.item.current_price * self.comission_persentage / 100)
+            return self.item.current_price * (1 + (self.comission_persentage / 100))
         return 0
 
     def __init__(self, name, comission_persentage, item = None):
