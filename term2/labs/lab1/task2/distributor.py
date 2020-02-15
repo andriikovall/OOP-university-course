@@ -2,22 +2,27 @@ from item import Item
 
 class Distributor:
 
-    def __init__(self, name, item, comission_persentage):
+
+    @property
+    def curr_item_price(self):
+        if (self.item != None):
+            return self.item.current_price + (self.item.current_price * self.comission_persentage / 100)
+        return 0
+
+    def __init__(self, name, comission_persentage, item = None):
         self.child_distributors = []
         self.name = name
         self.item = item
         self.comission_persentage = comission_persentage
     
-    def distribute(self, item):
-        pass
-        # print('Distributing item to another resellers')
-    
     def sell_item(self):
         pass
-        # print('Selling item with price', self.item.price)
     
-    def add(self, reseller):
+    def add_distibutor(self, reseller):
         pass
 
     def remove(self, reseller):
+        pass
+
+    def display_next_resellers(self):
         pass
