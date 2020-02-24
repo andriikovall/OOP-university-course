@@ -10,15 +10,15 @@ def main():
     d4 = DistributorComposite('volandemort', 2)
 
     d1.add_distibutor(d2)
-
     d1.add_distibutor(d4)
 
-    last = Reseller('last', 15)
+
     d1.add_distibutor(d2)
     d4.add_distibutor(d3)
 
     d1.add_distibutor(d4)
     
+    last = Reseller('last', 15)
     d3.add_distibutor(last)
 
 
