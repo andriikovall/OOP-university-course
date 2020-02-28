@@ -9,7 +9,7 @@ class Distributor:
             return self.item.current_price * (1 + (self.comission_persentage / 100))
         return 0
 
-    def __init__(self, name, comission_persentage, item = None):
+    def __init__(self, name, comission_persentage, item: Item = None):
         self.child_distributors = []
         self.name = name
         self.item = item

@@ -11,7 +11,6 @@ const docs = [
 const accountingServiceProxied = new AccountingServiceProxied();
 
 docs.forEach(accountingServiceProxied.addDocument);
-console.log(AccountingServiceProxied.documents);
 
 accountingServiceProxied.displayDocuments();
 AccountingServiceProxied.documents.slice(2).forEach(d => accountingServiceProxied.payForDocument(d.id));

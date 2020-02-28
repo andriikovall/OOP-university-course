@@ -19,7 +19,7 @@ class Reseller(Distributor):
         print('Final reseller can not have partners')
 
     def remove(self, reseller):
-        print("Final reseller doesn't have parnters")
+        print("Final reseller doesn't have partners")
 
     def display_next_resellers(self, item, level = 1):
         print('\n')

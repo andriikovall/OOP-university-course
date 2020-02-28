@@ -2,7 +2,7 @@ class Item:
 
     id = 0
 
-    def __init__(self, name, start_price, max_price):
+    def __init__(self, name: str, start_price: float, max_price: float):
         Item.id += 1
         self.id = Item.id
         self.name = name
