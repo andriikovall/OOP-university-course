@@ -1,6 +1,7 @@
 import functools
+from abc import ABC
 
-class CalculatorAbstract:
+class CalculatorAbstract(ABC):
 
     @staticmethod
     def add(*nums):
