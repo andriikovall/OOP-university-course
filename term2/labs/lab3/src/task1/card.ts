@@ -1,10 +1,10 @@
 import { ICloneable } from './icloneable';
 
-enum CardSuit {
+export enum CardSuit {
     SuitHeart, SuitDiamond, SuitClub, SuitSpade
 }
 
-enum CardRank {
+export enum CardRank {
     RankSix, RankSeven, RankEight, RankNine, RankTen,
     RankJack, RankQueen, RankKing, RankAce
 }
@@ -14,9 +14,9 @@ export class Card implements ICloneable {
     private _rank: CardRank;
     private _suit: CardSuit;
 
-    constructor({ _rank, _suit }: Card) {
-        this._rank = Card.isValidCardRank(_rank) ? _rank : CardRank.RankSix;
-        this._suit = Card.isValidSuit(_suit) ? _suit : CardSuit.SuitHeart;
+    constructor({ rank, suit }: { rank: CardRank, suit: CardSuit }) {
+        this._rank = Card.isValidCardRank(rank) ? rank : CardRank.RankSix;
+        this._suit = Card.isValidSuit(suit) ? suit : CardSuit.SuitHeart;
     }
 
     set rank(value: CardRank) {
@@ -32,7 +32,7 @@ export class Card implements ICloneable {
     }
 
     clone() {
-        return new Card({ ...this }) as this;
+        return new Card({ rank: this.rank, suit: this._suit }) as this;
     }
 
     private static isValidCardRank(rank: CardRank) {
