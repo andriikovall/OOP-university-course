@@ -1,5 +1,5 @@
 export class Greeter {
-    static greet(name: string) {
+    public greet(name: string) {
         console.log(`Hello ${name}`);
     }
 }

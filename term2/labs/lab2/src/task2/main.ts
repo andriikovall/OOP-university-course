@@ -10,6 +10,8 @@ const users = [
     new User('no name', 'no surname ', new Date(Date.now())), 
 ];
 
-users.forEach(user => Greeter.greet(user.firstName + ' ' + user.lastName));
+const oldGreeter = new Greeter();
+
+users.forEach(user => oldGreeter.greet(user.firstName + ' ' + user.lastName));
 console.log('\n');
 users.forEach(user => NewGreeter.greet(user));
