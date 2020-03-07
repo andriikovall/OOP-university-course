@@ -39,12 +39,28 @@ export class Card implements ICloneable {
         return new Card({ rank: this.rank, suit: this._suit }) as this;
     }
 
+    public displayInfo() {
+        const msg = 
+        `Card ----\n`+
+        `Rank: ${CardRank[this._rank]}\n`+
+        `Suite: ${CardSuit[this._suit]}`;
+        console.log(msg);
+    }
+
     private static isValidCardRank(rank: CardRank) {
         return Object.values(CardRank).includes(rank);
     }
 
     private static isValidSuit(suit: CardSuit) {
         return Object.values(CardSuit).includes(suit);
+    }
+
+    public static getSuitEnumKeys() {
+        return Object.values(CardSuit).map(v => parseInt(v as string)).filter(v => !isNaN(v));
+    }
+
+    public static getRankEnumKeys() {
+        return Object.values(CardRank).map(v => parseInt(v as string)).filter(v => !isNaN(v));
     }
 
 }

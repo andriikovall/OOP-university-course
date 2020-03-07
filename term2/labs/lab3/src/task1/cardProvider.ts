@@ -21,8 +21,8 @@ export class CardProvider {
     }
 
     public loadCards(): void {
-        const ranks = Object.values(CardRank).map(v => parseInt(v as string)).filter(v => !isNaN(v));
-        const suits = Object.values(CardSuit).map(v => parseInt(v as string)).filter(v => !isNaN(v));
+        const ranks = Card.getRankEnumKeys();
+        const suits = Card.getSuitEnumKeys();
         for (const rank of ranks) {
             for (const suit of suits) {
                 this.cachedCards.push(new Card({ rank, suit }));
@@ -30,6 +30,6 @@ export class CardProvider {
         }
 
         // just for demo
-        console.log(this.cachedCards, this.cachedCards.length);
+        // console.log(this.cachedCards, this.cachedCards.length);
     }
 }
