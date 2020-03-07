@@ -4,8 +4,7 @@ import { Greeter } from './Greeter';
 export class NewGreeter {
 
     public static ageForMoreOfficialGreeting: number = 35;
-    static oldGreeter: Greeter = new Greeter();
-
+    private static oldGreeter: Greeter;
 
     private static greetingsForTime = [
         {
@@ -43,7 +42,7 @@ export class NewGreeter {
             const msg: string = `${NewGreeter.getCurrentGreeting()} ${NewGreeter.capitalize(`${user.firstName} ${user.lastName}`)}`;
             console.log(msg);
         } else {
-            this.oldGreeter.greet(user.firstName + ' ' + user.lastName); 
+            NewGreeter.oldGreeter.greet(user.firstName + ' ' + user.lastName); 
         }
     }
 
