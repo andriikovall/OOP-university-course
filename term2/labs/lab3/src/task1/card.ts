@@ -19,7 +19,7 @@ export class Card implements ICloneable {
         this._suit = Card.isValidSuit(suit) ? suit : CardSuit.SuitHeart;
     }
 
-    set rank(value: CardRank) {
+    public setRank(value: CardRank) {
         if (Card.isValidCardRank(value)) {
             this._rank = value;
         } else {
@@ -29,6 +29,10 @@ export class Card implements ICloneable {
 
     get rank() {
         return this._rank;
+    }
+
+    get suit() {
+        return this._suit;
     }
 
     clone() {
