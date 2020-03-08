@@ -3,7 +3,6 @@ import { Student } from './student';
 export interface Paper {
     student: Student;
     display(): void;
-    // coloursUsed: number;
     eventName: string;
 }
 
@@ -17,19 +16,14 @@ function getQuality(coloursUsed: number) {
 export abstract class Certificate implements Paper {
 
     constructor(public student: Student, 
-                // public coloursUsed: number, 
                 public eventName: string){}
-
     // todo display quality
     display() {
-        // const quality = getQuality(this.coloursUsed); 
         const certificate = [
             '-----------------------------', 
             `Certificate from ${this.eventName}`, 
             `for ${this.student.fName} ${this.student.lName}`, 
             `from ${this.student.school} - ${this.student.group}`, 
-            // ` `, 
-            // `Quality: ${quality}`,
             `-----------------------------`
         ].join('\n');
         console.log(certificate);
@@ -40,12 +34,10 @@ export abstract class Certificate implements Paper {
 export abstract class Diploma implements Paper {
 
     constructor(public student: Student, 
-                // public coloursUsed: number, 
                 public eventName: string,
                 public place: number){}
 
     display() {
-        // const quality = getQuality(this.coloursUsed);
         const diploma = [
             '-----------------------------', 
             `Diploma`, 
@@ -53,8 +45,6 @@ export abstract class Diploma implements Paper {
             `From ${this.student.school} - ${this.student.group}`, 
             `For getting ${Diploma.getStringForPlace(this.place)} place`,
             `In ${this.eventName}`, 
-            // ``,
-            // `Quality: ${quality}`,
             `-----------------------------`
         ].join('\n');
         console.log(diploma);

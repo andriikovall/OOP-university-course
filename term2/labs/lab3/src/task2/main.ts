@@ -8,7 +8,7 @@ const args = argParser(process.argv.slice(2));
 function getFactoryFromSpecs(moneyAvailable: number, coloursNeeded: number): IPaperFactory {
     
     const factorySpecs = [modernFactorySpecs, oldFactorySpecs]
-        .find( ({ colours, price }) => colours <= coloursNeeded && price <= moneyAvailable);
+        .find( ({ colours, price }) => colours >= coloursNeeded && price <= moneyAvailable);
     if (!factorySpecs)
         return null;
 
