@@ -7,6 +7,13 @@ export interface Paper {
     eventName: string;
 }
 
+
+
+function getQuality(coloursUsed: number) {
+    const coloursForGoodQuality: number = 1658137;
+    return coloursUsed > coloursForGoodQuality ? 'Good' : 'Ordinary';
+}
+
 export class Certificate implements Paper {
 
     constructor(public student: Student, 
@@ -15,7 +22,17 @@ export class Certificate implements Paper {
 
     // todo display quality
     display() {
-        console.log('Certificate of', this.student, 'from', this.student.school, this.student.group, 'for', this.eventName);
+        const quality = getQuality(this.coloursUsed); 
+        const certificate = [
+            '-----------------------------', 
+            `Certificate from ${this.eventName}`, 
+            `for ${this.student.fName} ${this.student.lName}`, 
+            `from ${this.student.school} - ${this.student.group}`, 
+            ` `, 
+            `Quality: ${quality}`,
+            `-----------------------------`
+        ].join('\n');
+        console.log(certificate);
     }
 
 }
@@ -28,6 +45,27 @@ export class Diploma implements Paper {
                 public place: number){}
 
     display() {
-        console.log('Diploma of', this.student, 'from', this.student.school, this.student.group, 'place', this.place, this.eventName);
+        const quality = getQuality(this.coloursUsed);
+        const diploma = [
+            '-----------------------------', 
+            `Diploma`, 
+            `For ${this.student.fName} ${this.student.lName}`, 
+            `From ${this.student.school} - ${this.student.group}`, 
+            `For getting ${Diploma.getStringForPlace(this.place)} place`,
+            `In ${this.eventName}`, 
+            ``,
+            `Quality: ${quality}`,
+            `-----------------------------`
+        ].join('\n');
+        console.log(diploma);
+    }
+
+    private static getStringForPlace(place: number): string {
+        switch (place) {
+            case 1: return '1-st';
+            case 2: return '2-nd';
+            case 3: return '3-rd';
+            default: return `${place}-th`
+        }
     }
 }
