@@ -1,7 +1,9 @@
 import { IPaperFactory, ModernPaperFactory, OldPaperFactory, modernFactorySpecs, oldFactorySpecs } from "./paperFactory";
 import { Student } from "./student";
 
-const args = require('minimist')(process.argv.slice(2));
+import argParser from 'minimist';
+
+const args = argParser(process.argv.slice(2));
 
 function getFactoryFromSpecs(moneyAvailable: number, coloursNeeded: number): IPaperFactory {
     
