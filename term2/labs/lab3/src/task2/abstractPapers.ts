@@ -7,17 +7,10 @@ export interface Paper {
 }
 
 
-
-function getQuality(coloursUsed: number) {
-    const coloursForGoodQuality: number = 1658137;
-    return coloursUsed >= coloursForGoodQuality ? 'Good' : 'Ordinary';
-}
-
 export abstract class Certificate implements Paper {
 
     constructor(public student: Student, 
                 public eventName: string){}
-    // todo display quality
     display() {
         const certificate = [
             '-----------------------------', 
