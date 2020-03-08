@@ -15,8 +15,9 @@ function getFactoryFromSpecs(moneyAvailable: number, coloursNeeded: number): IPa
     switch (factorySpecs) {
         case oldFactorySpecs: return new OldPaperFactory();
         case modernFactorySpecs: return new ModernPaperFactory();
-        default: return null;
     }
+
+    return null;
 }
 
 (function main() {
@@ -37,21 +38,3 @@ function getFactoryFromSpecs(moneyAvailable: number, coloursNeeded: number): IPa
     diploma.display();
     certificate.display();
 })();
-
-
-// const modern: IPaperFactory = new ModernPaperFactory();
-// const old: IPaperFactory = new OldPaperFactory();
-
-
-// const modernDiploma = modern.createDiploma(student, 'int20h', 1);
-// const oldDiploma = old.createDiploma(student, 'int20h', 4);
-
-// const modernCert = modern.createCertificate(student, 'int20h');
-// const oldCert = old.createCertificate(student, 'int20h');
-
-
-// modernDiploma.display();
-// oldDiploma.display();
-
-// modernCert.display();
-// oldCert.display();

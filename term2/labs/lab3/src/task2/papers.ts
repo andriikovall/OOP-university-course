@@ -11,7 +11,7 @@ export interface Paper {
 
 function getQuality(coloursUsed: number) {
     const coloursForGoodQuality: number = 1658137;
-    return coloursUsed > coloursForGoodQuality ? 'Good' : 'Ordinary';
+    return coloursUsed >= coloursForGoodQuality ? 'Good' : 'Ordinary';
 }
 
 export class Certificate implements Paper {
