@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@types/node": "^13.7.4"
+    "@types/node": "^13.7.4",
+    "minimist": "^1.2.0"
   },
   "devDependencies": {},
   "scripts": {

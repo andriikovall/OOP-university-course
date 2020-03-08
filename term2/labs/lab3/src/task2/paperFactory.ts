@@ -2,16 +2,19 @@ import { Student } from './student';
 import { Diploma, Certificate } from './papers';
 
 export interface IPaperFactory {
-    price: number;
-    colours: number;
+    // readonly price: number;
+    // readonly colours: number;
     createDiploma(student: Student, eventName: string, place: number): Diploma;
     createCertificate(student: Student, eventName: string): Certificate;
 }
 
+export const modernFactorySpecs = { price: 150, colours: 16581375 };
+export const oldFactorySpecs = { price: 50, colours: 165814 };
+
 export class ModernPaperFactory implements IPaperFactory {
 
-    public price = 150;
-    public colours = 16581375;
+    public price = modernFactorySpecs.price;
+    public colours = modernFactorySpecs.colours;
 
     constructor(){}
 
@@ -28,8 +31,10 @@ export class ModernPaperFactory implements IPaperFactory {
 }
 
 export class OldPaperFactory implements IPaperFactory {
-    public price = 50;
-    public colours = 165814;
+    
+    
+    public price = oldFactorySpecs.price;
+    public colours = oldFactorySpecs.colours;
 
     constructor(){}
 
