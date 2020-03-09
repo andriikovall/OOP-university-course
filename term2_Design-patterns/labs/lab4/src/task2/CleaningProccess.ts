@@ -15,14 +15,14 @@ export class CleaningProcces {
         this.cleaningStrategy = this.getStrategyForTime(time);
     }
 
-    private getStrategyForTime(time: number): CleaningStrategy {
+    private getStrategyForTime(timeAvailable: number): CleaningStrategy {
         const strategy = [CommonCleaning, SuperCleaning, LightCleaning]
+            .filter( st => st.timeNeeded <= timeAvailable )
             .sort( (a, b) => a.timeNeeded - b.timeNeeded )
-            .filter(st => st.timeNeeded <= time)
             .pop() || null;
 
         if (strategy == null) 
-            throw new Error('Not enough time ti perform cleaning');
+            throw new Error('Not enough time to perform cleaning');
         return new strategy();
     }
 }

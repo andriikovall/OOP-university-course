@@ -1,6 +1,6 @@
 export abstract class CleaningStrategy {
     actions: string[];
-    timeNeeded: number;
+    static readonly timeNeeded: number;
     doCleaning() {
         console.log(this.actions.join('\n'));
     }
@@ -12,7 +12,7 @@ export class LightCleaning extends CleaningStrategy {
         'Sweeping the floor'
     ];
 
-    public static timeNeeded = 1;
+    public static readonly timeNeeded = 1;
 
     doCleaning() {
         console.log('Doing light cleaning--');
@@ -26,7 +26,7 @@ export class CommonCleaning extends CleaningStrategy {
         'Vacuuming the floor'
     ];
 
-    public static timeNeeded = 3;
+    public static readonly timeNeeded = 3;
 
     doCleaning() {
         console.log('Doing common cleaning');
@@ -40,7 +40,7 @@ export class SuperCleaning extends CleaningStrategy {
         'Cleaning the windows'
     ];
 
-    public static timeNeeded = 5;
+    public static readonly timeNeeded = 5;
 
     doCleaning() {
         console.log('Doing superMegaXXLProMaxPlus cleaning');
