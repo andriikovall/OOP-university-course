@@ -1,1 +1,1 @@
-// strategy
+// state
