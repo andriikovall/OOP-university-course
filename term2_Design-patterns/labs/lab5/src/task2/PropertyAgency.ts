@@ -1,4 +1,4 @@
-import { ICommand, FindFlatCommand, FindCostomerCommand } from "./command";
+import { ICommand, FindFlatCommand, FindCostomerCommand, FindFlatInOtherAgencies } from "./command";
 import { Client } from "./client";
 import { Flat } from "./flat";
 
@@ -9,16 +9,16 @@ export class PropertyAgency {
 
     private commandHistory: ICommand[] = [];
 
-    private otherAgencies: PropertyAgency[] = [];
+    private _otherAgencies: PropertyAgency[] = [];
 
     private clientsSuggestedFlats: Map<Client, Flat[]> = new Map();
     private flatsSuggestedClients: Map<Flat, Client[]> = new Map();
 
-    public setClientsSuggestedFlats(client: Client, flats: Flat[]) {
+    public setFlatsForClient(client: Client, flats: Flat[]) {
         this.clientsSuggestedFlats.set(client, flats);
     }
 
-    public getClientSuggestedFlats(client: Client) {
+    public getFlatsForClient(client: Client) {
         return this.clientsSuggestedFlats.get(client);
     }
 
@@ -38,6 +38,10 @@ export class PropertyAgency {
         return this._clients;
     }
 
+    public get otherAgencies() {
+        return this._otherAgencies;
+    }
+
     public runCommand(command: ICommand) {
         command.execute();
         this.commandHistory.push(command);
@@ -53,7 +57,7 @@ export class PropertyAgency {
     }
 
     public registerOtherAgency(agency: PropertyAgency) {
-        this.otherAgencies.push(agency);
+        this._otherAgencies.push(agency);
     }
 
     public findFlatsForClient(client: Client) {
@@ -61,18 +65,24 @@ export class PropertyAgency {
             this.registerClient(client);
         
         this.runCommand(new FindFlatCommand(this, client));
-        console.log(client.name, this.getClientSuggestedFlats(client));
+        console.log(client.name, this.getFlatsForClient(client));
     }
 
     public findClientsForFlat(flat: Flat) {
-        if (!this._flats.includes(flat))
+        if (!this._flats.includes(flat)) {
+            console.log('No flat found, registrating one');
             this.registerFlat(flat);
+        }
         
         this.runCommand(new FindCostomerCommand(this, flat));
         console.log(flat.address, this.getFlatsSuggestedClients(flat));
     }
 
     public searchForFlatInOtherAgencies(client: Client) {
-        this.otherAgencies.forEach(a => a.findFlatsForClient(client));
+        this.runCommand(new FindFlatInOtherAgencies(this, client));
+    }
+
+    public logCommandHistory() {
+        console.log(this.commandHistory);
     }
 }

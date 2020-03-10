@@ -15,8 +15,8 @@ export class FindFlatCommand implements ICommand {
         const flats = this.propertyAgency.flats.filter(
             f => f.price <= this.client.moneyAvailable && f.roomsCount >= this.client.requiredRoomsCount
         );
-        
-        this.propertyAgency.setClientsSuggestedFlats(this.client, flats);
+
+        this.propertyAgency.setFlatsForClient(this.client, flats);
     }
 }
 
@@ -30,5 +30,20 @@ export class FindCostomerCommand implements ICommand {
         );
 
         this.propertyAgency.setFlatsSuggestedClients(this.flat, clients);
+    }
+}
+
+export class FindFlatInOtherAgencies implements ICommand {
+    constructor(public propertyAgency: PropertyAgency, private client: Client) { }
+
+    execute() {
+        const flats: Flat[] = [];
+        this.propertyAgency.otherAgencies.forEach(
+            ag => {
+                ag.findFlatsForClient(this.client);
+                flats.push(...ag.getFlatsForClient(this.client)); 
+            }
+        );
+        this.propertyAgency.setFlatsForClient(this.client, flats);
     }
 }
