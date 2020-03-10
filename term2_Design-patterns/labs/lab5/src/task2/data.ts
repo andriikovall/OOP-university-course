@@ -4,7 +4,7 @@ import { Flat } from "./flat";
 export const clients = [
     new Client('andrii', 5000, 2), 
     new Client('vova', 45000, 3), 
-    new Client('bob', 1, 1)
+    new Client('bob', 1, 1) 
 ];
 
 export const flats = [
