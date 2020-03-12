@@ -1,9 +1,22 @@
 export abstract class Handler {
     public static handlerCount = 0;    
+    protected handlers: Handler[] = [];
+
     abstract handle(next: Function);
+    public use(handler: Handler) {
+        this.handlers.push(handler, ...handler.handlers);
+    }
+
+    protected callHandler(index: number) {
+        const currHandler = this.handlers[index];
+        if (!currHandler) {
+            return;
+        }
+        currHandler.handle(() => this.callHandler(index + 1));
+    }
 }
 
-export class FriendHandler extends Handler {
+export class Friend extends Handler {
 
     constructor(private propabilityToHelp = Math.random()){
         super();
@@ -25,8 +38,8 @@ export class FriendHandler extends Handler {
     }
 }
 
-export class CreditHandler extends Handler {
-    constructor(){
+export class Credit extends Handler {
+    constructor() {
         super();
     }
 
@@ -39,22 +52,16 @@ export class CreditHandler extends Handler {
 }
 
 
-export class User {
-    private handlers: Handler[] = [];
-
-    public use(handler: Handler) {
-        this.handlers.push(handler);
-    }
-
-    private callHandler(index: number) {
-        const currHandler = this.handlers[index];
-        if (!currHandler) {
-            return;
-        }
-        currHandler.handle(() => this.callHandler(index + 1));
+export class User extends Handler{
+    constructor() {
+        super();
     }
 
     public buyProduct()  {
         this.callHandler(0);
+    }
+
+    public handle(_next: Function) {
+        this.buyProduct();
     }
 }
