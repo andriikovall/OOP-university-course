@@ -1,4 +1,4 @@
-import { ICommand, FindFlatCommand, FindCostomerCommand, FindFlatInOtherAgencies } from "./command";
+import { ICommand, FindFlatCommand, FindCostomerCommand, FindFlatInOtherAgenciesCommand } from "./command";
 import { Client } from "./client";
 import { Flat } from "./flat";
 
@@ -22,11 +22,11 @@ export class PropertyAgency {
         return this.clientsSuggestedFlats.get(client);
     }
 
-    public setFlatsSuggestedClients(flat: Flat, clients: Client[]) {
+    public setClientsForFlat(flat: Flat, clients: Client[]) {
         this.flatsSuggestedClients.set(flat, clients);
     }
 
-    public getFlatsSuggestedClients(flat: Flat) {
+    public getClientsForFlat(flat: Flat) {
         return this.flatsSuggestedClients.get(flat);
     }
 
@@ -42,7 +42,7 @@ export class PropertyAgency {
         return this._otherAgencies;
     }
 
-    public runCommand(command: ICommand) {
+    private runCommand(command: ICommand) {
         command.execute();
         this.commandHistory.push(command);
     }
@@ -75,11 +75,11 @@ export class PropertyAgency {
         }
         
         this.runCommand(new FindCostomerCommand(this, flat));
-        console.log(flat.address, this.getFlatsSuggestedClients(flat));
+        console.log(flat.address, this.getClientsForFlat(flat));
     }
 
     public searchForFlatInOtherAgencies(client: Client) {
-        this.runCommand(new FindFlatInOtherAgencies(this, client));
+        this.runCommand(new FindFlatInOtherAgenciesCommand(this, client));
     }
 
     public logCommandHistory() {

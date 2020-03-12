@@ -29,11 +29,11 @@ export class FindCostomerCommand implements ICommand {
             c => c.moneyAvailable >= this.flat.price && c.requiredRoomsCount <= this.flat.roomsCount
         );
 
-        this.propertyAgency.setFlatsSuggestedClients(this.flat, clients);
+        this.propertyAgency.setClientsForFlat(this.flat, clients);
     }
 }
 
-export class FindFlatInOtherAgencies implements ICommand {
+export class FindFlatInOtherAgenciesCommand implements ICommand {
     constructor(public propertyAgency: PropertyAgency, private client: Client) { }
 
     execute() {
