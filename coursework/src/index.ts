@@ -1,5 +1,6 @@
 import Telegrah from 'telegraf';
+import { config } from './config';
 
-const bot = new Telegrah('1045750573:AAFyCWKHEqIMIBDCrlV3UrZDIIBHpLO10Q4');
+const bot = new Telegrah(config.BOT_TOKEN as string);
 
-bot.launch().then(() => console.log('bot started')).catch((err) => console.log('err', err));
+bot.launch().then(() => console.log('bot started')).catch((err: Error) => console.log('err', err));

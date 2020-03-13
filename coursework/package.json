@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@types/node": "^13.7.4",
+    "dotenv": "^8.2.0",
     "telegraf": "^3.36.0"
   },
   "keywords": [],
