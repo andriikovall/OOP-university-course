@@ -7,7 +7,7 @@ const agency2 = new PropertyAgency();
 
 clients.forEach(c => agency1.registerClient(c));
 
-flats.slice(0, 2)   .forEach(f => agency1.registerFlat(f));
+flats.slice(0, 2).forEach(f => agency1.registerFlat(f));
 flats.slice(2).forEach(f => agency2.registerFlat(f));
 
 agency1.registerOtherAgency(agency2);
