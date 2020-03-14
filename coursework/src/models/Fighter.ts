@@ -12,17 +12,18 @@ export enum FighterType {
     FighterSmart, 
     FighterStrong, 
     FighterPowerfull,
-    FighterAwesone,
+    FighterAwesome,
     FighterLongLiving 
 }
 
 export abstract class Fighter implements ICloneable {
-    public static nextId = 0;
+    private static nextId = 0;
     public id: number;
     private hp: number;
     constructor(public name: string, 
                 public creator: User, 
-                public specs: FighterSpecs ){
+                public specs: FighterSpecs, 
+                public type: FighterType ) {
                     this.id = ++Fighter.nextId;
                     this.hp = specs.maxHp;
                 }
@@ -31,15 +32,6 @@ export abstract class Fighter implements ICloneable {
         const successProbability = (1 - (enemy.specs.strength + enemy.specs.agility) / 100) + successProbabilityBonus;
         const isAttackSuccess = Math.random() <= successProbability;
         return isAttackSuccess;
-        // if (isAttackSuccess) {
-            // const attackerDmg = this.specs.damage;
-            // enemy.dealDamage(attackerDmg);
-            // console.log(`${this.getName()} makes ${attackerDmg} damage to ${enemy.getName()}`);
-            // return true;
-        // } else {
-            // console.log(`${this.getName()} attack missed`);
-            // return false;
-        // }
     }
 
     abstract attack(enemy: Fighter): void;
@@ -56,3 +48,55 @@ export abstract class Fighter implements ICloneable {
         return {...this};
     }
 }
+
+
+export class FighterSmart extends Fighter {
+
+    attack(enemy: Fighter): void {
+        // @todo add good loggin into bot
+        console.log('FighterSmart -> ', enemy);
+    }
+    
+}
+
+export class FighterStrong extends Fighter {
+
+    attack(enemy: Fighter): void {
+        // @todo add good loggin into bot
+        console.log('FighterStrong -> ', enemy);
+    }
+    
+}
+
+
+export class FighterPowerfull extends Fighter {
+
+    attack(enemy: Fighter): void {
+        // @todo add good loggin into bot
+        console.log('FighterPowerfull -> ', enemy);
+    }
+    
+}
+
+
+
+export class FighterAwesome extends Fighter {
+
+    attack(enemy: Fighter): void {
+        // @todo add good loggin into bot
+        console.log('FighterAwesome -> ', enemy);
+    }
+    
+}
+
+
+
+export class FighterLongLiving extends Fighter {
+
+    attack(enemy: Fighter): void {
+        // @todo add good loggin into bot
+        console.log('FighterLongLiving -> ', enemy);
+    }
+    
+}
+
