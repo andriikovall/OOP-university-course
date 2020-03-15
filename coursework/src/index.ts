@@ -1,14 +1,12 @@
+import Application from './Application';
 import Telegrah from 'telegraf';
-import { config, configureStorages } from './config';
+import handlers from './botHandlers';
+
+import { config } from './config';
 
 const bot = new Telegrah(config.BOT_TOKEN as string);
+bot.use(handlers.middleware());
 
-configureStorages()
-    .then(() => bot.launch())
-    .then(() => console.log('bot started'))
-    .catch((err: Error) => console.log('err', err))
+export const app = new Application(bot);
 
-
-bot.on('message', ctx => {
-    ctx.reply(ctx.message?.text as string);
-});
+app.start().catch((err: Error) => console.log(err.message));

@@ -3,14 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Application_1 = __importDefault(require("./Application"));
 const telegraf_1 = __importDefault(require("telegraf"));
+const botHandlers_1 = __importDefault(require("./botHandlers"));
 const config_1 = require("./config");
 const bot = new telegraf_1.default(config_1.config.BOT_TOKEN);
-config_1.configureStorages()
-    .then(() => bot.launch())
-    .then(() => console.log('bot started'))
-    .catch((err) => console.log('err', err));
-bot.on('message', ctx => {
-    var _a;
-    ctx.reply((_a = ctx.message) === null || _a === void 0 ? void 0 : _a.text);
-});
+bot.use(botHandlers_1.default.middleware());
+exports.app = new Application_1.default(bot);
+exports.app.start().catch((err) => console.log(err.message));

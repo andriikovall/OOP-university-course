@@ -28,8 +28,8 @@ class Fighter {
             this.hp = 0;
     }
     clone() {
-        // @todo builder
-        return { ...this };
+        const specsCopy = { ...this.specs };
+        return { ...this, specs: specsCopy };
     }
 }
 exports.Fighter = Fighter;

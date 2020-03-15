@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-
+// ADAPTER
 export default class {
     static readFile(path: string): Promise<string> {
         return new Promise((resolve: Function, reject: Function) => {

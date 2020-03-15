@@ -11,8 +11,13 @@ class FighterStorage {
     static async loadFighters() {
         console.log('loading fighters...');
         const rawData = await fs_adapted_1.default.readFile(config_1.config.FIGHTERS_FILE_PATH) || '[]';
-        const users = JSON.parse(rawData);
-        users.forEach(user => FighterStorage._fighters.set(user.id, user));
+        const fighters = JSON.parse(rawData);
+        fighters.forEach(f => {
+            FighterStorage._fighters.set(f.id, FighterStorage.createFighter(f.name, f.creatorId, f.specs, f.type));
+            if (f.id > FighterStorage.nextId) {
+                FighterStorage.nextId = f.id + 1;
+            }
+        });
     }
     static async saveFighters() {
         console.log('saving fighters...');
@@ -20,7 +25,7 @@ class FighterStorage {
         return fs_adapted_1.default.writeFile(config_1.config.FIGHTERS_FILE_PATH, serialized);
     }
     // FABRIC method
-    createFighter(name, creatorId, specs, type) {
+    static createFighter(name, creatorId, specs, type) {
         const creator = UserStorage_1.default.getUserById(creatorId);
         switch (type) {
             case Fighter_1.FighterType.FighterAwesome: return new Fighter_1.FighterAwesome(name, creator, specs, type);
@@ -37,6 +42,12 @@ class FighterStorage {
             return null;
         return fighter.clone();
     }
+    static insertFighter(fighter) {
+        if (!FighterStorage._fighters.get(fighter.id))
+            FighterStorage._fighters.set(++FighterStorage.nextId, fighter);
+        FighterStorage.saveFighters();
+    }
 }
 exports.default = FighterStorage;
 FighterStorage._fighters = new Map();
+FighterStorage.nextId = 0;

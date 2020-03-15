@@ -1,3 +1,3 @@
 export interface ICloneable {
-    clone(): this;
+    clone();
 }
