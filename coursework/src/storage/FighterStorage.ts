@@ -1,13 +1,26 @@
 import { Fighter, FighterSpecs, FighterType, FighterAwesome, FighterLongLiving, FighterPowerfull, FighterSmart, FighterStrong } from "../models/Fighter";
-import { UserStorage } from "./UserStorage";
+import UserStorage from "./UserStorage";
+import { config } from '../config';
+import fs from './fs-adapted';
 
-export class FighterStorage {
+export default class FighterStorage {
     private static _fighters = new Map<number, Fighter>();
 
-    public loadFighters(): void {
+    public static async loadFighters(): Promise<void> {
         console.log('loading fighters...');
+        const rawData = await fs.readFile(config.FIGHTERS_FILE_PATH) || '[]';
+        const users: Fighter[] = JSON.parse(rawData);
+        users.forEach(user => FighterStorage._fighters.set(user.id, user));
     }
 
+    public static async saveFighters(): Promise<void> {
+        console.log('saving fighters...');
+        const serialized: string = JSON.stringify([...FighterStorage._fighters.values()], null, 2);
+        return fs.writeFile(config.FIGHTERS_FILE_PATH, serialized);
+    }
+
+
+    // FABRIC method
     private createFighter(name: string, creatorId: number, specs: FighterSpecs, type: FighterType): Fighter {
         const creator = UserStorage.getUserById(creatorId);
         switch (type) {
@@ -22,7 +35,7 @@ export class FighterStorage {
     }
 
     public static getFighterById(id: number): Fighter {
-        const fighter = this._fighters.get(id);
+        const fighter = FighterStorage._fighters.get(id);
         if (!fighter)
             return null;
             

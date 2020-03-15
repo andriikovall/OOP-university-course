@@ -1,17 +1,26 @@
 import { User } from "../models/User";
+import fs from './fs-adapted';
+import { config } from '../config';
 
-export class UserStorage {
+export default class UserStorage {
 
     private static _users = new Map<number, User>();
 
-    public static loadUser() {
-        this._users.set(1, new User(1, 'ziovio'));
-        this._users.set(2, new User(2, 'nicname'));
-        console.log('users are loaded...');
+    public static async loadUsers(): Promise<void> {
+        console.log('loading users...');
+        const rawData = await fs.readFile(config.USERS_FILE_PATH) || '[]';
+        const users: User[] = JSON.parse(rawData);
+        users.forEach(user => UserStorage._users.set(user.id, user));
     }
 
-    public static getUserById(id: number) {
-        const user = this._users.get(id);
+    public static async saveUsers(): Promise<void> {
+        console.log('saving users');
+        const serialized: string = JSON.stringify([...UserStorage._users.values()], null, 2);
+        return fs.writeFile(config.USERS_FILE_PATH, serialized);
+    }
+
+    public static getUserById(id: number): User {
+        const user = UserStorage._users.get(id);
         if (!user)
             return null;
         

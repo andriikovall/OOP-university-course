@@ -1,10 +1,14 @@
 import Telegrah from 'telegraf';
-import { config } from './config';
+import { config, configureStorages } from './config';
 
 const bot = new Telegrah(config.BOT_TOKEN as string);
 
-bot.launch().then(() => console.log('bot started')).catch((err: Error) => console.log('err', err));
+configureStorages()
+    .then(() => bot.launch())
+    .then(() => console.log('bot started'))
+    .catch((err: Error) => console.log('err', err))
+
 
 bot.on('message', ctx => {
-    ctx.reply(ctx.message?.text as string);  
+    ctx.reply(ctx.message?.text as string);
 });
