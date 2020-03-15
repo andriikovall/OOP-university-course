@@ -1,4 +1,4 @@
-import { User, UserState } from "../models/User";
+import { User, UserStateEnum } from "../models/User";
 import fs from './fs-adapted';
 import { config } from '../config';
 
@@ -10,7 +10,7 @@ export default class UserStorage {
         console.log('loading users...');
         const rawData = await fs.readFile(config.USERS_FILE_PATH) || '[]';
         const users: User[] = JSON.parse(rawData);
-        users.forEach(user => UserStorage._users.set(user.id, new User(user.id, user.nickName, user.state)));
+        users.forEach(user => UserStorage._users.set(user.id, new User(user.id, user.nickName, user.stateValue)));
     }
 
     public static async saveUsers(): Promise<void> {
@@ -33,4 +33,11 @@ export default class UserStorage {
             UserStorage.saveUsers();
         }
     }
+
+    public static setUserStateValue(user: User, state: UserStateEnum) {
+        user.stateValue = state;
+        UserStorage._users.set(user.id, user);
+        UserStorage.saveUsers();
+    }
+
 }

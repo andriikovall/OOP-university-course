@@ -1,11 +1,13 @@
-import { app } from './index';
 import Telegraf, { ContextMessageUpdate } from 'telegraf';
+
 import UserStorage from './storage/UserStorage';
+import { app } from './index';
 import { User } from './models/User';
-import { CreateFighterCommand } from './Command';
+
+import buttons from './buttons';
 
 export interface ctxType extends ContextMessageUpdate {
-    state: any,
+    state?: { user: User },
 };
 
 const bot = new Telegraf();
@@ -19,6 +21,15 @@ bot.command('start', (ctx: ctxType) => {
     console.log(ctx.state.user);
     app.onStart(ctx);
 });
+
+bot.hears(buttons.createNewFighter, (ctx: ctxType) => {
+    app.onCreateFighter(ctx);
+})
+
+bot.hears([...Object.values(buttons.fighters)], (ctx: ctxType) => {
+    app.onFighterTypeSelected(ctx);
+})
+
 
 
 export default bot;
