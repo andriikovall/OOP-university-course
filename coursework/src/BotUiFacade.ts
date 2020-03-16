@@ -47,17 +47,12 @@ class MDFormatter extends TextFormatter {
 // FACADE
 export default class BotUI {
 
-    private static keyBoard = new Keyboard();
     public static parseMode: ParseMode = ParseMode.ParseModeMarkdown;
 
-    private static getCurrentTextFormatter(): TextFormatter {
-        switch (BotUI.parseMode) {
-            case ParseMode.ParseModeMarkdown: return new MDFormatter();
-            case ParseMode.ParseModeHTML: return new HTMLFormatter();
-        }
-    }
-
-
+    private static keyBoard = new Keyboard();
+    
+    
+    
     public static drawFighter(fighter: Fighter): string {
         const formatter: TextFormatter = BotUI.getCurrentTextFormatter();
         const msg: string = [
@@ -68,18 +63,26 @@ export default class BotUI {
             ...(Object.entries(fighter.specs).map(([key, val]) => `   ${formatter.toBold(key)} ${formatter.toItalic(val)}`))
         ].join('\n');
         return msg;
-
+        
     }
-
+    
     public static createInlineKeyBoard(buttons: string[][]) {
         BotUI.keyBoard.clear();
         BotUI.keyBoard.new();
-
+    
         for (const btnRow of buttons) {
             BotUI.keyBoard.add(...btnRow)
         }
         return BotUI.keyBoard.draw();
     }
+    
+    private static getCurrentTextFormatter(): TextFormatter {
+        switch (BotUI.parseMode) {
+            case ParseMode.ParseModeMarkdown: return new MDFormatter();
+            case ParseMode.ParseModeHTML: return new HTMLFormatter();
+        }
+    }
+
 }
 
 

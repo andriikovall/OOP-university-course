@@ -39,12 +39,6 @@ class MDFormatter extends TextFormatter {
 }
 // FACADE
 class BotUI {
-    static getCurrentTextFormatter() {
-        switch (BotUI.parseMode) {
-            case ParseMode.ParseModeMarkdown: return new MDFormatter();
-            case ParseMode.ParseModeHTML: return new HTMLFormatter();
-        }
-    }
     static drawFighter(fighter) {
         const formatter = BotUI.getCurrentTextFormatter();
         const msg = [
@@ -64,7 +58,13 @@ class BotUI {
         }
         return BotUI.keyBoard.draw();
     }
+    static getCurrentTextFormatter() {
+        switch (BotUI.parseMode) {
+            case ParseMode.ParseModeMarkdown: return new MDFormatter();
+            case ParseMode.ParseModeHTML: return new HTMLFormatter();
+        }
+    }
 }
 exports.default = BotUI;
-BotUI.keyBoard = new telegraf_keyboard_1.default();
 BotUI.parseMode = ParseMode.ParseModeMarkdown;
+BotUI.keyBoard = new telegraf_keyboard_1.default();
