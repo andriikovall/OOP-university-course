@@ -11,7 +11,7 @@ export default class UserStorage {
         console.log('loading users...');
         const rawData = await fs.readFile(config.USERS_FILE_PATH) || '[]';
         const users: User[] = JSON.parse(rawData);
-        users.forEach(user => UserStorage._users.set(user.id, new User(user.id, user.nickName, user.stateValue)));
+        users.forEach(user => UserStorage._users.set(user.id, new User(user.id, user.nickName, user.stateValue, user.bufferFighterType)));
     }
 
     public static async saveUsers(): Promise<void> {
@@ -35,16 +35,16 @@ export default class UserStorage {
         }
     }
 
-    public static setUserStateValue(user: User, state: UserStateEnum) {
+    public static setUserStateValue(user: User, state: UserStateEnum): Promise<void> {
         user.stateValue = state;
         UserStorage._users.set(user.id, user);
-        UserStorage.saveUsers();
+        return UserStorage.saveUsers();
     }
 
-    public static setUserFighterTypeChoice(user: User, type: FighterType) {
+    public static setUserFighterTypeChoice(user: User, type: FighterType): Promise<void> {
         user.bufferFighterType = type;
         UserStorage._users.set(user.id, user);
-        UserStorage.saveUsers();
+        return UserStorage.saveUsers();
     }
 
 }

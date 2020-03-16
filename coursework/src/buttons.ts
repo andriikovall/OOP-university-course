@@ -8,11 +8,3 @@ export default {
         longLiving: 'Long living 👼🏻'
     }
 }
-
-// export enum FighterType {
-//     FighterSmart,
-//     FighterStrong,
-//     FighterPowerfull,
-//     FighterAwesome,
-//     FighterLongLiving
-// }

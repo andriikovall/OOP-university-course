@@ -11,7 +11,7 @@ class UserStorage {
         console.log('loading users...');
         const rawData = await fs_adapted_1.default.readFile(config_1.config.USERS_FILE_PATH) || '[]';
         const users = JSON.parse(rawData);
-        users.forEach(user => UserStorage._users.set(user.id, new User_1.User(user.id, user.nickName, user.stateValue)));
+        users.forEach(user => UserStorage._users.set(user.id, new User_1.User(user.id, user.nickName, user.stateValue, user.bufferFighterType)));
     }
     static async saveUsers() {
         console.log('saving users');
@@ -33,12 +33,12 @@ class UserStorage {
     static setUserStateValue(user, state) {
         user.stateValue = state;
         UserStorage._users.set(user.id, user);
-        UserStorage.saveUsers();
+        return UserStorage.saveUsers();
     }
     static setUserFighterTypeChoice(user, type) {
         user.bufferFighterType = type;
         UserStorage._users.set(user.id, user);
-        UserStorage.saveUsers();
+        return UserStorage.saveUsers();
     }
 }
 exports.default = UserStorage;

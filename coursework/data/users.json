@@ -2,11 +2,7 @@
   {
     "id": 379946182,
     "nickName": "ZioSmith",
-    "stateValue": 0
-  },
-  {
-    "id": 580585110,
-    "nickName": "Алла ",
-    "stateValue": 0
+    "stateValue": 0,
+    "bufferFighterType": 1
   }
 ]

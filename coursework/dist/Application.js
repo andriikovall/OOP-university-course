@@ -20,13 +20,15 @@ class Application {
         // ctx.state.user.setState(new UserDefaultState(ctx.state.user));
     }
     onCreateFighter(ctx) {
-        if (ctx.state.user.state.canSelectFighterType()) {
+        var _a;
+        if ((_a = ctx.state.user) === null || _a === void 0 ? void 0 : _a.state.canSelectFighterType()) {
             this.runCommand(new Command_1.CreateFighterCommand(ctx, this));
             ctx.state.user.setState(new User_1.UserSelectingFighterTypeState(ctx.state.user));
         }
     }
     onFighterTypeSelected(ctx) {
-        if (ctx.state.user.state.canSelectFighterType()) {
+        var _a;
+        if ((_a = ctx.state.user) === null || _a === void 0 ? void 0 : _a.state.canSelectFighterType()) {
             this.runCommand(new Command_1.FighterTypeSelectedCommand(ctx, this));
             ctx.state.user.setState(User_1.UserStateEnum.UserEnteringFighterName);
         }

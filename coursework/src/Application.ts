@@ -24,14 +24,14 @@ export default class Application {
     }
 
     public onCreateFighter(ctx: ctxType) {
-        if (ctx.state.user.state.canSelectFighterType()) {
+        if (ctx.state.user?.state.canSelectFighterType()) {
             this.runCommand(new CreateFighterCommand(ctx, this));
             ctx.state.user.setState(new UserSelectingFighterTypeState(ctx.state.user));
         }
     }
 
     public onFighterTypeSelected(ctx: ctxType) {
-        if (ctx.state.user.state.canSelectFighterType()) {
+        if (ctx.state.user?.state.canSelectFighterType()) {
             this.runCommand(new FighterTypeSelectedCommand(ctx, this));
             ctx.state.user.setState(UserStateEnum.UserEnteringFighterName);
         }

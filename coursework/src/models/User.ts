@@ -6,7 +6,6 @@ import UserStorage from "../storage/UserStorage";
 export class User implements ICloneable {
 
     public state: UserState;
-    public bufferFighterType: FighterType;
 
     public setState(state: UserState | UserStateEnum) {
         if (state instanceof UserState) {
@@ -17,11 +16,14 @@ export class User implements ICloneable {
             UserStorage.setUserStateValue(this, state);
         }
     }
-    constructor(public id: number, public nickName: string, public stateValue: UserStateEnum = UserStateEnum.UserDefault) {
+    constructor(public id: number, 
+                public nickName: string, 
+                public stateValue: UserStateEnum = UserStateEnum.UserDefault, 
+                public bufferFighterType: FighterType = FighterType.FighterAwesome) {
         this.setState(stateValue);
     }
     clone(): this {
-        return new User(this.id, this.nickName, this.stateValue) as this;
+        return new User(this.id, this.nickName, this.stateValue, this.bufferFighterType) as this;
     }
 
     private getStateValueFromEmun(state: UserStateEnum): UserState {

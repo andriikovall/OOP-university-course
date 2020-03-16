@@ -27,10 +27,10 @@ export class OnStartCommand implements ICommand {
     execute(): void {
         const newUser = new User(this.ctx.chat.id, extractUsername(this.ctx.from));
         UserStorage.addUser(newUser)
-            .then(_ => {
-                const btns = BotUI.createInlineKeyBoard([[`${buttons.createNewFighter}`]]);
-                this.ctx.reply('Hello. Thanks for beginning!\n' + 'Start a fight or create a new fighter!', btns);
-            });
+        .then(_ => {
+            const btns = BotUI.createInlineKeyBoard([[`${buttons.createNewFighter}`]]);
+            this.ctx.reply('Hello. Thanks for beginning!\n' + 'Start a fight or create a new fighter!', btns);
+        });
     }
 }
 
@@ -54,13 +54,15 @@ export class FighterTypeSelectedCommand implements ICommand {
         this.ctx.reply('Take the name for your fighter!');
         let fighterType: FighterType = 0;
         switch (this.ctx.message.text) {
-            case buttons.fighters.smart: fighterType = FighterType.FighterSmart;
-            case buttons.fighters.strong: fighterType = FighterType.FighterStrong;
-            case buttons.fighters.awesome: fighterType = FighterType.FighterAwesome;
-            case buttons.fighters.powerfull: fighterType = FighterType.FighterAwesome;
-            case buttons.fighters.longLiving: fighterType = FighterType.FighterLongLiving;
+            case buttons.fighters.smart: fighterType = FighterType.FighterSmart; break;
+            case buttons.fighters.strong: fighterType = FighterType.FighterStrong; break;
+            case buttons.fighters.awesome: fighterType = FighterType.FighterAwesome; break;
+            case buttons.fighters.powerfull: fighterType = FighterType.FighterAwesome; break;
+            case buttons.fighters.longLiving: fighterType = FighterType.FighterLongLiving; break;
         }
-        this.ctx.state.user.bufferFighterType = fighterType;
+
+        console.log('fighterType:', fighterType, this.ctx.message.text);
+        UserStorage.setUserFighterTypeChoice(this.ctx.state.user, fighterType);
     }
 
 }
@@ -70,16 +72,15 @@ export class FighterNameConfirmingCommand implements ICommand {
     constructor(public ctx: ctxType, public app: Application) { }
 
     execute() {
-        // @todo
 
-        const name: string = [...this.ctx.message.text].join('');
+        const name: string = this.ctx.message.text;
         const creatorId: number = this.ctx.state.user.id;
 
         const fighter = FighterStorage.createFighter(name, creatorId, this.ctx.state.user.bufferFighterType || FighterType.FighterAwesome);
         FighterStorage.insertFighter(fighter).then(_ => {
             const reply = BotUI.drawFighter(fighter);
             const btns = BotUI.createInlineKeyBoard([[`${buttons.createNewFighter}`]]);
-            this.ctx.reply(reply, btns);
+            this.ctx.replyWithMarkdown(reply, btns);
         })
     }
 }

@@ -3,12 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Fighter_1 = require("./Fighter");
 const UserStorage_1 = __importDefault(require("../storage/UserStorage"));
 class User {
-    constructor(id, nickName, stateValue = UserStateEnum.UserDefault) {
+    constructor(id, nickName, stateValue = UserStateEnum.UserDefault, bufferFighterType = Fighter_1.FighterType.FighterAwesome) {
         this.id = id;
         this.nickName = nickName;
         this.stateValue = stateValue;
+        this.bufferFighterType = bufferFighterType;
         this.setState(stateValue);
     }
     setState(state) {
@@ -22,7 +24,7 @@ class User {
         }
     }
     clone() {
-        return new User(this.id, this.nickName, this.stateValue);
+        return new User(this.id, this.nickName, this.stateValue, this.bufferFighterType);
     }
     getStateValueFromEmun(state) {
         switch (state) {

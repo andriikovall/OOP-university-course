@@ -48,13 +48,24 @@ class FighterTypeSelectedCommand {
         this.ctx.reply('Take the name for your fighter!');
         let fighterType = 0;
         switch (this.ctx.message.text) {
-            case buttons_1.default.fighters.smart: fighterType = Fighter_1.FighterType.FighterSmart;
-            case buttons_1.default.fighters.strong: fighterType = Fighter_1.FighterType.FighterStrong;
-            case buttons_1.default.fighters.awesome: fighterType = Fighter_1.FighterType.FighterAwesome;
-            case buttons_1.default.fighters.powerfull: fighterType = Fighter_1.FighterType.FighterAwesome;
-            case buttons_1.default.fighters.longLiving: fighterType = Fighter_1.FighterType.FighterLongLiving;
+            case buttons_1.default.fighters.smart:
+                fighterType = Fighter_1.FighterType.FighterSmart;
+                break;
+            case buttons_1.default.fighters.strong:
+                fighterType = Fighter_1.FighterType.FighterStrong;
+                break;
+            case buttons_1.default.fighters.awesome:
+                fighterType = Fighter_1.FighterType.FighterAwesome;
+                break;
+            case buttons_1.default.fighters.powerfull:
+                fighterType = Fighter_1.FighterType.FighterAwesome;
+                break;
+            case buttons_1.default.fighters.longLiving:
+                fighterType = Fighter_1.FighterType.FighterLongLiving;
+                break;
         }
-        this.ctx.state.user.bufferFighterType = fighterType;
+        console.log('fighterType:', fighterType, this.ctx.message.text);
+        UserStorage_1.default.setUserFighterTypeChoice(this.ctx.state.user, fighterType);
     }
 }
 exports.FighterTypeSelectedCommand = FighterTypeSelectedCommand;
@@ -64,14 +75,13 @@ class FighterNameConfirmingCommand {
         this.app = app;
     }
     execute() {
-        // @todo
-        const name = [...this.ctx.message.text].join('');
+        const name = this.ctx.message.text;
         const creatorId = this.ctx.state.user.id;
         const fighter = FighterStorage_1.default.createFighter(name, creatorId, this.ctx.state.user.bufferFighterType || Fighter_1.FighterType.FighterAwesome);
         FighterStorage_1.default.insertFighter(fighter).then(_ => {
             const reply = BotUiFacade_1.default.drawFighter(fighter);
             const btns = BotUiFacade_1.default.createInlineKeyBoard([[`${buttons_1.default.createNewFighter}`]]);
-            this.ctx.reply(reply, btns);
+            this.ctx.replyWithMarkdown(reply, btns);
         });
     }
 }
