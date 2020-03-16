@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const helpers_1 = require("../helpers");
 var FighterType;
 (function (FighterType) {
     FighterType[FighterType["FighterSmart"] = 0] = "FighterSmart";
@@ -9,13 +10,16 @@ var FighterType;
     FighterType[FighterType["FighterLongLiving"] = 4] = "FighterLongLiving";
 })(FighterType = exports.FighterType || (exports.FighterType = {}));
 class Fighter {
-    constructor(name, creator, specs, type) {
+    constructor(name, creator, type, specs) {
         this.name = name;
         this.creator = creator;
-        this.specs = specs;
         this.type = type;
+        this.specs = specs;
+        if (!specs) {
+            this.specs = this.generateSpecs();
+        }
         this.id = ++Fighter.nextId;
-        this.hp = specs.maxHp;
+        this.hp = this.specs.maxHp;
     }
     enemyCanBeAttacked(enemy, successProbabilityBonus = 0) {
         const successProbability = (1 - (enemy.specs.strength + enemy.specs.agility) / 100) + successProbabilityBonus;
@@ -28,13 +32,20 @@ class Fighter {
             this.hp = 0;
     }
     clone() {
-        const specsCopy = { ...this.specs };
-        return { ...this, specs: specsCopy };
+        return { ...this, specs: { ...this.specs } };
     }
 }
 exports.Fighter = Fighter;
 Fighter.nextId = 0;
 class FighterSmart extends Fighter {
+    generateSpecs() {
+        return {
+            damage: helpers_1.randInt(10, 15),
+            strength: helpers_1.randInt(5, 10),
+            agility: helpers_1.randInt(40, 50),
+            maxHp: helpers_1.randInt(80, 140)
+        };
+    }
     attack(enemy) {
         // @todo add good loggin into bot
         console.log('FighterSmart -> ', enemy);
@@ -42,6 +53,14 @@ class FighterSmart extends Fighter {
 }
 exports.FighterSmart = FighterSmart;
 class FighterStrong extends Fighter {
+    generateSpecs() {
+        return {
+            damage: helpers_1.randInt(10, 20),
+            strength: helpers_1.randInt(20, 40),
+            agility: helpers_1.randInt(10, 20),
+            maxHp: helpers_1.randInt(150, 200)
+        };
+    }
     attack(enemy) {
         // @todo add good loggin into bot
         console.log('FighterStrong -> ', enemy);
@@ -49,6 +68,14 @@ class FighterStrong extends Fighter {
 }
 exports.FighterStrong = FighterStrong;
 class FighterPowerfull extends Fighter {
+    generateSpecs() {
+        return {
+            damage: helpers_1.randInt(40, 50),
+            strength: helpers_1.randInt(10, 20),
+            agility: helpers_1.randInt(20, 30),
+            maxHp: helpers_1.randInt(100, 200)
+        };
+    }
     attack(enemy) {
         // @todo add good loggin into bot
         console.log('FighterPowerfull -> ', enemy);
@@ -56,6 +83,14 @@ class FighterPowerfull extends Fighter {
 }
 exports.FighterPowerfull = FighterPowerfull;
 class FighterAwesome extends Fighter {
+    generateSpecs() {
+        return {
+            damage: helpers_1.randInt(30, 40),
+            strength: helpers_1.randInt(10, 20),
+            agility: helpers_1.randInt(50, 100),
+            maxHp: helpers_1.randInt(50, 200)
+        };
+    }
     attack(enemy) {
         // @todo add good loggin into bot
         console.log('FighterAwesome -> ', enemy);
@@ -63,6 +98,14 @@ class FighterAwesome extends Fighter {
 }
 exports.FighterAwesome = FighterAwesome;
 class FighterLongLiving extends Fighter {
+    generateSpecs() {
+        return {
+            damage: helpers_1.randInt(10, 20),
+            strength: helpers_1.randInt(10, 20),
+            agility: helpers_1.randInt(100, 200),
+            maxHp: helpers_1.randInt(100, 200)
+        };
+    }
     attack(enemy) {
         // @todo add good loggin into bot
         console.log('FighterLongLiving -> ', enemy);

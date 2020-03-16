@@ -1,6 +1,7 @@
 import { User, UserStateEnum } from "../models/User";
 import fs from './fs-adapted';
 import { config } from '../config';
+import { FighterType } from "../models/Fighter";
 
 export default class UserStorage {
 
@@ -27,15 +28,21 @@ export default class UserStorage {
         return user.clone();
     }
 
-    public static addUser(user: User): void {
+    public static addUser(user: User): Promise<void> {
         if (UserStorage.getUserById(user.id) != null) {
             UserStorage._users.set(user.id, user);
-            UserStorage.saveUsers();
+            return UserStorage.saveUsers();
         }
     }
 
     public static setUserStateValue(user: User, state: UserStateEnum) {
         user.stateValue = state;
+        UserStorage._users.set(user.id, user);
+        UserStorage.saveUsers();
+    }
+
+    public static setUserFighterTypeChoice(user: User, type: FighterType) {
+        user.bufferFighterType = type;
         UserStorage._users.set(user.id, user);
         UserStorage.saveUsers();
     }

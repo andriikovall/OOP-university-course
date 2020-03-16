@@ -14,6 +14,7 @@ exports.config = {
     FIGHTERS_FILE_PATH: path_1.default.join(__dirname, '../data/fighters.json'),
 };
 function configureStorages() {
-    return Promise.all([UserStorage_1.default.loadUsers(), FighterStorage_1.default.loadFighters()]);
+    return UserStorage_1.default.loadUsers()
+        .then(_ => FighterStorage_1.default.loadFighters());
 }
 exports.configureStorages = configureStorages;

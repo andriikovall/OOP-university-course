@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserStorage_1 = __importDefault(require("../storage/UserStorage"));
 class User {
-    constructor(id, nickName, stateValue = 0) {
+    constructor(id, nickName, stateValue = UserStateEnum.UserDefault) {
         this.id = id;
         this.nickName = nickName;
         this.stateValue = stateValue;
@@ -27,6 +27,7 @@ class User {
     getStateValueFromEmun(state) {
         switch (state) {
             case UserStateEnum.UserSelectingFighterType: return new UserSelectingFighterTypeState(this);
+            case UserStateEnum.UserEnteringFighterName: return new UserEnteringFighterNameState(this);
             default: return new UserDefaultState(this);
         }
     }
@@ -40,6 +41,7 @@ var UserStateEnum;
 (function (UserStateEnum) {
     UserStateEnum[UserStateEnum["UserDefault"] = 0] = "UserDefault";
     UserStateEnum[UserStateEnum["UserSelectingFighterType"] = 1] = "UserSelectingFighterType";
+    UserStateEnum[UserStateEnum["UserEnteringFighterName"] = 2] = "UserEnteringFighterName";
 })(UserStateEnum = exports.UserStateEnum || (exports.UserStateEnum = {}));
 class UserState {
     constructor(user) {
@@ -53,6 +55,9 @@ class UserDefaultState extends UserState {
         this.enumValue = UserStateEnum.UserDefault;
     }
     canSelectFighterType() {
+        return true;
+    }
+    canEnterFighterName() {
         return false;
     }
 }
@@ -65,5 +70,21 @@ class UserSelectingFighterTypeState extends UserState {
     canSelectFighterType() {
         return true;
     }
+    canEnterFighterName() {
+        return false;
+    }
 }
 exports.UserSelectingFighterTypeState = UserSelectingFighterTypeState;
+class UserEnteringFighterNameState extends UserState {
+    constructor() {
+        super(...arguments);
+        this.enumValue = UserStateEnum.UserEnteringFighterName;
+    }
+    canSelectFighterType() {
+        return false;
+    }
+    canEnterFighterName() {
+        return true;
+    }
+}
+exports.UserEnteringFighterNameState = UserEnteringFighterNameState;

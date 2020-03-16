@@ -12,6 +12,7 @@ export const config = {
     FIGHTERS_FILE_PATH: path.join(__dirname, '../data/fighters.json'), 
 }
 
-export function configureStorages(): Promise<void[]> {
-    return Promise.all([UsersStorage.loadUsers(), FightersStorage.loadFighters()]);
+export function configureStorages(): Promise<void> {
+    return UsersStorage.loadUsers()
+            .then(_ => FightersStorage.loadFighters());
 }

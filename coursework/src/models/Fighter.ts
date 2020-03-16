@@ -1,5 +1,6 @@
 import { User } from "./User";
 import { ICloneable } from "./ICloneable";
+import { randInt } from '../helpers';
 
 export interface FighterSpecs {
     damage: number;
@@ -22,10 +23,14 @@ export abstract class Fighter implements ICloneable {
     private hp: number;
     constructor(public name: string,
         public creator: User,
-        public specs: FighterSpecs,
-        public type: FighterType) {
+        public type: FighterType,
+        public specs: FighterSpecs) {
+
+        if (!specs) {
+            this.specs = this.generateSpecs();
+        }
         this.id = ++Fighter.nextId;
-        this.hp = specs.maxHp;
+        this.hp = this.specs.maxHp;
     }
 
     public enemyCanBeAttacked(enemy: Fighter, successProbabilityBonus: number = 0): boolean {
@@ -35,6 +40,7 @@ export abstract class Fighter implements ICloneable {
     }
 
     abstract attack(enemy: Fighter): void;
+    abstract generateSpecs(): FighterSpecs;
 
     public dealDamage(dmg: number) {
         this.hp -= dmg;
@@ -44,13 +50,20 @@ export abstract class Fighter implements ICloneable {
     }
 
     clone(): Fighter {
-        const specsCopy = { ...this.specs };
-        return { ...this, specs: specsCopy } as Fighter;
+        return { ...this, specs: { ...this.specs } } as Fighter;
     }
 }
 
 
 export class FighterSmart extends Fighter {
+    generateSpecs(): FighterSpecs {
+        return {
+            damage: randInt(10, 15), 
+            strength: randInt(5, 10), 
+            agility: randInt(40, 50), 
+            maxHp: randInt(80, 140)
+        }
+    }
 
     attack(enemy: Fighter): void {
         // @todo add good loggin into bot
@@ -60,6 +73,14 @@ export class FighterSmart extends Fighter {
 }
 
 export class FighterStrong extends Fighter {
+    generateSpecs(): FighterSpecs {
+        return {
+            damage: randInt(10, 20), 
+            strength: randInt(20, 40), 
+            agility: randInt(10, 20), 
+            maxHp: randInt(150, 200)
+        }
+    }
 
     attack(enemy: Fighter): void {
         // @todo add good loggin into bot
@@ -70,6 +91,14 @@ export class FighterStrong extends Fighter {
 
 
 export class FighterPowerfull extends Fighter {
+    generateSpecs(): FighterSpecs {
+        return {
+            damage: randInt(40, 50), 
+            strength: randInt(10, 20), 
+            agility: randInt(20, 30), 
+            maxHp: randInt(100, 200)
+        }
+    }
 
     attack(enemy: Fighter): void {
         // @todo add good loggin into bot
@@ -81,6 +110,14 @@ export class FighterPowerfull extends Fighter {
 
 
 export class FighterAwesome extends Fighter {
+    generateSpecs(): FighterSpecs {
+        return {
+            damage: randInt(30, 40), 
+            strength: randInt(10, 20), 
+            agility: randInt(50, 100), 
+            maxHp: randInt(50, 200)
+        }
+    }
 
     attack(enemy: Fighter): void {
         // @todo add good loggin into bot
@@ -92,6 +129,14 @@ export class FighterAwesome extends Fighter {
 
 
 export class FighterLongLiving extends Fighter {
+    generateSpecs(): FighterSpecs {
+        return {
+            damage: randInt(10, 20), 
+            strength: randInt(10, 20), 
+            agility: randInt(100, 200), 
+            maxHp: randInt(100, 200)
+        }
+    }
 
     attack(enemy: Fighter): void {
         // @todo add good loggin into bot

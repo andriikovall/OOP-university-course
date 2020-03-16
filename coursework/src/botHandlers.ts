@@ -18,17 +18,20 @@ bot.use((ctx: ctxType, next) => {
 });
 
 bot.command('start', (ctx: ctxType) => {
-    console.log(ctx.state.user);
     app.onStart(ctx);
 });
 
 bot.hears(buttons.createNewFighter, (ctx: ctxType) => {
     app.onCreateFighter(ctx);
-})
+});
 
 bot.hears([...Object.values(buttons.fighters)], (ctx: ctxType) => {
     app.onFighterTypeSelected(ctx);
-})
+});
+
+bot.on('text', (ctx: ctxType) => {
+    app.onText(ctx);
+});
 
 
 

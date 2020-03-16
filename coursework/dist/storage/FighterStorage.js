@@ -13,7 +13,7 @@ class FighterStorage {
         const rawData = await fs_adapted_1.default.readFile(config_1.config.FIGHTERS_FILE_PATH) || '[]';
         const fighters = JSON.parse(rawData);
         fighters.forEach(f => {
-            FighterStorage._fighters.set(f.id, FighterStorage.createFighter(f.name, f.creatorId, f.specs, f.type));
+            FighterStorage._fighters.set(f.id, FighterStorage.createFighter(f.name, f.creator.id, f.type, f.specs));
             if (f.id > FighterStorage.nextId) {
                 FighterStorage.nextId = f.id + 1;
             }
@@ -25,14 +25,14 @@ class FighterStorage {
         return fs_adapted_1.default.writeFile(config_1.config.FIGHTERS_FILE_PATH, serialized);
     }
     // FABRIC method
-    static createFighter(name, creatorId, specs, type) {
+    static createFighter(name, creatorId, type, specs = null) {
         const creator = UserStorage_1.default.getUserById(creatorId);
         switch (type) {
-            case Fighter_1.FighterType.FighterAwesome: return new Fighter_1.FighterAwesome(name, creator, specs, type);
-            case Fighter_1.FighterType.FighterLongLiving: return new Fighter_1.FighterLongLiving(name, creator, specs, type);
-            case Fighter_1.FighterType.FighterPowerfull: return new Fighter_1.FighterPowerfull(name, creator, specs, type);
-            case Fighter_1.FighterType.FighterSmart: return new Fighter_1.FighterSmart(name, creator, specs, type);
-            case Fighter_1.FighterType.FighterStrong: return new Fighter_1.FighterStrong(name, creator, specs, type);
+            case Fighter_1.FighterType.FighterAwesome: return new Fighter_1.FighterAwesome(name, creator, type, specs);
+            case Fighter_1.FighterType.FighterLongLiving: return new Fighter_1.FighterLongLiving(name, creator, type, specs);
+            case Fighter_1.FighterType.FighterPowerfull: return new Fighter_1.FighterPowerfull(name, creator, type, specs);
+            case Fighter_1.FighterType.FighterSmart: return new Fighter_1.FighterSmart(name, creator, type, specs);
+            case Fighter_1.FighterType.FighterStrong: return new Fighter_1.FighterStrong(name, creator, type, specs);
         }
         return null;
     }
@@ -45,7 +45,7 @@ class FighterStorage {
     static insertFighter(fighter) {
         if (!FighterStorage._fighters.get(fighter.id))
             FighterStorage._fighters.set(++FighterStorage.nextId, fighter);
-        FighterStorage.saveFighters();
+        return FighterStorage.saveFighters();
     }
 }
 exports.default = FighterStorage;

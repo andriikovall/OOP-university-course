@@ -6,6 +6,7 @@ import UserStorage from "../storage/UserStorage";
 export class User implements ICloneable {
 
     public state: UserState;
+    public bufferFighterType: FighterType;
 
     public setState(state: UserState | UserStateEnum) {
         if (state instanceof UserState) {
@@ -16,7 +17,7 @@ export class User implements ICloneable {
             UserStorage.setUserStateValue(this, state);
         }
     }
-    constructor(public id: number, public nickName: string, public stateValue: UserStateEnum = 0) {
+    constructor(public id: number, public nickName: string, public stateValue: UserStateEnum = UserStateEnum.UserDefault) {
         this.setState(stateValue);
     }
     clone(): this {
@@ -26,6 +27,7 @@ export class User implements ICloneable {
     private getStateValueFromEmun(state: UserStateEnum): UserState {
         switch (state) {
             case UserStateEnum.UserSelectingFighterType: return new UserSelectingFighterTypeState(this);
+            case UserStateEnum.UserEnteringFighterName:  return new UserEnteringFighterNameState(this);
             default: return new UserDefaultState(this);
         }
     }
@@ -39,7 +41,8 @@ export class User implements ICloneable {
 
 export enum UserStateEnum {
     UserDefault,
-    UserSelectingFighterType
+    UserSelectingFighterType,
+    UserEnteringFighterName
 }
 
 export abstract class UserState {
@@ -47,6 +50,7 @@ export abstract class UserState {
     constructor(private user: User) { }
 
     abstract canSelectFighterType(): boolean;
+    abstract canEnterFighterName(): boolean;
     // ..
 }
 
@@ -54,6 +58,10 @@ export class UserDefaultState extends UserState {
 
     public enumValue = UserStateEnum.UserDefault;
     canSelectFighterType() {
+        return true;
+    }
+
+    canEnterFighterName(): boolean {
         return false;
     }
 
@@ -64,6 +72,24 @@ export class UserSelectingFighterTypeState extends UserState {
 
     public enumValue = UserStateEnum.UserSelectingFighterType;
     canSelectFighterType(): boolean {
+        return true;
+    }
+
+    canEnterFighterName(): boolean {
+        return false;
+    }
+}
+
+
+export class UserEnteringFighterNameState extends UserState {
+
+    public enumValue = UserStateEnum.UserEnteringFighterName;
+
+    canSelectFighterType(): boolean {
+        return false;
+    }
+
+    canEnterFighterName(): boolean {
         return true;
     }
 }

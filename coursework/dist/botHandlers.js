@@ -14,7 +14,6 @@ bot.use((ctx, next) => {
     return next();
 });
 bot.command('start', (ctx) => {
-    console.log(ctx.state.user);
     index_1.app.onStart(ctx);
 });
 bot.hears(buttons_1.default.createNewFighter, (ctx) => {
@@ -22,5 +21,8 @@ bot.hears(buttons_1.default.createNewFighter, (ctx) => {
 });
 bot.hears([...Object.values(buttons_1.default.fighters)], (ctx) => {
     index_1.app.onFighterTypeSelected(ctx);
+});
+bot.on('text', (ctx) => {
+    index_1.app.onText(ctx);
 });
 exports.default = bot;
