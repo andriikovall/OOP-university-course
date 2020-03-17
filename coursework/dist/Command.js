@@ -2,11 +2,18 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = require("./models/User");
 const UserStorage_1 = __importDefault(require("./storage/UserStorage"));
 const buttons_1 = __importDefault(require("./config/buttons"));
-const BotUiFacade_1 = __importDefault(require("./BotUiFacade"));
+const BotUiFacade_1 = __importStar(require("./BotUiFacade"));
 const Fighter_1 = require("./models/Fighter");
 const FighterStorage_1 = __importDefault(require("./storage/FighterStorage"));
 function extractUsername(user) {
@@ -79,13 +86,31 @@ class FighterNameConfirmingCommand {
         const creatorId = this.ctx.state.user.id;
         const fighter = FighterStorage_1.default.createFighter(name, creatorId, this.ctx.state.user.bufferFighterType || Fighter_1.FighterType.FighterAwesome);
         FighterStorage_1.default.insertFighter(fighter).then(_ => {
-            // nothing will change
+            // nothing will change, because of BUILDER
             // BotUI.parseMode = ParseMode.ParseModeHTML;
             const reply = BotUiFacade_1.default.drawFighter(fighter);
-            const btns = BotUiFacade_1.default.createKeyboard([[`${buttons_1.default.createNewFighter}`]]);
+            const btns = BotUiFacade_1.default.createKeyboard([[`${buttons_1.default.createNewFighter}`], [`${buttons_1.default.showMyFighters}`]]);
             const extraMessageConfig = BotUiFacade_1.default.createExtraOptions({ caption: reply });
             this.ctx.replyWithPhoto(fighter.photoUrl, { ...extraMessageConfig, ...btns });
         });
     }
 }
 exports.FighterNameConfirmingCommand = FighterNameConfirmingCommand;
+class FighetrsShowComamnd {
+    constructor(ctx, app) {
+        this.ctx = ctx;
+        this.app = app;
+    }
+    execute() {
+        const fighters = this.ctx.state.user.getFighters();
+        for (const f of fighters) {
+            const reply = BotUiFacade_1.default.drawFighter(f);
+            const buttons = [
+                [new BotUiFacade_1.CallbackBtn('Choose for fight', '   '), new BotUiFacade_1.CallbackBtn('Delete(', '   ')]
+            ];
+            const extraMessageConfig = BotUiFacade_1.default.createExtraOptions({ markup: buttons, caption: reply });
+            this.ctx.replyWithPhoto(f.photoUrl, extraMessageConfig);
+        }
+    }
+}
+exports.FighetrsShowComamnd = FighetrsShowComamnd;

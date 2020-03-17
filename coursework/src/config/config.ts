@@ -16,7 +16,8 @@ export const config = {
         powerfull: 'https://res.cloudinary.com/webprogbase/image/upload/v1584442924/powerfull_ccxmtc.png', 
         awesome: 'https://res.cloudinary.com/webprogbase/image/upload/v1584442924/awesome_h2dcdc.png', 
         lucky: 'https://res.cloudinary.com/webprogbase/image/upload/v1584442924/lucky_dxf1ny.png',
-    }
+    }, 
+    TELEGRAM_MESSAGES_PER_SECOND: 35,
 }
 
 export function configureStorages(): Promise<void> {

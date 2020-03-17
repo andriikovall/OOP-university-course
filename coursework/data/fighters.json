@@ -1,0 +1,92 @@
+[
+  {
+    "name": "name",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 0,
+      "bufferFighterType": 3
+    },
+    "type": 3,
+    "specs": {
+      "damage": 34,
+      "strength": 13,
+      "agility": 77,
+      "maxHp": 61
+    },
+    "id": 1,
+    "hp": 61
+  },
+  {
+    "name": "bobo",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 0,
+      "bufferFighterType": 3
+    },
+    "type": 3,
+    "specs": {
+      "damage": 40,
+      "strength": 14,
+      "agility": 82,
+      "maxHp": 178
+    },
+    "id": 2,
+    "hp": 178
+  },
+  {
+    "name": "hgmg",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 0,
+      "bufferFighterType": 3
+    },
+    "type": 3,
+    "specs": {
+      "damage": 30,
+      "strength": 11,
+      "agility": 100,
+      "maxHp": 89
+    },
+    "id": 3,
+    "hp": 89
+  },
+  {
+    "name": "hm,4",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 0,
+      "bufferFighterType": 3
+    },
+    "type": 3,
+    "specs": {
+      "damage": 38,
+      "strength": 10,
+      "agility": 86,
+      "maxHp": 53
+    },
+    "id": 4,
+    "hp": 53
+  },
+  {
+    "name": "LuckyMannanana",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 2,
+      "bufferFighterType": 4
+    },
+    "type": 4,
+    "specs": {
+      "damage": 11,
+      "strength": 12,
+      "agility": 117,
+      "maxHp": 153
+    },
+    "id": 5,
+    "hp": 153
+  }
+]

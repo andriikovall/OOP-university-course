@@ -1,11 +1,14 @@
 import { ICloneable } from "./ICloneable";
-import { FighterType } from "./Fighter";
+import { FighterType, Fighter } from "./Fighter";
 import UserStorage from "../storage/UserStorage";
+import FighterStorage from "../storage/FighterStorage";
+import { config } from "../config/config";
 
 
 export class User implements ICloneable {
 
     public state: UserState;
+    public bufferFighterSelectedId: number;
 
     public setState(state: UserState | UserStateEnum) {
         if (state instanceof UserState) {
@@ -32,6 +35,15 @@ export class User implements ICloneable {
             case UserStateEnum.UserEnteringFighterName:  return new UserEnteringFighterNameState(this);
             default: return new UserDefaultState(this);
         }
+    }
+
+    public getFighters(page: number = 1): Fighter[] {
+        if (page < 0)
+            page = 0;
+
+        // todo PROXY
+        return FighterStorage.getUserFighters(this.id)
+                .slice((page  - 1) * config.TELEGRAM_MESSAGES_PER_SECOND);
     }
 
     toJSON() {

@@ -4,8 +4,8 @@ import { User as TelegrafUser, ExtraPhoto } from 'telegraf/typings/telegram-type
 import UserStorage from './storage/UserStorage';
 import { ctxType } from './botHandlers';
 import buttons from './config/buttons';
-import BotUI, { ParseMode } from './BotUiFacade';
-import { FighterType } from './models/Fighter';
+import BotUI, { ParseMode, UrlBtn, CallbackBtn } from './BotUiFacade';
+import { FighterType, Fighter } from './models/Fighter';
 import FighterStorage from './storage/FighterStorage';
 
 export interface ICommand {
@@ -26,10 +26,10 @@ export class OnStartCommand implements ICommand {
     execute(): void {
         const newUser = new User(this.ctx.chat.id, extractUsername(this.ctx.from));
         UserStorage.addUser(newUser)
-        .then(_ => {
-            const btns = BotUI.createKeyboard([[`${buttons.createNewFighter}`]]);
-            this.ctx.reply('Start a fight or create a new fighter!', btns);
-        });
+            .then(_ => {
+                const btns = BotUI.createKeyboard([[`${buttons.createNewFighter}`]]);
+                this.ctx.reply('Start a fight or create a new fighter!', btns);
+            });
     }
 }
 
@@ -77,12 +77,30 @@ export class FighterNameConfirmingCommand implements ICommand {
 
         const fighter = FighterStorage.createFighter(name, creatorId, this.ctx.state.user.bufferFighterType || FighterType.FighterAwesome);
         FighterStorage.insertFighter(fighter).then(_ => {
-            // nothing will change
+            // nothing will change, because of BUILDER
             // BotUI.parseMode = ParseMode.ParseModeHTML;
             const reply = BotUI.drawFighter(fighter);
-            const btns = BotUI.createKeyboard([[`${buttons.createNewFighter}`]]);
+            const btns = BotUI.createKeyboard([[`${buttons.createNewFighter}`], [`${buttons.showMyFighters}`]]);
             const extraMessageConfig = BotUI.createExtraOptions({ caption: reply })
-            this.ctx.replyWithPhoto(fighter.photoUrl, {...extraMessageConfig, ...btns} as ExtraPhoto);
+            this.ctx.replyWithPhoto(fighter.photoUrl, { ...extraMessageConfig, ...btns } as ExtraPhoto);
         })
+    }
+}
+
+
+export class FighetrsShowComamnd implements ICommand {
+    constructor(public ctx: ctxType, public app: Application) { }
+
+    execute() {
+        const fighters: Fighter[] = this.ctx.state.user.getFighters();
+        for (const f of fighters) {
+            const reply = BotUI.drawFighter(f);
+            const buttons = [
+                [ new CallbackBtn('Choose for fight', '   '), new CallbackBtn('Delete(', '   ')]
+            ];
+
+            const extraMessageConfig = BotUI.createExtraOptions({ markup: buttons, caption: reply });
+            this.ctx.replyWithPhoto(f.photoUrl, extraMessageConfig as ExtraPhoto);
+        }
     }
 }

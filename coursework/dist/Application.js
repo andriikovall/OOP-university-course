@@ -39,5 +39,8 @@ class Application {
             ctx.state.user.setState(User_1.UserStateEnum.UserDefault);
         }
     }
+    onFightersShow(ctx) {
+        this.runCommand(new Command_1.FighetrsShowComamnd(ctx, this));
+    }
 }
 exports.default = Application;

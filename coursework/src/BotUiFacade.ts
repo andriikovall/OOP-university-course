@@ -103,12 +103,13 @@ export default class BotUI {
         opts.markup = [];
         
         const inlineKeyboard = [];
-        for (let row of opts.markup) {
+        for (const row of opts.markup) {
             const mappedRow = row.map(btn => btn instanceof UrlBtn ? 
                 Markup.urlButton(btn.text, btn.url) : 
                 Markup.callbackButton(btn.text, btn.callback));
             inlineKeyboard.push(mappedRow);
         }
+
         const extra = Extra.markup(Markup.inlineKeyboard(inlineKeyboard));
         extra['caption'] = opts?.caption;
 

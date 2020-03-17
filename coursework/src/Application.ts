@@ -1,8 +1,9 @@
-import { ICommand, OnStartCommand, CreateFighterCommand, FighterTypeSelectedCommand, FighterNameConfirmingCommand } from "./Command";
+import { ICommand, OnStartCommand, CreateFighterCommand, FighterTypeSelectedCommand, FighterNameConfirmingCommand, FighetrsShowComamnd } from "./Command";
 import Telegrah, { ContextMessageUpdate } from "telegraf";
 import { config, configureStorages } from './config/config';
 import { ctxType } from "./botHandlers";
 import { UserSelectingFighterTypeState, UserDefaultState, UserStateEnum } from "./models/User";
+import { Fighter } from "./models/Fighter";
 
 export default class Application {
 
@@ -42,5 +43,9 @@ export default class Application {
             this.runCommand(new FighterNameConfirmingCommand(ctx, this));
             ctx.state.user.setState(UserStateEnum.UserDefault);
         }
+    }
+
+    public onFightersShow(ctx: ctxType) {
+        this.runCommand(new FighetrsShowComamnd(ctx, this));
     }
 }

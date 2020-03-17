@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Fighter_1 = require("./Fighter");
 const UserStorage_1 = __importDefault(require("../storage/UserStorage"));
+const FighterStorage_1 = __importDefault(require("../storage/FighterStorage"));
+const config_1 = require("../config/config");
 class User {
     constructor(id, nickName, stateValue = UserStateEnum.UserDefault, bufferFighterType = Fighter_1.FighterType.FighterAwesome) {
         this.id = id;
@@ -32,6 +34,13 @@ class User {
             case UserStateEnum.UserEnteringFighterName: return new UserEnteringFighterNameState(this);
             default: return new UserDefaultState(this);
         }
+    }
+    getFighters(page = 1) {
+        if (page < 0)
+            page = 0;
+        // todo PROXY
+        return FighterStorage_1.default.getUserFighters(this.id)
+            .slice((page - 1) * config_1.config.TELEGRAM_MESSAGES_PER_SECOND);
     }
     toJSON() {
         const copy = { ...this, state: undefined };

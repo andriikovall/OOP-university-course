@@ -84,7 +84,7 @@ class BotUI {
         if (!opts.markup)
             opts.markup = [];
         const inlineKeyboard = [];
-        for (let row of opts.markup) {
+        for (const row of opts.markup) {
             const mappedRow = row.map(btn => btn instanceof UrlBtn ?
                 telegraf_1.Markup.urlButton(btn.text, btn.url) :
                 telegraf_1.Markup.callbackButton(btn.text, btn.callback));

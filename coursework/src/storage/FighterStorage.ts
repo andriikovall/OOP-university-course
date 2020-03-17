@@ -54,4 +54,9 @@ export default class FighterStorage {
 
         return FighterStorage.saveFighters();
     }
+
+    public static getUserFighters(userId: number): Fighter[] {
+        return [...FighterStorage._fighters.values()]
+                    .filter(f => f.creator.id === userId);
+    } 
 }

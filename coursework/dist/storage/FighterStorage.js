@@ -47,6 +47,10 @@ class FighterStorage {
             FighterStorage._fighters.set(++FighterStorage.nextId, fighter);
         return FighterStorage.saveFighters();
     }
+    static getUserFighters(userId) {
+        return [...FighterStorage._fighters.values()]
+            .filter(f => f.creator.id === userId);
+    }
 }
 exports.default = FighterStorage;
 FighterStorage._fighters = new Map();
