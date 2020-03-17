@@ -35,6 +35,9 @@ class Fighter {
     clone() {
         return { ...this, specs: { ...this.specs } };
     }
+    toJSON() {
+        return { ...this, photoUrl: undefined };
+    }
 }
 exports.Fighter = Fighter;
 Fighter.nextId = 0;

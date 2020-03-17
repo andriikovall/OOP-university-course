@@ -55,6 +55,10 @@ export abstract class Fighter implements ICloneable {
     clone(): Fighter {
         return { ...this, specs: { ...this.specs } } as Fighter;
     }
+
+    toJSON() {
+        return { ...this, photoUrl: undefined };
+    }
 }
 
 

@@ -19,8 +19,9 @@ class Application {
         this.runCommand(new Command_1.OnStartCommand(ctx, this));
     }
     onCreateFighter(ctx) {
-        var _a;
-        if ((_a = ctx.state.user) === null || _a === void 0 ? void 0 : _a.state.canSelectFighterType()) {
+        var _a, _b;
+        console.log((_a = ctx.state.user) === null || _a === void 0 ? void 0 : _a.state);
+        if ((_b = ctx.state.user) === null || _b === void 0 ? void 0 : _b.state.canSelectFighterType()) {
             this.runCommand(new Command_1.CreateFighterCommand(ctx, this));
             ctx.state.user.setState(new User_1.UserSelectingFighterTypeState(ctx.state.user));
         }

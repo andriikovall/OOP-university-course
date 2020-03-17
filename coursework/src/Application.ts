@@ -23,6 +23,7 @@ export default class Application {
     }
 
     public onCreateFighter(ctx: ctxType) {
+        console.log(ctx.state.user?.state);
         if (ctx.state.user?.state.canSelectFighterType()) {
             this.runCommand(new CreateFighterCommand(ctx, this));
             ctx.state.user.setState(new UserSelectingFighterTypeState(ctx.state.user));
