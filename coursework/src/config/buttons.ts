@@ -5,6 +5,6 @@ export default {
         strong: 'Strong 💪', 
         powerfull: 'Powerfull 👊', 
         awesome: 'Awesome 😎', 
-        longLiving: 'Long living 👼🏻'
+        lucky: 'Lucky 👼🏻'
     }
 }

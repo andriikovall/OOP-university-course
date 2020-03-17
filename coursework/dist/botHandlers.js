@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const telegraf_1 = __importDefault(require("telegraf"));
 const UserStorage_1 = __importDefault(require("./storage/UserStorage"));
 const index_1 = require("./index");
-const buttons_1 = __importDefault(require("./buttons"));
+const buttons_1 = __importDefault(require("./config/buttons"));
 ;
 const bot = new telegraf_1.default();
 bot.use((ctx, next) => {
@@ -14,6 +14,8 @@ bot.use((ctx, next) => {
     return next();
 });
 bot.command('start', (ctx) => {
+    if (!ctx.state.user)
+        ctx.reply('Hello. Thanks for beginning!');
     index_1.app.onStart(ctx);
 });
 bot.hears(buttons_1.default.createNewFighter, (ctx) => {

@@ -4,7 +4,7 @@ import UserStorage from './storage/UserStorage';
 import { app } from './index';
 import { User } from './models/User';
 
-import buttons from './buttons';
+import buttons from './config/buttons';
 
 export interface ctxType extends ContextMessageUpdate {
     state?: { user: User },
@@ -18,6 +18,9 @@ bot.use((ctx: ctxType, next) => {
 });
 
 bot.command('start', (ctx: ctxType) => {
+    if (!ctx.state.user) 
+        ctx.reply('Hello. Thanks for beginning!');
+        
     app.onStart(ctx);
 });
 

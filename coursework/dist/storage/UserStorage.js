@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = require("../models/User");
 const fs_adapted_1 = __importDefault(require("./fs-adapted"));
-const config_1 = require("../config");
+const config_1 = require("../config/config");
 class UserStorage {
     static async loadUsers() {
         console.log('loading users...');

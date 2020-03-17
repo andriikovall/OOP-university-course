@@ -1,6 +1,6 @@
 import { User, UserStateEnum } from "../models/User";
 import fs from './fs-adapted';
-import { config } from '../config';
+import { config } from '../config/config';
 import { FighterType } from "../models/Fighter";
 
 export default class UserStorage {

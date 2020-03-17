@@ -59,7 +59,7 @@ export abstract class UserState {
 export class UserDefaultState extends UserState {
 
     public enumValue = UserStateEnum.UserDefault;
-    canSelectFighterType() {
+    canSelectFighterType(): boolean {
         return true;
     }
 

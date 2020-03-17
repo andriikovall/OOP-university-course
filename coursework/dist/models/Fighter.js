@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const helpers_1 = require("../helpers");
+const config_1 = require("../config/config");
 var FighterType;
 (function (FighterType) {
     FighterType[FighterType["FighterSmart"] = 0] = "FighterSmart";
     FighterType[FighterType["FighterStrong"] = 1] = "FighterStrong";
     FighterType[FighterType["FighterPowerfull"] = 2] = "FighterPowerfull";
     FighterType[FighterType["FighterAwesome"] = 3] = "FighterAwesome";
-    FighterType[FighterType["FighterLongLiving"] = 4] = "FighterLongLiving";
+    FighterType[FighterType["FighterLucky"] = 4] = "FighterLucky";
 })(FighterType = exports.FighterType || (exports.FighterType = {}));
 class Fighter {
     constructor(name, creator, type, specs) {
@@ -38,6 +39,10 @@ class Fighter {
 exports.Fighter = Fighter;
 Fighter.nextId = 0;
 class FighterSmart extends Fighter {
+    constructor() {
+        super(...arguments);
+        this.photoUrl = config_1.config.fightersImages.smart;
+    }
     generateSpecs() {
         return {
             damage: helpers_1.randInt(10, 15),
@@ -53,6 +58,10 @@ class FighterSmart extends Fighter {
 }
 exports.FighterSmart = FighterSmart;
 class FighterStrong extends Fighter {
+    constructor() {
+        super(...arguments);
+        this.photoUrl = config_1.config.fightersImages.strong;
+    }
     generateSpecs() {
         return {
             damage: helpers_1.randInt(10, 20),
@@ -68,6 +77,10 @@ class FighterStrong extends Fighter {
 }
 exports.FighterStrong = FighterStrong;
 class FighterPowerfull extends Fighter {
+    constructor() {
+        super(...arguments);
+        this.photoUrl = config_1.config.fightersImages.powerfull;
+    }
     generateSpecs() {
         return {
             damage: helpers_1.randInt(40, 50),
@@ -83,6 +96,10 @@ class FighterPowerfull extends Fighter {
 }
 exports.FighterPowerfull = FighterPowerfull;
 class FighterAwesome extends Fighter {
+    constructor() {
+        super(...arguments);
+        this.photoUrl = config_1.config.fightersImages.awesome;
+    }
     generateSpecs() {
         return {
             damage: helpers_1.randInt(30, 40),
@@ -97,7 +114,11 @@ class FighterAwesome extends Fighter {
     }
 }
 exports.FighterAwesome = FighterAwesome;
-class FighterLongLiving extends Fighter {
+class FighterLucky extends Fighter {
+    constructor() {
+        super(...arguments);
+        this.photoUrl = config_1.config.fightersImages.lucky;
+    }
     generateSpecs() {
         return {
             damage: helpers_1.randInt(10, 20),
@@ -111,4 +132,4 @@ class FighterLongLiving extends Fighter {
         console.log('FighterLongLiving -> ', enemy);
     }
 }
-exports.FighterLongLiving = FighterLongLiving;
+exports.FighterLucky = FighterLucky;

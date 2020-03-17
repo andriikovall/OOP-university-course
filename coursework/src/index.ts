@@ -2,7 +2,7 @@ import Application from './Application';
 import Telegrah from 'telegraf';
 import handlers from './botHandlers';
 
-import { config } from './config';
+import { config } from './config/config';
 
 const bot = new Telegrah(config.BOT_TOKEN as string);
 bot.use(handlers.middleware());

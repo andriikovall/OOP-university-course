@@ -1,13 +1,12 @@
 import { User } from './models/User';
 import Application from './Application';
-import { User as TelegrafUser } from 'telegraf/typings/telegram-types';
+import { User as TelegrafUser, ExtraPhoto } from 'telegraf/typings/telegram-types';
 import UserStorage from './storage/UserStorage';
 import { ctxType } from './botHandlers';
-import buttons from './buttons';
-import BotUI from './BotUiFacade';
-import { Fighter, FighterSmart, FighterType } from './models/Fighter';
+import buttons from './config/buttons';
+import BotUI, { ParseMode } from './BotUiFacade';
+import { FighterType } from './models/Fighter';
 import FighterStorage from './storage/FighterStorage';
-
 
 export interface ICommand {
     ctx: ctxType,
@@ -28,8 +27,8 @@ export class OnStartCommand implements ICommand {
         const newUser = new User(this.ctx.chat.id, extractUsername(this.ctx.from));
         UserStorage.addUser(newUser)
         .then(_ => {
-            const btns = BotUI.createInlineKeyBoard([[`${buttons.createNewFighter}`]]);
-            this.ctx.reply('Hello. Thanks for beginning!\n' + 'Start a fight or create a new fighter!', btns);
+            const btns = BotUI.createKeyboard([[`${buttons.createNewFighter}`]]);
+            this.ctx.reply('Start a fight or create a new fighter!', btns);
         });
     }
 }
@@ -41,7 +40,7 @@ export class CreateFighterCommand implements ICommand {
 
     execute(): void {
         const fighters: string[][] = Object.values(buttons.fighters).map(f => [f]);
-        const fightersBtns = BotUI.createInlineKeyBoard(fighters);
+        const fightersBtns = BotUI.createKeyboard(fighters);
         this.ctx.reply('Choose what type of hero you want. Choose wisely...', fightersBtns);
     }
 }
@@ -51,14 +50,14 @@ export class FighterTypeSelectedCommand implements ICommand {
     constructor(public ctx: ctxType, public app: Application) { }
 
     execute(): void {
-        this.ctx.reply('Take the name for your fighter!');
+        this.ctx.reply('Take the name for your fighter!', BotUI.clearKeyboard());
         let fighterType: FighterType = 0;
         switch (this.ctx.message.text) {
             case buttons.fighters.smart: fighterType = FighterType.FighterSmart; break;
             case buttons.fighters.strong: fighterType = FighterType.FighterStrong; break;
             case buttons.fighters.awesome: fighterType = FighterType.FighterAwesome; break;
             case buttons.fighters.powerfull: fighterType = FighterType.FighterAwesome; break;
-            case buttons.fighters.longLiving: fighterType = FighterType.FighterLongLiving; break;
+            case buttons.fighters.lucky: fighterType = FighterType.FighterLucky; break;
         }
 
         console.log('fighterType:', fighterType, this.ctx.message.text);
@@ -78,9 +77,12 @@ export class FighterNameConfirmingCommand implements ICommand {
 
         const fighter = FighterStorage.createFighter(name, creatorId, this.ctx.state.user.bufferFighterType || FighterType.FighterAwesome);
         FighterStorage.insertFighter(fighter).then(_ => {
+            // nothing will change
+            // BotUI.parseMode = ParseMode.ParseModeHTML;
             const reply = BotUI.drawFighter(fighter);
-            const btns = BotUI.createInlineKeyBoard([[`${buttons.createNewFighter}`]]);
-            this.ctx.replyWithMarkdown(reply, btns);
+            const btns = BotUI.createKeyboard([[`${buttons.createNewFighter}`]]);
+            const extraMessageConfig = BotUI.createExtraOptions({ caption: reply })
+            this.ctx.replyWithPhoto(fighter.photoUrl, {...extraMessageConfig, ...btns} as ExtraPhoto);
         })
     }
 }

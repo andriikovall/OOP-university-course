@@ -1,6 +1,10 @@
 import Keyboard from 'telegraf-keyboard';
 
 import { Fighter, FighterType } from "./models/Fighter";
+// import { Extra, Markup } from 'telegraf/typings/index';
+import { ExtraEditMessage } from 'telegraf/typings/telegram-types';
+import { Markup, Extra } from 'telegraf';
+import { isArray } from 'util';
 
 
 export enum ParseMode {
@@ -43,6 +47,19 @@ class MDFormatter extends TextFormatter {
     
 }
 
+export class UrlBtn {
+    constructor(public text: string, public url: string) {}
+}
+
+export class CallbackBtn {
+    constructor(public text: string, public callback: string) {}
+}
+
+interface ExtraOptions {
+    markup?: (UrlBtn | CallbackBtn)[][];
+    caption?: string;
+}
+
 
 // FACADE
 export default class BotUI {
@@ -50,8 +67,6 @@ export default class BotUI {
     public static parseMode: ParseMode = ParseMode.ParseModeMarkdown;
 
     private static keyBoard = new Keyboard();
-    
-    
     
     public static drawFighter(fighter: Fighter): string {
         const formatter: TextFormatter = BotUI.getCurrentTextFormatter();
@@ -65,15 +80,44 @@ export default class BotUI {
         return msg;
         
     }
+
+    public static clearKeyboard() {
+        return BotUI.createKeyboard([[]]);
+    }
     
-    public static createInlineKeyBoard(buttons: string[][]) {
-        BotUI.keyBoard.clear();
+    public static createKeyboard(buttons: string[][]) {
+        if (buttons.length === 1 && buttons[0]?.length === 0) {
+            return BotUI.keyBoard.clear();
+        }
+
         BotUI.keyBoard.new();
     
         for (const btnRow of buttons) {
             BotUI.keyBoard.add(...btnRow)
         }
         return BotUI.keyBoard.draw();
+    }
+
+    public static createExtraOptions(opts: ExtraOptions) {
+        if (!opts.markup)
+        opts.markup = [];
+        
+        const inlineKeyboard = [];
+        for (let row of opts.markup) {
+            const mappedRow = row.map(btn => btn instanceof UrlBtn ? 
+                Markup.urlButton(btn.text, btn.url) : 
+                Markup.callbackButton(btn.text, btn.callback));
+            inlineKeyboard.push(mappedRow);
+        }
+        const extra = Extra.markup(Markup.inlineKeyboard(inlineKeyboard));
+        extra['caption'] = opts?.caption;
+
+        switch (BotUI.parseMode) {
+            case ParseMode.ParseModeHTML: extra.parse_mode = 'HTML'; break;
+            case ParseMode.ParseModeMarkdown: extra.parse_mode = 'Markdown'; break;
+        }
+
+        return extra;
     }
     
     private static getCurrentTextFormatter(): TextFormatter {

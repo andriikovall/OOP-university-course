@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Fighter_1 = require("../models/Fighter");
 const UserStorage_1 = __importDefault(require("./UserStorage"));
-const config_1 = require("../config");
+const config_1 = require("../config/config");
 const fs_adapted_1 = __importDefault(require("./fs-adapted"));
 class FighterStorage {
     static async loadFighters() {
@@ -29,7 +29,7 @@ class FighterStorage {
         const creator = UserStorage_1.default.getUserById(creatorId);
         switch (type) {
             case Fighter_1.FighterType.FighterAwesome: return new Fighter_1.FighterAwesome(name, creator, type, specs);
-            case Fighter_1.FighterType.FighterLongLiving: return new Fighter_1.FighterLongLiving(name, creator, type, specs);
+            case Fighter_1.FighterType.FighterLucky: return new Fighter_1.FighterLucky(name, creator, type, specs);
             case Fighter_1.FighterType.FighterPowerfull: return new Fighter_1.FighterPowerfull(name, creator, type, specs);
             case Fighter_1.FighterType.FighterSmart: return new Fighter_1.FighterSmart(name, creator, type, specs);
             case Fighter_1.FighterType.FighterStrong: return new Fighter_1.FighterStrong(name, creator, type, specs);

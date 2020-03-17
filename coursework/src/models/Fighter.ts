@@ -1,6 +1,7 @@
 import { User } from "./User";
 import { ICloneable } from "./ICloneable";
 import { randInt } from '../helpers';
+import { config } from '../config/config';
 
 export interface FighterSpecs {
     damage: number;
@@ -14,12 +15,14 @@ export enum FighterType {
     FighterStrong,
     FighterPowerfull,
     FighterAwesome,
-    FighterLongLiving
+    FighterLucky
 }
 
 export abstract class Fighter implements ICloneable {
-    private static nextId = 0;
     public id: number;
+    public photoUrl: string;
+
+    private static nextId = 0;
     private hp: number;
     constructor(public name: string,
         public creator: User,
@@ -56,6 +59,9 @@ export abstract class Fighter implements ICloneable {
 
 
 export class FighterSmart extends Fighter {
+
+    public photoUrl = config.fightersImages.smart;
+
     generateSpecs(): FighterSpecs {
         return {
             damage: randInt(10, 15), 
@@ -73,6 +79,9 @@ export class FighterSmart extends Fighter {
 }
 
 export class FighterStrong extends Fighter {
+
+    public photoUrl = config.fightersImages.strong;
+
     generateSpecs(): FighterSpecs {
         return {
             damage: randInt(10, 20), 
@@ -91,6 +100,9 @@ export class FighterStrong extends Fighter {
 
 
 export class FighterPowerfull extends Fighter {
+
+    public photoUrl = config.fightersImages.powerfull;
+
     generateSpecs(): FighterSpecs {
         return {
             damage: randInt(40, 50), 
@@ -110,6 +122,9 @@ export class FighterPowerfull extends Fighter {
 
 
 export class FighterAwesome extends Fighter {
+
+    public photoUrl = config.fightersImages.awesome;
+
     generateSpecs(): FighterSpecs {
         return {
             damage: randInt(30, 40), 
@@ -128,7 +143,10 @@ export class FighterAwesome extends Fighter {
 
 
 
-export class FighterLongLiving extends Fighter {
+export class FighterLucky extends Fighter {
+
+    public photoUrl = config.fightersImages.lucky;
+
     generateSpecs(): FighterSpecs {
         return {
             damage: randInt(10, 20), 

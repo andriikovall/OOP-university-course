@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const telegraf_keyboard_1 = __importDefault(require("telegraf-keyboard"));
 const Fighter_1 = require("./models/Fighter");
+const telegraf_1 = require("telegraf");
 var ParseMode;
 (function (ParseMode) {
     ParseMode[ParseMode["ParseModeMarkdown"] = 0] = "ParseModeMarkdown";
@@ -37,6 +38,20 @@ class MDFormatter extends TextFormatter {
         return `[${text}](${encodeURI(url)})`;
     }
 }
+class UrlBtn {
+    constructor(text, url) {
+        this.text = text;
+        this.url = url;
+    }
+}
+exports.UrlBtn = UrlBtn;
+class CallbackBtn {
+    constructor(text, callback) {
+        this.text = text;
+        this.callback = callback;
+    }
+}
+exports.CallbackBtn = CallbackBtn;
 // FACADE
 class BotUI {
     static drawFighter(fighter) {
@@ -50,13 +65,42 @@ class BotUI {
         ].join('\n');
         return msg;
     }
-    static createInlineKeyBoard(buttons) {
-        BotUI.keyBoard.clear();
+    static clearKeyboard() {
+        return BotUI.createKeyboard([[]]);
+    }
+    static createKeyboard(buttons) {
+        var _a;
+        if (buttons.length === 1 && ((_a = buttons[0]) === null || _a === void 0 ? void 0 : _a.length) === 0) {
+            return BotUI.keyBoard.clear();
+        }
         BotUI.keyBoard.new();
         for (const btnRow of buttons) {
             BotUI.keyBoard.add(...btnRow);
         }
         return BotUI.keyBoard.draw();
+    }
+    static createExtraOptions(opts) {
+        var _a;
+        if (!opts.markup)
+            opts.markup = [];
+        const inlineKeyboard = [];
+        for (let row of opts.markup) {
+            const mappedRow = row.map(btn => btn instanceof UrlBtn ?
+                telegraf_1.Markup.urlButton(btn.text, btn.url) :
+                telegraf_1.Markup.callbackButton(btn.text, btn.callback));
+            inlineKeyboard.push(mappedRow);
+        }
+        const extra = telegraf_1.Extra.markup(telegraf_1.Markup.inlineKeyboard(inlineKeyboard));
+        extra['caption'] = (_a = opts) === null || _a === void 0 ? void 0 : _a.caption;
+        switch (BotUI.parseMode) {
+            case ParseMode.ParseModeHTML:
+                extra.parse_mode = 'HTML';
+                break;
+            case ParseMode.ParseModeMarkdown:
+                extra.parse_mode = 'Markdown';
+                break;
+        }
+        return extra;
     }
     static getCurrentTextFormatter() {
         switch (BotUI.parseMode) {

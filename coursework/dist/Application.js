@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("./Command");
-const config_1 = require("./config");
+const config_1 = require("./config/config");
 const User_1 = require("./models/User");
 class Application {
     constructor(bot) {
@@ -17,7 +17,6 @@ class Application {
     }
     onStart(ctx) {
         this.runCommand(new Command_1.OnStartCommand(ctx, this));
-        // ctx.state.user.setState(new UserDefaultState(ctx.state.user));
     }
     onCreateFighter(ctx) {
         var _a;

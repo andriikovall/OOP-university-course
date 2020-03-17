@@ -1,6 +1,6 @@
-import { Fighter, FighterSpecs, FighterType, FighterAwesome, FighterLongLiving, FighterPowerfull, FighterSmart, FighterStrong } from "../models/Fighter";
+import { Fighter, FighterSpecs, FighterType, FighterAwesome, FighterLucky, FighterPowerfull, FighterSmart, FighterStrong } from "../models/Fighter";
 import UserStorage from "./UserStorage";
-import { config } from '../config';
+import { config } from '../config/config';
 import fs from './fs-adapted';
 
 export default class FighterStorage {
@@ -31,7 +31,7 @@ export default class FighterStorage {
         const creator = UserStorage.getUserById(creatorId);
         switch (type) {
             case FighterType.FighterAwesome: return    new FighterAwesome(name, creator, type, specs);
-            case FighterType.FighterLongLiving: return new FighterLongLiving(name, creator, type, specs);
+            case FighterType.FighterLucky: return      new FighterLucky(name, creator, type, specs);
             case FighterType.FighterPowerfull: return  new FighterPowerfull(name, creator, type, specs);
             case FighterType.FighterSmart: return      new FighterSmart(name, creator, type, specs);
             case FighterType.FighterStrong: return     new FighterStrong(name, creator, type, specs);
