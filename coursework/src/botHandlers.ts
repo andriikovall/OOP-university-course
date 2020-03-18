@@ -13,7 +13,8 @@ export interface ctxType extends ContextMessageUpdate {
 const bot = new Telegraf();
 
 bot.use((ctx: ctxType, next) => {
-    ctx.state.user = UserStorage.getUserById(ctx?.message?.chat.id);
+    const userId = ctx?.message?.chat.id || ctx.callbackQuery.message.chat.id;
+    ctx.state.user = UserStorage.getUserById(userId);
     return next()
 });
 
@@ -36,12 +37,15 @@ bot.hears([...Object.values(buttons.fighters)], (ctx: ctxType) => {
     app.onFighterTypeSelected(ctx);
 });
 
+bot.hears(buttons.showEnemies, (ctx: ctxType) => {
+    app.onEmeniesShow(ctx);
+});
+
 bot.on('text', (ctx: ctxType) => {
     app.onText(ctx);
 });
 
 bot.on('callback_query', (ctx: ctxType) => {
-    ctx.state.user = UserStorage.getUserById(ctx.callbackQuery.message.chat.id);
     app.onCallbackQuery(ctx);
 })
 

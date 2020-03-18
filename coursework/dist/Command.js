@@ -74,7 +74,6 @@ class FighterTypeSelectedCommand {
                 fighterType = Fighter_1.FighterType.FighterLucky;
                 break;
         }
-        console.log('fighterType:', fighterType, this.ctx.message.text);
         UserStorage_1.default.setUserFighterTypeChoice(this.ctx.state.user, fighterType)
             .then(_ => cb());
     }
@@ -94,7 +93,7 @@ class FighterNameConfirmingCommand {
             // nothing will change, because of BUILDER
             // BotUI.parseMode = ParseMode.ParseModeHTML;
             const reply = BotUiFacade_1.default.drawFighter(fighter);
-            const btns = BotUiFacade_1.default.createKeyboard([[buttons_1.default.createNewFighter], [buttons_1.default.showMyFighters]]);
+            const btns = BotUiFacade_1.default.createKeyboard([[buttons_1.default.createNewFighter], [buttons_1.default.showMyFighters], [buttons_1.default.showEnemies]]);
             const extraMessageConfig = BotUiFacade_1.default.createExtraOptions({ caption: reply });
             this.ctx.replyWithPhoto(fighter.photoUrl, { ...extraMessageConfig, ...btns })
                 .then(_ => cb());
@@ -122,6 +121,43 @@ class FighetrsShowComamnd {
     }
 }
 exports.FighetrsShowComamnd = FighetrsShowComamnd;
+class DeleteFighterCommand {
+    constructor(ctx, fighterId, app) {
+        this.ctx = ctx;
+        this.fighterId = fighterId;
+        this.app = app;
+    }
+    execute(cb) {
+        FighterStorage_1.default.deleteFighter(this.fighterId)
+            .then(res => {
+            if (res) {
+                this.ctx.answerCbQuery('Your fighter was deleted', true);
+                this.ctx.deleteMessage();
+            }
+            cb(res);
+        });
+    }
+}
+exports.DeleteFighterCommand = DeleteFighterCommand;
+class EnemiesShowCommand {
+    constructor(ctx, app) {
+        this.ctx = ctx;
+        this.app = app;
+    }
+    execute(cb) {
+        const fighters = this.ctx.state.user.getEnemies();
+        for (const f of fighters) {
+            const reply = BotUiFacade_1.default.drawFighter(f);
+            const btns = [
+                [new BotUiFacade_1.CallbackBtn(buttons_1.default.callbacks.selectEnemy.text, JSON.stringify({ methodName: Application_1.CallbackQueryHandler.chooseEnemy.name, args: [f.id] }))]
+            ];
+            const extraMessageConfig = BotUiFacade_1.default.createExtraOptions({ markup: btns, caption: reply });
+            this.ctx.replyWithPhoto(f.photoUrl, extraMessageConfig)
+                .then(_ => cb());
+        }
+    }
+}
+exports.EnemiesShowCommand = EnemiesShowCommand;
 class ChooseFighterCommand {
     constructor(ctx, fighterId, app) {
         this.ctx = ctx;
@@ -141,21 +177,22 @@ class ChooseFighterCommand {
     }
 }
 exports.ChooseFighterCommand = ChooseFighterCommand;
-class DeleteFighterCommand {
-    constructor(ctx, fighterId, app) {
+class ChooseEnemyCommand {
+    constructor(ctx, app, enemyId) {
         this.ctx = ctx;
-        this.fighterId = fighterId;
         this.app = app;
+        this.enemyId = enemyId;
     }
     execute(cb) {
-        FighterStorage_1.default.deleteFighter(this.fighterId)
-            .then(res => {
-            if (res) {
-                this.ctx.answerCbQuery('Your fighter was deleted', true);
-                this.ctx.deleteMessage();
-            }
-            cb(res);
-        });
+        this.ctx.state.user.bufferEmenySelectedId = this.enemyId;
+        UserStorage_1.default.updateUser(this.ctx.state.user)
+            .then(_ => {
+            const fighter = FighterStorage_1.default.getFighterById(this.enemyId);
+            const reply = 'You selected ' + fighter.name + ' as the enemy!';
+            this.ctx.reply(reply);
+            this.ctx.answerCbQuery(reply);
+        })
+            .then(_ => cb());
     }
 }
-exports.DeleteFighterCommand = DeleteFighterCommand;
+exports.ChooseEnemyCommand = ChooseEnemyCommand;

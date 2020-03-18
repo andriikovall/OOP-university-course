@@ -55,10 +55,11 @@ exports.CallbackBtn = CallbackBtn;
 // FACADE
 class BotUI {
     static drawFighter(fighter) {
+        var _a, _b;
         const formatter = BotUI.getCurrentTextFormatter();
         const msg = [
             `${formatter.toItalic('Name:')} ${formatter.toBold(fighter.name)}`,
-            `${formatter.toItalic('Creator:')} ${formatter.toUserLink(fighter.creator.nickName, fighter.creator.id)}`,
+            `${formatter.toItalic('Creator:')} ${formatter.toUserLink((_a = fighter.creator) === null || _a === void 0 ? void 0 : _a.nickName, (_b = fighter.creator) === null || _b === void 0 ? void 0 : _b.id)}`,
             `${formatter.toItalic('Type:')} ${formatter.toBold(Fighter_1.FighterType[fighter.type])}`,
             `${formatter.toBold('Abilities:')}`,
             ...(Object.entries(fighter.specs).map(([key, val]) => `   ${formatter.toBold(key)} ${formatter.toItalic(val)}`))

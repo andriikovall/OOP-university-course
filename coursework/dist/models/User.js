@@ -8,11 +8,13 @@ const UserStorage_1 = __importDefault(require("../storage/UserStorage"));
 const FighterStorage_1 = __importDefault(require("../storage/FighterStorage"));
 const config_1 = require("../config/config");
 class User {
-    constructor(id, nickName, stateValue = UserStateEnum.UserDefault, bufferFighterType = Fighter_1.FighterType.FighterAwesome) {
+    constructor(id, nickName, stateValue = UserStateEnum.UserDefault, bufferFighterType = Fighter_1.FighterType.FighterAwesome, bufferFighterSelectedId = -1, bufferEmenySelectedId = -1) {
         this.id = id;
         this.nickName = nickName;
         this.stateValue = stateValue;
         this.bufferFighterType = bufferFighterType;
+        this.bufferFighterSelectedId = bufferFighterSelectedId;
+        this.bufferEmenySelectedId = bufferEmenySelectedId;
         this.setState(stateValue);
     }
     setState(state) {
@@ -26,7 +28,7 @@ class User {
         }
     }
     clone() {
-        return new User(this.id, this.nickName, this.stateValue, this.bufferFighterType);
+        return new User(this.id, this.nickName, this.stateValue, this.bufferFighterType, this.bufferFighterSelectedId, this.bufferEmenySelectedId);
     }
     getStateValueFromEmun(state) {
         switch (state) {
@@ -45,9 +47,15 @@ class User {
         return FighterStorage_1.default.getUserFighters(this.id)
             .slice((page - 1) * config_1.config.TELEGRAM_MESSAGES_PER_SECOND);
     }
+    getEnemies(page = 1) {
+        if (page < 0)
+            page = 0;
+        // todo PROXY
+        return FighterStorage_1.default.getUserEnemies(this.id)
+            .slice((page - 1) * config_1.config.TELEGRAM_MESSAGES_PER_SECOND);
+    }
     toJSON() {
-        const copy = { ...this, state: undefined };
-        return copy;
+        return { ...this, state: undefined };
     }
 }
 exports.User = User;

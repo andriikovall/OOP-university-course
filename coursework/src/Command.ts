@@ -62,7 +62,6 @@ export class FighterTypeSelectedCommand implements ICommand {
             case buttons.fighters.lucky: fighterType = FighterType.FighterLucky; break;
         }
 
-        console.log('fighterType:', fighterType, this.ctx.message.text);
         UserStorage.setUserFighterTypeChoice(this.ctx.state.user, fighterType)
             .then(_ => cb());
     }
@@ -83,7 +82,7 @@ export class FighterNameConfirmingCommand implements ICommand {
             // nothing will change, because of BUILDER
             // BotUI.parseMode = ParseMode.ParseModeHTML;
             const reply = BotUI.drawFighter(fighter);
-            const btns = BotUI.createKeyboard([[buttons.createNewFighter], [buttons.showMyFighters]]);
+            const btns = BotUI.createKeyboard([[buttons.createNewFighter], [buttons.showMyFighters], [buttons.showEnemies]]);
             const extraMessageConfig = BotUI.createExtraOptions({ caption: reply })
             this.ctx.replyWithPhoto(fighter.photoUrl, { ...extraMessageConfig, ...btns } as ExtraPhoto)
                 .then(_ => cb());
@@ -114,10 +113,44 @@ export class FighetrsShowComamnd implements ICommand {
     }
 }
 
+export class DeleteFighterCommand implements ICommand {
+    constructor(public ctx: ctxType, private fighterId: number, public app: Application) { }
+
+    execute(cb: Function) {
+        FighterStorage.deleteFighter(this.fighterId)
+            .then(res => {
+                if (res) {
+                    this.ctx.answerCbQuery('Your fighter was deleted', true);
+                    this.ctx.deleteMessage();
+                }
+                cb(res);
+            })
+    }
+}
+
+export class EnemiesShowCommand implements ICommand {
+    constructor(public ctx: ctxType, public app: Application) { }
+
+    execute(cb: Function) {
+        const fighters: Fighter[] = this.ctx.state.user.getEnemies();
+        for (const f of fighters) {
+            const reply = BotUI.drawFighter(f);
+
+            const btns = [
+                [new CallbackBtn(buttons.callbacks.selectEnemy.text,
+                    JSON.stringify({ methodName: CallbackQueryHandler.chooseEnemy.name, args: [f.id] }))]
+            ];
+
+            const extraMessageConfig = BotUI.createExtraOptions({ markup: btns, caption: reply });
+            this.ctx.replyWithPhoto(f.photoUrl, extraMessageConfig as ExtraPhoto)
+                .then(_ => cb());
+        }
+    }
+}
 
 export class ChooseFighterCommand implements ICommand {
     constructor(public ctx: ctxType, private fighterId: number, public app: Application) { }
-
+    
     execute(cb: Function) {
         this.ctx.state.user.bufferFighterSelectedId = this.fighterId;
         UserStorage.updateUser(this.ctx.state.user)
@@ -132,17 +165,18 @@ export class ChooseFighterCommand implements ICommand {
 
 }
 
-export class DeleteFighterCommand implements ICommand {
-    constructor(public ctx: ctxType, private fighterId: number, public app: Application) { }
+export class ChooseEnemyCommand implements ICommand {
+    constructor(public ctx: ctxType, public app: Application, private enemyId: number) { }
 
     execute(cb: Function) {
-        FighterStorage.deleteFighter(this.fighterId)
-            .then(res => {
-                if (res) {
-                    this.ctx.answerCbQuery('Your fighter was deleted', true);
-                    this.ctx.deleteMessage();
-                }
-                cb(res);
+        this.ctx.state.user.bufferEmenySelectedId = this.enemyId;
+        UserStorage.updateUser(this.ctx.state.user)
+            .then(_ => {
+                const fighter = FighterStorage.getFighterById(this.enemyId);
+                const reply = 'You selected ' + fighter.name + ' as the enemy!';
+                this.ctx.reply(reply);
+                this.ctx.answerCbQuery(reply);
             })
+            .then(_ => cb());
     }
 }

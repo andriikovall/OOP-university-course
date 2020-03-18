@@ -8,7 +8,6 @@ import { config } from "../config/config";
 export class User implements ICloneable {
 
     public state: UserState;
-    public bufferFighterSelectedId: number;
 
     public setState(state: UserState | UserStateEnum) {
         if (state instanceof UserState) {
@@ -22,11 +21,18 @@ export class User implements ICloneable {
     constructor(public id: number, 
                 public nickName: string, 
                 public stateValue: UserStateEnum = UserStateEnum.UserDefault, 
-                public bufferFighterType: FighterType = FighterType.FighterAwesome) {
+                public bufferFighterType: FighterType = FighterType.FighterAwesome, 
+                public bufferFighterSelectedId: number = -1, 
+                public bufferEmenySelectedId:   number = -1) {
         this.setState(stateValue);
     }
     clone(): this {
-        return new User(this.id, this.nickName, this.stateValue, this.bufferFighterType) as this;
+        return new User(this.id, 
+                        this.nickName, 
+                        this.stateValue,
+                        this.bufferFighterType, 
+                        this.bufferFighterSelectedId, 
+                        this.bufferEmenySelectedId) as this;
     }
 
     private getStateValueFromEmun(state: UserStateEnum): UserState {
@@ -49,9 +55,17 @@ export class User implements ICloneable {
                 .slice((page  - 1) * config.TELEGRAM_MESSAGES_PER_SECOND);
     }
 
+    public getEnemies(page: number = 1): Fighter[] {
+        if (page < 0)
+            page = 0;
+
+        // todo PROXY
+        return FighterStorage.getUserEnemies(this.id)
+                .slice((page  - 1) * config.TELEGRAM_MESSAGES_PER_SECOND);
+    }
+
     toJSON() {
-        const copy = { ...this, state: undefined };
-        return copy;
+        return { ...this, state: undefined };
     }
 }
 

@@ -5,19 +5,25 @@ import { FighterType } from "../models/Fighter";
 
 export default class UserStorage {
 
-    private static _users = new Map<number, User>();
+    public static _users = new Map<number, User>();
 
     public static async loadUsers(): Promise<void> {
         console.log('loading users...');
         const rawData = await fs.readFile(config.USERS_FILE_PATH) || '[]';
         const users: User[] = JSON.parse(rawData);
-        users.forEach(user => UserStorage._users.set(user.id, new User(user.id, user.nickName, user.stateValue, user.bufferFighterType)));
+        users.forEach(user => UserStorage._users.set(user.id, 
+                                            new User(user.id, 
+                                                user.nickName, 
+                                                user.stateValue, 
+                                                user.bufferFighterType, 
+                                                user.bufferFighterSelectedId, 
+                                                user.bufferEmenySelectedId  )));
     }
 
     public static async saveUsers(): Promise<void> {
         console.log('saving users');
         const serialized: string = JSON.stringify([...UserStorage._users.values()], null, 2);
-        return fs.writeFile(config.USERS_FILE_PATH, serialized);
+        return fs.writeFile(config.USERS_FILE_PATH, serialized);  
     }
 
     public static getUserById(id: number): User {

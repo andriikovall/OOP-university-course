@@ -2,8 +2,17 @@
   {
     "id": 379946182,
     "nickName": "ZioSmith",
-    "stateValue": 3,
+    "stateValue": 0,
+    "bufferFighterType": 1,
+    "bufferFighterSelectedId": 7,
+    "bufferEmenySelectedId": 5
+  },
+  {
+    "id": 774444043,
+    "nickName": "Александр ",
+    "stateValue": 0,
     "bufferFighterType": 4,
-    "bufferFighterSelectedId": 8
+    "bufferFighterSelectedId": -1,
+    "bufferEmenySelectedId": -1
   }
 ]

@@ -1,4 +1,4 @@
-import { ICommand, OnStartCommand, CreateFighterCommand, FighterTypeSelectedCommand, FighterNameConfirmingCommand, FighetrsShowComamnd, ChooseFighterCommand, DeleteFighterCommand } from "./Command";
+import { ICommand, OnStartCommand, CreateFighterCommand, FighterTypeSelectedCommand, FighterNameConfirmingCommand, FighetrsShowComamnd, ChooseFighterCommand, DeleteFighterCommand, EnemiesShowCommand, ChooseEnemyCommand } from "./Command";
 import Telegrah, { ContextMessageUpdate } from "telegraf";
 import { config, configureStorages } from './config/config';
 import { ctxType } from "./botHandlers";
@@ -24,7 +24,6 @@ export default class Application {
     }
 
     public onCreateFighter(ctx: ctxType) {
-        console.log(ctx.state.user?.state);
         if (ctx.state.user?.state.canSelectFighterType()) {
             this.runCommand(new CreateFighterCommand(ctx, this), () => {
                 ctx.state.user.setState(new UserSelectingFighterTypeState(ctx.state.user));
@@ -52,6 +51,10 @@ export default class Application {
         this.runCommand(new FighetrsShowComamnd(ctx, this));
     }
 
+    public onEmeniesShow(ctx: ctxType) {
+        this.runCommand(new EnemiesShowCommand(ctx, this));
+    }
+
     public onCallbackQuery(ctx: ctxType) {
         const cbQueryData: CallbackQueryData = JSON.parse(ctx.callbackQuery.data);
         console.log(cbQueryData);
@@ -75,11 +78,17 @@ export class CallbackQueryHandler {
     // @todo proxy
     public static chooseFighter(ctx: ctxType, app: Application, fighterId: number) {
         app.runCommand(new ChooseFighterCommand(ctx, fighterId, app), () => {
-            ctx.state.user.setState(new UserSelectingEnemyState(ctx.state.user));
+            // ctx.state.user.setState(new UserSelectingEnemyState(ctx.state.user));
             // const fighter = FighterStorage.getFighterById(fighterId);
             // const reply = 'You selected ' + fighter.name + ' for fight!';
             // ctx.reply(reply);
             // ctx.answerCbQuery(reply);
+        });
+    }
+
+    public static chooseEnemy(ctx: ctxType, app: Application, enemyId: number) {
+        app.runCommand(new ChooseEnemyCommand(ctx, app, enemyId), () => {
+
         });
     }
 

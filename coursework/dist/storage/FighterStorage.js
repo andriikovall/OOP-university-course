@@ -33,7 +33,6 @@ class FighterStorage {
         return null;
     }
     static getFighterById(id) {
-        console.log(FighterStorage._fighters);
         const fighter = FighterStorage._fighters.get(id);
         if (!fighter)
             return null;
@@ -53,7 +52,11 @@ class FighterStorage {
     }
     static getUserFighters(userId) {
         return [...FighterStorage._fighters.values()]
-            .filter(f => f.creator.id === userId);
+            .filter(f => { var _a; return ((_a = f.creator) === null || _a === void 0 ? void 0 : _a.id) === userId; });
+    }
+    static getUserEnemies(userId) {
+        return [...FighterStorage._fighters.values()]
+            .filter(f => { var _a; return ((_a = f.creator) === null || _a === void 0 ? void 0 : _a.id) !== userId; });
     }
 }
 exports.default = FighterStorage;

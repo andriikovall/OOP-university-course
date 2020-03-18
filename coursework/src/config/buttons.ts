@@ -1,6 +1,7 @@
 export default {
     createNewFighter: '👨‍🎤 Create new fighter 👨‍🎤', 
     showMyFighters: '⚔️ Show my fighters! ⚔️',
+    showEnemies: '* Show enemies *',
     fighters: {
         smart: 'Smart 🧙‍♂️', 
         strong: 'Strong 💪', 
@@ -15,6 +16,9 @@ export default {
         }, 
         deleteFighter: {
             text: 'Delete', 
+        },
+        selectEnemy: {
+            text: 'Select as the enemy'
         }
     }
 }

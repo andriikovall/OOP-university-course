@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     createNewFighter: '👨‍🎤 Create new fighter 👨‍🎤',
     showMyFighters: '⚔️ Show my fighters! ⚔️',
+    showEnemies: '* Show enemies *',
     fighters: {
         smart: 'Smart 🧙‍♂️',
         strong: 'Strong 💪',
@@ -16,6 +17,9 @@ exports.default = {
         },
         deleteFighter: {
             text: 'Delete',
+        },
+        selectEnemy: {
+            text: 'Select as the enemy'
         }
     }
 };

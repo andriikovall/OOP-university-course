@@ -72,7 +72,7 @@ export default class BotUI {
         const formatter: TextFormatter = BotUI.getCurrentTextFormatter();
         const msg: string = [
             `${formatter.toItalic('Name:')} ${formatter.toBold(fighter.name)}`, 
-            `${formatter.toItalic('Creator:')} ${formatter.toUserLink(fighter.creator.nickName, fighter.creator.id)}`, 
+            `${formatter.toItalic('Creator:')} ${formatter.toUserLink(fighter.creator?.nickName, fighter.creator?.id)}`, 
             `${formatter.toItalic('Type:')} ${formatter.toBold(FighterType[fighter.type])}`,
             `${formatter.toBold('Abilities:')}`, 
             ...(Object.entries(fighter.specs).map(([key, val]) => `   ${formatter.toBold(key)} ${formatter.toItalic(val)}`))

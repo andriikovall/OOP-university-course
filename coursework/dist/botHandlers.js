@@ -11,7 +11,8 @@ const buttons_1 = __importDefault(require("./config/buttons"));
 const bot = new telegraf_1.default();
 bot.use((ctx, next) => {
     var _a;
-    ctx.state.user = UserStorage_1.default.getUserById((_a = ctx === null || ctx === void 0 ? void 0 : ctx.message) === null || _a === void 0 ? void 0 : _a.chat.id);
+    const userId = ((_a = ctx === null || ctx === void 0 ? void 0 : ctx.message) === null || _a === void 0 ? void 0 : _a.chat.id) || ctx.callbackQuery.message.chat.id;
+    ctx.state.user = UserStorage_1.default.getUserById(userId);
     return next();
 });
 bot.command('start', (ctx) => {
@@ -28,11 +29,13 @@ bot.hears(buttons_1.default.showMyFighters, (ctx) => {
 bot.hears([...Object.values(buttons_1.default.fighters)], (ctx) => {
     index_1.app.onFighterTypeSelected(ctx);
 });
+bot.hears(buttons_1.default.showEnemies, (ctx) => {
+    index_1.app.onEmeniesShow(ctx);
+});
 bot.on('text', (ctx) => {
     index_1.app.onText(ctx);
 });
 bot.on('callback_query', (ctx) => {
-    ctx.state.user = UserStorage_1.default.getUserById(ctx.callbackQuery.message.chat.id);
     index_1.app.onCallbackQuery(ctx);
 });
 exports.default = bot;

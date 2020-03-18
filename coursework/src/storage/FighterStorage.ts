@@ -38,7 +38,6 @@ export default class FighterStorage {
     }
 
     public static getFighterById(id: number): Fighter {
-        console.log(FighterStorage._fighters);
         const fighter = FighterStorage._fighters.get(id);
         if (!fighter)
             return null;
@@ -63,6 +62,11 @@ export default class FighterStorage {
 
     public static getUserFighters(userId: number): Fighter[] {
         return [...FighterStorage._fighters.values()]
-                    .filter(f => f.creator.id === userId);
+                    .filter(f => f.creator?.id === userId);
     } 
+
+    public static getUserEnemies(userId: number): Fighter[] {
+        return [...FighterStorage._fighters.values()]
+                    .filter(f => f.creator?.id !== userId);
+    }
 }
