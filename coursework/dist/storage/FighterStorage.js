@@ -7,7 +7,6 @@ const Fighter_1 = require("../models/Fighter");
 const UserStorage_1 = __importDefault(require("./UserStorage"));
 const config_1 = require("../config/config");
 const fs_adapted_1 = __importDefault(require("./fs-adapted"));
-const helpers_1 = require("../helpers");
 class FighterStorage {
     static async loadFighters() {
         console.log('loading fighters...');
@@ -18,7 +17,6 @@ class FighterStorage {
         });
     }
     static async saveFighters() {
-        console.log('saving fighters...');
         const serialized = JSON.stringify([...FighterStorage._fighters.values()], null, 2);
         return fs_adapted_1.default.writeFile(config_1.config.FIGHTERS_FILE_PATH, serialized);
     }
@@ -35,6 +33,7 @@ class FighterStorage {
         return null;
     }
     static getFighterById(id) {
+        console.log(FighterStorage._fighters);
         const fighter = FighterStorage._fighters.get(id);
         if (!fighter)
             return null;
@@ -48,8 +47,7 @@ class FighterStorage {
     }
     static insertFighter(fighter) {
         if (!FighterStorage._fighters.get(fighter.id)) {
-            const id = helpers_1.randInt(1, 9999999999);
-            FighterStorage._fighters.set(id, fighter);
+            FighterStorage._fighters.set(fighter.id, fighter);
         }
         return FighterStorage.saveFighters();
     }

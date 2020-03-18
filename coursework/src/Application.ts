@@ -54,6 +54,7 @@ export default class Application {
 
     public onCallbackQuery(ctx: ctxType) {
         const cbQueryData: CallbackQueryData = JSON.parse(ctx.callbackQuery.data);
+        console.log(cbQueryData);
         const handler: Function = CallbackQueryHandler.getQueryHandler(ctx, this, cbQueryData.methodName, cbQueryData.args);
         handler();
     }
@@ -75,10 +76,10 @@ export class CallbackQueryHandler {
     public static chooseFighter(ctx: ctxType, app: Application, fighterId: number) {
         app.runCommand(new ChooseFighterCommand(ctx, fighterId, app), () => {
             ctx.state.user.setState(new UserSelectingEnemyState(ctx.state.user));
-            const fighter = FighterStorage.getFighterById(fighterId);
-            const reply = 'You selected ' + fighter.name + ' for fight!';
-            ctx.reply(reply);
-            ctx.answerCbQuery(reply);
+            // const fighter = FighterStorage.getFighterById(fighterId);
+            // const reply = 'You selected ' + fighter.name + ' for fight!';
+            // ctx.reply(reply);
+            // ctx.answerCbQuery(reply);
         });
     }
 

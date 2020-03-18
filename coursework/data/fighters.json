@@ -4,57 +4,21 @@
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 1
-    },
-    "type": 3,
-    "specs": {
-      "damage": 33,
-      "strength": 10,
-      "agility": 91,
-      "maxHp": 179
-    },
-    "id": 1,
-    "hp": 179
-  },
-  {
-    "name": "sfds",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 1
-    },
-    "type": 1,
-    "specs": {
-      "damage": 17,
-      "strength": 35,
-      "agility": 19,
-      "maxHp": 189
-    },
-    "id": 2,
-    "hp": 189
-  },
-  {
-    "name": "name",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
       "stateValue": 2,
       "bufferFighterType": 0
     },
     "type": 0,
     "specs": {
-      "damage": 12,
-      "strength": 9,
+      "damage": 15,
+      "strength": 10,
       "agility": 49,
-      "maxHp": 135
+      "maxHp": 109
     },
     "id": 4,
-    "hp": 135
+    "hp": 109
   },
   {
-    "name": "strong",
+    "name": "strinh",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
@@ -63,13 +27,49 @@
     },
     "type": 1,
     "specs": {
-      "damage": 20,
-      "strength": 40,
-      "agility": 17,
-      "maxHp": 183
+      "damage": 15,
+      "strength": 37,
+      "agility": 18,
+      "maxHp": 178
     },
     "id": 5,
-    "hp": 183
+    "hp": 178
+  },
+  {
+    "name": "power",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 2,
+      "bufferFighterType": 2
+    },
+    "type": 2,
+    "specs": {
+      "damage": 47,
+      "strength": 11,
+      "agility": 20,
+      "maxHp": 102
+    },
+    "id": 6,
+    "hp": 102
+  },
+  {
+    "name": "awe",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 2,
+      "bufferFighterType": 3
+    },
+    "type": 3,
+    "specs": {
+      "damage": 34,
+      "strength": 20,
+      "agility": 78,
+      "maxHp": 82
+    },
+    "id": 7,
+    "hp": 82
   },
   {
     "name": "lucky",
@@ -82,11 +82,11 @@
     "type": 4,
     "specs": {
       "damage": 15,
-      "strength": 17,
-      "agility": 144,
-      "maxHp": 160
+      "strength": 18,
+      "agility": 139,
+      "maxHp": 129
     },
-    "id": 6,
-    "hp": 160
+    "id": 8,
+    "hp": 129
   }
 ]

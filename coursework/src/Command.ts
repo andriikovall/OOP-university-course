@@ -58,7 +58,7 @@ export class FighterTypeSelectedCommand implements ICommand {
             case buttons.fighters.smart: fighterType = FighterType.FighterSmart; break;
             case buttons.fighters.strong: fighterType = FighterType.FighterStrong; break;
             case buttons.fighters.awesome: fighterType = FighterType.FighterAwesome; break;
-            case buttons.fighters.powerfull: fighterType = FighterType.FighterAwesome; break;
+            case buttons.fighters.powerfull: fighterType = FighterType.FighterPowerfull; break;
             case buttons.fighters.lucky: fighterType = FighterType.FighterLucky; break;
         }
 

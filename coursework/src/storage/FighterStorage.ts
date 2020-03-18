@@ -17,7 +17,6 @@ export default class FighterStorage {
     }
 
     public static async saveFighters(): Promise<void> {
-        console.log('saving fighters...');
         const serialized: string = JSON.stringify([...FighterStorage._fighters.values()], null, 2);
         return fs.writeFile(config.FIGHTERS_FILE_PATH, serialized);
     }
@@ -39,6 +38,7 @@ export default class FighterStorage {
     }
 
     public static getFighterById(id: number): Fighter {
+        console.log(FighterStorage._fighters);
         const fighter = FighterStorage._fighters.get(id);
         if (!fighter)
             return null;
@@ -55,8 +55,7 @@ export default class FighterStorage {
 
     public static insertFighter(fighter: Fighter): Promise<void> {
         if (!FighterStorage._fighters.get(fighter.id)) {
-            const id = randInt(1, 9999999999);
-            FighterStorage._fighters.set(id, fighter);
+            FighterStorage._fighters.set(fighter.id, fighter);
         }
 
         return FighterStorage.saveFighters();

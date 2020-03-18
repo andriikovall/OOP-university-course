@@ -68,7 +68,7 @@ class FighterTypeSelectedCommand {
                 fighterType = Fighter_1.FighterType.FighterAwesome;
                 break;
             case buttons_1.default.fighters.powerfull:
-                fighterType = Fighter_1.FighterType.FighterAwesome;
+                fighterType = Fighter_1.FighterType.FighterPowerfull;
                 break;
             case buttons_1.default.fighters.lucky:
                 fighterType = Fighter_1.FighterType.FighterLucky;
