@@ -80,7 +80,6 @@ class BotUI {
         return BotUI.keyBoard.draw();
     }
     static createExtraOptions(opts) {
-        var _a;
         if (!opts.markup)
             opts.markup = [];
         const inlineKeyboard = [];
@@ -91,7 +90,7 @@ class BotUI {
             inlineKeyboard.push(mappedRow);
         }
         const extra = telegraf_1.Extra.markup(telegraf_1.Markup.inlineKeyboard(inlineKeyboard));
-        extra['caption'] = (_a = opts) === null || _a === void 0 ? void 0 : _a.caption;
+        extra['caption'] = opts === null || opts === void 0 ? void 0 : opts.caption;
         switch (BotUI.parseMode) {
             case ParseMode.ParseModeHTML:
                 extra.parse_mode = 'HTML';

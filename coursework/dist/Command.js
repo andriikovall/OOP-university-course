@@ -24,12 +24,13 @@ class OnStartCommand {
         this.ctx = ctx;
         this.app = app;
     }
-    execute() {
+    execute(cb) {
         const newUser = new User_1.User(this.ctx.chat.id, extractUsername(this.ctx.from));
         UserStorage_1.default.addUser(newUser)
             .then(_ => {
             const btns = BotUiFacade_1.default.createKeyboard([[`${buttons_1.default.createNewFighter}`]]);
-            this.ctx.reply('Start a fight or create a new fighter!', btns);
+            this.ctx.reply('Start a fight or create a new fighter!', btns)
+                .then(_ => cb());
         });
     }
 }
@@ -39,10 +40,11 @@ class CreateFighterCommand {
         this.ctx = ctx;
         this.app = app;
     }
-    execute() {
+    execute(cb) {
         const fighters = Object.values(buttons_1.default.fighters).map(f => [f]);
         const fightersBtns = BotUiFacade_1.default.createKeyboard(fighters);
-        this.ctx.reply('Choose what type of hero you want. Choose wisely...', fightersBtns);
+        this.ctx.reply('Choose what type of hero you want. Choose wisely...', fightersBtns)
+            .then(_ => cb());
     }
 }
 exports.CreateFighterCommand = CreateFighterCommand;
@@ -51,7 +53,7 @@ class FighterTypeSelectedCommand {
         this.ctx = ctx;
         this.app = app;
     }
-    execute() {
+    execute(cb) {
         this.ctx.reply('Take the name for your fighter!', BotUiFacade_1.default.clearKeyboard());
         let fighterType = 0;
         switch (this.ctx.message.text) {
@@ -72,7 +74,8 @@ class FighterTypeSelectedCommand {
                 break;
         }
         console.log('fighterType:', fighterType, this.ctx.message.text);
-        UserStorage_1.default.setUserFighterTypeChoice(this.ctx.state.user, fighterType);
+        UserStorage_1.default.setUserFighterTypeChoice(this.ctx.state.user, fighterType)
+            .then(_ => cb());
     }
 }
 exports.FighterTypeSelectedCommand = FighterTypeSelectedCommand;
@@ -81,7 +84,7 @@ class FighterNameConfirmingCommand {
         this.ctx = ctx;
         this.app = app;
     }
-    execute() {
+    execute(cb) {
         const name = this.ctx.message.text;
         const creatorId = this.ctx.state.user.id;
         const fighter = FighterStorage_1.default.createFighter(name, creatorId, this.ctx.state.user.bufferFighterType || Fighter_1.FighterType.FighterAwesome);
@@ -91,7 +94,8 @@ class FighterNameConfirmingCommand {
             const reply = BotUiFacade_1.default.drawFighter(fighter);
             const btns = BotUiFacade_1.default.createKeyboard([[`${buttons_1.default.createNewFighter}`], [`${buttons_1.default.showMyFighters}`]]);
             const extraMessageConfig = BotUiFacade_1.default.createExtraOptions({ caption: reply });
-            this.ctx.replyWithPhoto(fighter.photoUrl, { ...extraMessageConfig, ...btns });
+            this.ctx.replyWithPhoto(fighter.photoUrl, { ...extraMessageConfig, ...btns })
+                .then(_ => cb());
         });
     }
 }
@@ -101,7 +105,7 @@ class FighetrsShowComamnd {
         this.ctx = ctx;
         this.app = app;
     }
-    execute() {
+    execute(cb) {
         const fighters = this.ctx.state.user.getFighters();
         for (const f of fighters) {
             const reply = BotUiFacade_1.default.drawFighter(f);
@@ -109,7 +113,8 @@ class FighetrsShowComamnd {
                 [new BotUiFacade_1.CallbackBtn('Choose for fight', '   '), new BotUiFacade_1.CallbackBtn('Delete(', '   ')]
             ];
             const extraMessageConfig = BotUiFacade_1.default.createExtraOptions({ markup: buttons, caption: reply });
-            this.ctx.replyWithPhoto(f.photoUrl, extraMessageConfig);
+            this.ctx.replyWithPhoto(f.photoUrl, extraMessageConfig)
+                .then(_ => cb());
         }
     }
 }

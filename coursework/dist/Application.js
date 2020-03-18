@@ -7,8 +7,8 @@ class Application {
     constructor(bot) {
         this.bot = bot;
     }
-    runCommand(command) {
-        command.execute();
+    runCommand(command, doneCb = () => { }) {
+        command.execute(doneCb);
     }
     start() {
         return config_1.configureStorages()
@@ -22,21 +22,24 @@ class Application {
         var _a, _b;
         console.log((_a = ctx.state.user) === null || _a === void 0 ? void 0 : _a.state);
         if ((_b = ctx.state.user) === null || _b === void 0 ? void 0 : _b.state.canSelectFighterType()) {
-            this.runCommand(new Command_1.CreateFighterCommand(ctx, this));
-            ctx.state.user.setState(new User_1.UserSelectingFighterTypeState(ctx.state.user));
+            this.runCommand(new Command_1.CreateFighterCommand(ctx, this), () => {
+                ctx.state.user.setState(new User_1.UserSelectingFighterTypeState(ctx.state.user));
+            });
         }
     }
     onFighterTypeSelected(ctx) {
         var _a;
         if ((_a = ctx.state.user) === null || _a === void 0 ? void 0 : _a.state.canSelectFighterType()) {
-            this.runCommand(new Command_1.FighterTypeSelectedCommand(ctx, this));
-            ctx.state.user.setState(User_1.UserStateEnum.UserEnteringFighterName);
+            this.runCommand(new Command_1.FighterTypeSelectedCommand(ctx, this), () => {
+                ctx.state.user.setState(User_1.UserStateEnum.UserEnteringFighterName);
+            });
         }
     }
     onText(ctx) {
         if (ctx.state.user.state.canEnterFighterName()) {
-            this.runCommand(new Command_1.FighterNameConfirmingCommand(ctx, this));
-            ctx.state.user.setState(User_1.UserStateEnum.UserDefault);
+            this.runCommand(new Command_1.FighterNameConfirmingCommand(ctx, this), () => {
+                ctx.state.user.setState(User_1.UserStateEnum.UserDefault);
+            });
         }
     }
     onFightersShow(ctx) {

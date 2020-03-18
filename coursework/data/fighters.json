@@ -4,8 +4,8 @@
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 3
+      "stateValue": 1,
+      "bufferFighterType": 0
     },
     "type": 3,
     "specs": {
@@ -22,8 +22,8 @@
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 3
+      "stateValue": 1,
+      "bufferFighterType": 0
     },
     "type": 3,
     "specs": {
@@ -40,8 +40,8 @@
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 3
+      "stateValue": 1,
+      "bufferFighterType": 0
     },
     "type": 3,
     "specs": {
@@ -58,8 +58,8 @@
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 3
+      "stateValue": 1,
+      "bufferFighterType": 0
     },
     "type": 3,
     "specs": {
@@ -76,8 +76,8 @@
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
-      "stateValue": 2,
-      "bufferFighterType": 4
+      "stateValue": 1,
+      "bufferFighterType": 0
     },
     "type": 4,
     "specs": {
@@ -88,5 +88,95 @@
     },
     "id": 5,
     "hp": 153
+  },
+  {
+    "name": "name",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 1,
+      "bufferFighterType": 0
+    },
+    "type": 1,
+    "specs": {
+      "damage": 12,
+      "strength": 30,
+      "agility": 17,
+      "maxHp": 197
+    },
+    "id": 6,
+    "hp": 197
+  },
+  {
+    "name": "asd",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 1,
+      "bufferFighterType": 0
+    },
+    "type": 3,
+    "specs": {
+      "damage": 32,
+      "strength": 12,
+      "agility": 77,
+      "maxHp": 117
+    },
+    "id": 7,
+    "hp": 117
+  },
+  {
+    "name": "ajsndma",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 2,
+      "bufferFighterType": 3
+    },
+    "type": 3,
+    "specs": {
+      "damage": 36,
+      "strength": 20,
+      "agility": 73,
+      "maxHp": 143
+    },
+    "id": 9,
+    "hp": 143
+  },
+  {
+    "name": "asndkasdmasda",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 2,
+      "bufferFighterType": 1
+    },
+    "type": 1,
+    "specs": {
+      "damage": 20,
+      "strength": 23,
+      "agility": 13,
+      "maxHp": 172
+    },
+    "id": 11,
+    "hp": 172
+  },
+  {
+    "name": "dsfsdf",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 2,
+      "bufferFighterType": 4
+    },
+    "type": 4,
+    "specs": {
+      "damage": 19,
+      "strength": 17,
+      "agility": 179,
+      "maxHp": 158
+    },
+    "id": 12,
+    "hp": 158
   }
 ]

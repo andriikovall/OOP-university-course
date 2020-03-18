@@ -10,8 +10,8 @@ const buttons_1 = __importDefault(require("./config/buttons"));
 ;
 const bot = new telegraf_1.default();
 bot.use((ctx, next) => {
-    var _a, _b;
-    ctx.state.user = UserStorage_1.default.getUserById((_b = (_a = ctx) === null || _a === void 0 ? void 0 : _a.message) === null || _b === void 0 ? void 0 : _b.chat.id);
+    var _a;
+    ctx.state.user = UserStorage_1.default.getUserById((_a = ctx === null || ctx === void 0 ? void 0 : ctx.message) === null || _a === void 0 ? void 0 : _a.chat.id);
     return next();
 });
 bot.command('start', (ctx) => {

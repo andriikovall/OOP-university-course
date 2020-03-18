@@ -7,8 +7,8 @@ import { Fighter } from "./models/Fighter";
 
 export default class Application {
 
-    public runCommand(command: ICommand) {
-        command.execute();
+    public runCommand(command: ICommand, doneCb: Function = () => {}) {
+        command.execute(doneCb);
     }
 
     constructor(public bot: Telegrah<ContextMessageUpdate>) { }
@@ -26,22 +26,25 @@ export default class Application {
     public onCreateFighter(ctx: ctxType) {
         console.log(ctx.state.user?.state);
         if (ctx.state.user?.state.canSelectFighterType()) {
-            this.runCommand(new CreateFighterCommand(ctx, this));
-            ctx.state.user.setState(new UserSelectingFighterTypeState(ctx.state.user));
+            this.runCommand(new CreateFighterCommand(ctx, this), () => {
+                ctx.state.user.setState(new UserSelectingFighterTypeState(ctx.state.user));
+            });
         }
     }
 
     public onFighterTypeSelected(ctx: ctxType) {
         if (ctx.state.user?.state.canSelectFighterType()) {
-            this.runCommand(new FighterTypeSelectedCommand(ctx, this));
-            ctx.state.user.setState(UserStateEnum.UserEnteringFighterName);
+            this.runCommand(new FighterTypeSelectedCommand(ctx, this), () => {
+                ctx.state.user.setState(UserStateEnum.UserEnteringFighterName);
+            });
         }
     }   
 
     public onText(ctx: ctxType) {
         if (ctx.state.user.state.canEnterFighterName()) {
-            this.runCommand(new FighterNameConfirmingCommand(ctx, this));
-            ctx.state.user.setState(UserStateEnum.UserDefault);
+            this.runCommand(new FighterNameConfirmingCommand(ctx, this), () => {
+                ctx.state.user.setState(UserStateEnum.UserDefault);
+            });
         }
     }
 
