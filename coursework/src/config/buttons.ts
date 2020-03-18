@@ -7,5 +7,14 @@ export default {
         powerfull: 'Powerfull 👊', 
         awesome: 'Awesome 😎', 
         lucky: 'Lucky 🧞‍♂️'
+    }, 
+    
+    callbacks: {
+        selectFighter: {
+            text: 'Choose fighter', 
+        }, 
+        deleteFighter: {
+            text: 'Delete', 
+        }
     }
 }

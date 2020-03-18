@@ -42,6 +42,12 @@ class FighterStorage {
             return null;
         return fighter.clone();
     }
+    static deleteFighter(id) {
+        const result = FighterStorage._fighters.delete(id);
+        if (!result)
+            return new Promise((res, _rej) => res(result));
+        return FighterStorage.saveFighters().then(_ => true);
+    }
     static insertFighter(fighter) {
         if (!FighterStorage._fighters.get(fighter.id))
             FighterStorage._fighters.set(++FighterStorage.nextId, fighter);

@@ -30,19 +30,21 @@ export default class UserStorage {
 
     public static addUser(user: User): Promise<void> {
         if (UserStorage.getUserById(user.id) != null) {
-            UserStorage._users.set(user.id, user);
-            return UserStorage.saveUsers();
+            return UserStorage.updateUser(user);
         }
     }
 
     public static setUserStateValue(user: User, state: UserStateEnum): Promise<void> {
         user.stateValue = state;
-        UserStorage._users.set(user.id, user);
-        return UserStorage.saveUsers();
+        return UserStorage.updateUser(user);
     }
 
     public static setUserFighterTypeChoice(user: User, type: FighterType): Promise<void> {
         user.bufferFighterType = type;
+        return UserStorage.updateUser(user);
+    }
+
+    public static updateUser(user: User): Promise<void> {
         UserStorage._users.set(user.id, user);
         return UserStorage.saveUsers();
     }

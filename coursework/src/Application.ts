@@ -1,9 +1,9 @@
-import { ICommand, OnStartCommand, CreateFighterCommand, FighterTypeSelectedCommand, FighterNameConfirmingCommand, FighetrsShowComamnd } from "./Command";
+import { ICommand, OnStartCommand, CreateFighterCommand, FighterTypeSelectedCommand, FighterNameConfirmingCommand, FighetrsShowComamnd, ChooseFighterCommand, DeleteFighterCommand } from "./Command";
 import Telegrah, { ContextMessageUpdate } from "telegraf";
 import { config, configureStorages } from './config/config';
 import { ctxType } from "./botHandlers";
-import { UserSelectingFighterTypeState, UserDefaultState, UserStateEnum } from "./models/User";
-import { Fighter } from "./models/Fighter";
+import { UserSelectingFighterTypeState, UserDefaultState, UserStateEnum, UserSelectingEnemyState } from "./models/User";
+import FighterStorage from "./storage/FighterStorage";
 
 export default class Application {
 
@@ -50,5 +50,39 @@ export default class Application {
 
     public onFightersShow(ctx: ctxType) {
         this.runCommand(new FighetrsShowComamnd(ctx, this));
+    }
+
+    public onCallbackQuery(ctx: ctxType) {
+        const cbQueryData: CallbackQueryData = JSON.parse(ctx.callbackQuery.data);
+        const handler: Function = CallbackQueryHandler.getQueryHandler(ctx, this, cbQueryData.methodName, cbQueryData.args);
+        handler();
+    }
+}
+
+interface CallbackQueryData {
+    methodName: string, 
+    args: any[]
+}
+
+
+export class CallbackQueryHandler {
+
+    public static getQueryHandler(ctx: ctxType, app: Application, methodName: string, args: any[]): Function {
+        return () => CallbackQueryHandler[methodName](ctx, app, ...args);
+    }
+
+    // @todo proxy
+    public static chooseFighter(ctx: ctxType, app: Application, fighterId: number) {
+        app.runCommand(new ChooseFighterCommand(ctx, fighterId, app), () => {
+            ctx.state.user.setState(new UserSelectingEnemyState(ctx.state.user));
+            const fighter = FighterStorage.getFighterById(fighterId);
+            ctx.reply('You selected ' + fighter.name + ' for fight!');
+        });
+    }
+
+    public static deleteFighter(ctx: ctxType, app: Application, fighterId: number) {
+        app.runCommand(new DeleteFighterCommand(ctx, fighterId, app), () => {
+            // ctx.state.user.setState(new UserSelectingEnemyState(ctx.state.user));
+        });
     }
 }

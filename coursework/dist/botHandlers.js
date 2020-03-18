@@ -31,4 +31,8 @@ bot.hears([...Object.values(buttons_1.default.fighters)], (ctx) => {
 bot.on('text', (ctx) => {
     index_1.app.onText(ctx);
 });
+bot.on('callback_query', (ctx) => {
+    ctx.state.user = UserStorage_1.default.getUserById(ctx.callbackQuery.message.chat.id);
+    index_1.app.onCallbackQuery(ctx);
+});
 exports.default = bot;

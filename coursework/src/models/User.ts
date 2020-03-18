@@ -33,6 +33,9 @@ export class User implements ICloneable {
         switch (state) {
             case UserStateEnum.UserSelectingFighterType: return new UserSelectingFighterTypeState(this);
             case UserStateEnum.UserEnteringFighterName:  return new UserEnteringFighterNameState(this);
+            case UserStateEnum.UserSelectingEnemy:       return new UserSelectingEnemyState(this);
+            case UserStateEnum.UserStartingFight:        return new UserSelectingFighterTypeState(this);
+            case UserStateEnum.UserAboutToStartFight:    return new UserAboutToStartFightState(this);
             default: return new UserDefaultState(this);
         }
     }
@@ -56,7 +59,10 @@ export class User implements ICloneable {
 export enum UserStateEnum {
     UserDefault,
     UserSelectingFighterType,
-    UserEnteringFighterName
+    UserEnteringFighterName, 
+    UserSelectingEnemy, 
+    UserStartingFight, 
+    UserAboutToStartFight
 }
 
 export abstract class UserState {
@@ -65,17 +71,28 @@ export abstract class UserState {
 
     abstract canSelectFighterType(): boolean;
     abstract canEnterFighterName(): boolean;
+    abstract canChooseEnemy(): boolean;
+    abstract canStartFight(): boolean;
     // ..
 }
 
 export class UserDefaultState extends UserState {
 
     public enumValue = UserStateEnum.UserDefault;
+
     canSelectFighterType(): boolean {
         return true;
     }
 
     canEnterFighterName(): boolean {
+        return false;
+    }
+
+    canChooseEnemy(): boolean {
+        return false;
+    }
+
+    canStartFight(): boolean {
         return false;
     }
 
@@ -92,6 +109,14 @@ export class UserSelectingFighterTypeState extends UserState {
     canEnterFighterName(): boolean {
         return false;
     }
+
+    canChooseEnemy(): boolean {
+        return false;
+    }
+    
+    canStartFight(): boolean {
+        return false;
+    }
 }
 
 
@@ -106,4 +131,57 @@ export class UserEnteringFighterNameState extends UserState {
     canEnterFighterName(): boolean {
         return true;
     }
+
+    canChooseEnemy(): boolean {
+        return false;
+    }
+
+    canStartFight(): boolean {
+        return false;
+    }
+}
+
+export class UserSelectingEnemyState extends UserState {
+
+    public enumValue = UserStateEnum.UserSelectingEnemy;
+
+    canSelectFighterType(): boolean {
+        return false;
+    }    
+
+    canEnterFighterName(): boolean {
+        return false;
+    }
+
+    canChooseEnemy(): boolean {
+        return true;
+    }
+
+    canStartFight(): boolean {
+        return false;
+    }
+
+}
+
+
+export class UserAboutToStartFightState extends UserState {
+
+    public enumValue = UserStateEnum.UserAboutToStartFight;
+
+    canSelectFighterType(): boolean {
+        return false;
+    }    
+
+    canEnterFighterName(): boolean {
+        return false;
+    }
+
+    canChooseEnemy(): boolean {
+        return true;
+    }
+
+    canStartFight(): boolean {
+        return true;
+    }
+
 }

@@ -26,17 +26,18 @@ class UserStorage {
     }
     static addUser(user) {
         if (UserStorage.getUserById(user.id) != null) {
-            UserStorage._users.set(user.id, user);
-            return UserStorage.saveUsers();
+            return UserStorage.updateUser(user);
         }
     }
     static setUserStateValue(user, state) {
         user.stateValue = state;
-        UserStorage._users.set(user.id, user);
-        return UserStorage.saveUsers();
+        return UserStorage.updateUser(user);
     }
     static setUserFighterTypeChoice(user, type) {
         user.bufferFighterType = type;
+        return UserStorage.updateUser(user);
+    }
+    static updateUser(user) {
         UserStorage._users.set(user.id, user);
         return UserStorage.saveUsers();
     }

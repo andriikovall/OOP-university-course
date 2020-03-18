@@ -1,8 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("./Command");
 const config_1 = require("./config/config");
 const User_1 = require("./models/User");
+const FighterStorage_1 = __importDefault(require("./storage/FighterStorage"));
 class Application {
     constructor(bot) {
         this.bot = bot;
@@ -45,5 +49,29 @@ class Application {
     onFightersShow(ctx) {
         this.runCommand(new Command_1.FighetrsShowComamnd(ctx, this));
     }
+    onCallbackQuery(ctx) {
+        const cbQueryData = JSON.parse(ctx.callbackQuery.data);
+        const handler = CallbackQueryHandler.getQueryHandler(ctx, this, cbQueryData.methodName, cbQueryData.args);
+        handler();
+    }
 }
 exports.default = Application;
+class CallbackQueryHandler {
+    static getQueryHandler(ctx, app, methodName, args) {
+        return () => CallbackQueryHandler[methodName](ctx, app, ...args);
+    }
+    // @todo proxy
+    static chooseFighter(ctx, app, fighterId) {
+        app.runCommand(new Command_1.ChooseFighterCommand(ctx, fighterId, app), () => {
+            ctx.state.user.setState(new User_1.UserSelectingEnemyState(ctx.state.user));
+            const fighter = FighterStorage_1.default.getFighterById(fighterId);
+            ctx.reply('You selected ' + fighter.name + ' for fight!');
+        });
+    }
+    static deleteFighter(ctx, app, fighterId) {
+        app.runCommand(new Command_1.DeleteFighterCommand(ctx, fighterId, app), () => {
+            // ctx.state.user.setState(new UserSelectingEnemyState(ctx.state.user));
+        });
+    }
+}
+exports.CallbackQueryHandler = CallbackQueryHandler;

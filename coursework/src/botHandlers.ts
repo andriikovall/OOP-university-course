@@ -40,6 +40,11 @@ bot.on('text', (ctx: ctxType) => {
     app.onText(ctx);
 });
 
+bot.on('callback_query', (ctx: ctxType) => {
+    ctx.state.user = UserStorage.getUserById(ctx.callbackQuery.message.chat.id);
+    app.onCallbackQuery(ctx);
+})
+
 
 
 export default bot;

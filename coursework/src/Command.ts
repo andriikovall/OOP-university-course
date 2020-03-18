@@ -1,10 +1,10 @@
 import { User } from './models/User';
-import Application from './Application';
+import Application, { CallbackQueryHandler } from './Application';
 import { User as TelegrafUser, ExtraPhoto } from 'telegraf/typings/telegram-types';
 import UserStorage from './storage/UserStorage';
 import { ctxType } from './botHandlers';
 import buttons from './config/buttons';
-import BotUI, { ParseMode, UrlBtn, CallbackBtn } from './BotUiFacade';
+import BotUI, { CallbackBtn } from './BotUiFacade';
 import { FighterType, Fighter } from './models/Fighter';
 import FighterStorage from './storage/FighterStorage';
 
@@ -83,7 +83,7 @@ export class FighterNameConfirmingCommand implements ICommand {
             // nothing will change, because of BUILDER
             // BotUI.parseMode = ParseMode.ParseModeHTML;
             const reply = BotUI.drawFighter(fighter);
-            const btns = BotUI.createKeyboard([[`${buttons.createNewFighter}`], [`${buttons.showMyFighters}`]]);
+            const btns = BotUI.createKeyboard([[buttons.createNewFighter], [buttons.showMyFighters]]);
             const extraMessageConfig = BotUI.createExtraOptions({ caption: reply })
             this.ctx.replyWithPhoto(fighter.photoUrl, { ...extraMessageConfig, ...btns } as ExtraPhoto)
                 .then(_ => cb());
@@ -99,13 +99,42 @@ export class FighetrsShowComamnd implements ICommand {
         const fighters: Fighter[] = this.ctx.state.user.getFighters();
         for (const f of fighters) {
             const reply = BotUI.drawFighter(f);
-            const buttons = [
-                [ new CallbackBtn('Choose for fight', '   '), new CallbackBtn('Delete(', '   ')]
+
+            const btns = [
+                [new CallbackBtn(buttons.callbacks.selectFighter.text,
+                    JSON.stringify({ methodName: CallbackQueryHandler.chooseFighter.name, args: [f.id] })),
+                new CallbackBtn(buttons.callbacks.deleteFighter.text,
+                    JSON.stringify({ methodName: CallbackQueryHandler.deleteFighter.name, args: [f.id] }))]
             ];
 
-            const extraMessageConfig = BotUI.createExtraOptions({ markup: buttons, caption: reply });
+            const extraMessageConfig = BotUI.createExtraOptions({ markup: btns, caption: reply });
             this.ctx.replyWithPhoto(f.photoUrl, extraMessageConfig as ExtraPhoto)
                 .then(_ => cb());
         }
+    }
+}
+
+
+export class ChooseFighterCommand implements ICommand {
+    constructor(public ctx: ctxType, private fighterId: number, public app: Application) { }
+
+    execute(cb: Function) {
+        this.ctx.state.user.bufferFighterSelectedId = this.fighterId;
+        UserStorage.updateUser(this.ctx.state.user)
+            .then(_ => cb())
+    }
+
+}
+
+export class DeleteFighterCommand implements ICommand {
+    constructor(public ctx: ctxType, private fighterId: number, public app: Application) { }
+
+    execute(cb: Function) {
+        FighterStorage.deleteFighter(this.fighterId)
+            .then(res => {
+                if (res)
+                    this.ctx.answerCbQuery('Your fighter was deleted', true);
+                cb(res);
+            })
     }
 }

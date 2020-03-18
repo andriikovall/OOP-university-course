@@ -48,6 +48,13 @@ export default class FighterStorage {
         return fighter.clone();
     }
 
+    public static deleteFighter(id: number): Promise<boolean> {
+        const result = FighterStorage._fighters.delete(id);
+        if (!result)
+            return new Promise((res, _rej) => res(result));
+        return FighterStorage.saveFighters().then(_ => true);
+    }
+
     public static insertFighter(fighter: Fighter): Promise<void> {
         if (!FighterStorage._fighters.get(fighter.id))
             FighterStorage._fighters.set(++FighterStorage.nextId, fighter);
