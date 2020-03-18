@@ -78,7 +78,7 @@ export class FighterNameConfirmingCommand implements ICommand {
         const name: string = this.ctx.message.text;
         const creatorId: number = this.ctx.state.user.id;
 
-        const fighter = FighterStorage.createFighter(name, creatorId, this.ctx.state.user.bufferFighterType || FighterType.FighterAwesome);
+        const fighter = FighterStorage.createFighter(name, creatorId, this.ctx.state.user.bufferFighterType ?? FighterType.FighterAwesome);
         FighterStorage.insertFighter(fighter).then(_ => {
             // nothing will change, because of BUILDER
             // BotUI.parseMode = ParseMode.ParseModeHTML;
@@ -121,7 +121,13 @@ export class ChooseFighterCommand implements ICommand {
     execute(cb: Function) {
         this.ctx.state.user.bufferFighterSelectedId = this.fighterId;
         UserStorage.updateUser(this.ctx.state.user)
-            .then(_ => cb())
+            .then(_ => {
+                const fighter = FighterStorage.getFighterById(this.fighterId);
+                const reply = 'You selected ' + fighter.name + ' for fight!';
+                this.ctx.reply(reply);
+                this.ctx.answerCbQuery(reply);
+            })
+            .then(_ => cb());
     }
 
 }
@@ -132,8 +138,10 @@ export class DeleteFighterCommand implements ICommand {
     execute(cb: Function) {
         FighterStorage.deleteFighter(this.fighterId)
             .then(res => {
-                if (res)
+                if (res) {
                     this.ctx.answerCbQuery('Your fighter was deleted', true);
+                    this.ctx.deleteMessage();
+                }
                 cb(res);
             })
     }

@@ -7,6 +7,7 @@ const Fighter_1 = require("../models/Fighter");
 const UserStorage_1 = __importDefault(require("./UserStorage"));
 const config_1 = require("../config/config");
 const fs_adapted_1 = __importDefault(require("./fs-adapted"));
+const helpers_1 = require("../helpers");
 class FighterStorage {
     static async loadFighters() {
         console.log('loading fighters...');
@@ -14,9 +15,6 @@ class FighterStorage {
         const fighters = JSON.parse(rawData);
         fighters.forEach(f => {
             FighterStorage._fighters.set(f.id, FighterStorage.createFighter(f.name, f.creator.id, f.type, f.specs));
-            if (f.id > FighterStorage.nextId) {
-                FighterStorage.nextId = f.id + 1;
-            }
         });
     }
     static async saveFighters() {
@@ -45,12 +43,14 @@ class FighterStorage {
     static deleteFighter(id) {
         const result = FighterStorage._fighters.delete(id);
         if (!result)
-            return new Promise((res, _rej) => res(result));
+            return new Promise((res, _rej) => res(false));
         return FighterStorage.saveFighters().then(_ => true);
     }
     static insertFighter(fighter) {
-        if (!FighterStorage._fighters.get(fighter.id))
-            FighterStorage._fighters.set(++FighterStorage.nextId, fighter);
+        if (!FighterStorage._fighters.get(fighter.id)) {
+            const id = helpers_1.randInt(1, 9999999999);
+            FighterStorage._fighters.set(id, fighter);
+        }
         return FighterStorage.saveFighters();
     }
     static getUserFighters(userId) {
@@ -60,4 +60,3 @@ class FighterStorage {
 }
 exports.default = FighterStorage;
 FighterStorage._fighters = new Map();
-FighterStorage.nextId = 0;

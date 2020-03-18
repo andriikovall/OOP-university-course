@@ -65,7 +65,9 @@ class CallbackQueryHandler {
         app.runCommand(new Command_1.ChooseFighterCommand(ctx, fighterId, app), () => {
             ctx.state.user.setState(new User_1.UserSelectingEnemyState(ctx.state.user));
             const fighter = FighterStorage_1.default.getFighterById(fighterId);
-            ctx.reply('You selected ' + fighter.name + ' for fight!');
+            const reply = 'You selected ' + fighter.name + ' for fight!';
+            ctx.reply(reply);
+            ctx.answerCbQuery(reply);
         });
     }
     static deleteFighter(ctx, app, fighterId) {

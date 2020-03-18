@@ -86,9 +86,10 @@ class FighterNameConfirmingCommand {
         this.app = app;
     }
     execute(cb) {
+        var _a;
         const name = this.ctx.message.text;
         const creatorId = this.ctx.state.user.id;
-        const fighter = FighterStorage_1.default.createFighter(name, creatorId, this.ctx.state.user.bufferFighterType || Fighter_1.FighterType.FighterAwesome);
+        const fighter = FighterStorage_1.default.createFighter(name, creatorId, (_a = this.ctx.state.user.bufferFighterType) !== null && _a !== void 0 ? _a : Fighter_1.FighterType.FighterAwesome);
         FighterStorage_1.default.insertFighter(fighter).then(_ => {
             // nothing will change, because of BUILDER
             // BotUI.parseMode = ParseMode.ParseModeHTML;
@@ -130,6 +131,12 @@ class ChooseFighterCommand {
     execute(cb) {
         this.ctx.state.user.bufferFighterSelectedId = this.fighterId;
         UserStorage_1.default.updateUser(this.ctx.state.user)
+            .then(_ => {
+            const fighter = FighterStorage_1.default.getFighterById(this.fighterId);
+            const reply = 'You selected ' + fighter.name + ' for fight!';
+            this.ctx.reply(reply);
+            this.ctx.answerCbQuery(reply);
+        })
             .then(_ => cb());
     }
 }
@@ -143,8 +150,10 @@ class DeleteFighterCommand {
     execute(cb) {
         FighterStorage_1.default.deleteFighter(this.fighterId)
             .then(res => {
-            if (res)
+            if (res) {
                 this.ctx.answerCbQuery('Your fighter was deleted', true);
+                this.ctx.deleteMessage();
+            }
             cb(res);
         });
     }

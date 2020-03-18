@@ -1,182 +1,92 @@
 [
   {
-    "name": "name",
+    "name": "smart",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
       "stateValue": 0,
-      "bufferFighterType": 4
+      "bufferFighterType": 1
     },
     "type": 3,
     "specs": {
-      "damage": 34,
-      "strength": 13,
-      "agility": 77,
-      "maxHp": 61
+      "damage": 33,
+      "strength": 10,
+      "agility": 91,
+      "maxHp": 179
     },
     "id": 1,
-    "hp": 61
+    "hp": 179
   },
   {
-    "name": "bobo",
+    "name": "sfds",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
       "stateValue": 0,
-      "bufferFighterType": 4
-    },
-    "type": 3,
-    "specs": {
-      "damage": 40,
-      "strength": 14,
-      "agility": 82,
-      "maxHp": 178
-    },
-    "id": 2,
-    "hp": 178
-  },
-  {
-    "name": "hgmg",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 4
-    },
-    "type": 3,
-    "specs": {
-      "damage": 30,
-      "strength": 11,
-      "agility": 100,
-      "maxHp": 89
-    },
-    "id": 3,
-    "hp": 89
-  },
-  {
-    "name": "hm,4",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 4
-    },
-    "type": 3,
-    "specs": {
-      "damage": 38,
-      "strength": 10,
-      "agility": 86,
-      "maxHp": 53
-    },
-    "id": 4,
-    "hp": 53
-  },
-  {
-    "name": "LuckyMannanana",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 4
-    },
-    "type": 4,
-    "specs": {
-      "damage": 11,
-      "strength": 12,
-      "agility": 117,
-      "maxHp": 153
-    },
-    "id": 5,
-    "hp": 153
-  },
-  {
-    "name": "name",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 4
+      "bufferFighterType": 1
     },
     "type": 1,
     "specs": {
+      "damage": 17,
+      "strength": 35,
+      "agility": 19,
+      "maxHp": 189
+    },
+    "id": 2,
+    "hp": 189
+  },
+  {
+    "name": "name",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 2,
+      "bufferFighterType": 0
+    },
+    "type": 0,
+    "specs": {
       "damage": 12,
-      "strength": 30,
-      "agility": 17,
-      "maxHp": 197
+      "strength": 9,
+      "agility": 49,
+      "maxHp": 135
     },
-    "id": 6,
-    "hp": 197
+    "id": 4,
+    "hp": 135
   },
   {
-    "name": "asd",
+    "name": "strong",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 4
-    },
-    "type": 3,
-    "specs": {
-      "damage": 32,
-      "strength": 12,
-      "agility": 77,
-      "maxHp": 117
-    },
-    "id": 7,
-    "hp": 117
-  },
-  {
-    "name": "ajsndma",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 4
-    },
-    "type": 3,
-    "specs": {
-      "damage": 36,
-      "strength": 20,
-      "agility": 73,
-      "maxHp": 143
-    },
-    "id": 8,
-    "hp": 143
-  },
-  {
-    "name": "asndkasdmasda",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 4
+      "stateValue": 2,
+      "bufferFighterType": 1
     },
     "type": 1,
     "specs": {
       "damage": 20,
-      "strength": 23,
-      "agility": 13,
-      "maxHp": 172
+      "strength": 40,
+      "agility": 17,
+      "maxHp": 183
     },
-    "id": 9,
-    "hp": 172
+    "id": 5,
+    "hp": 183
   },
   {
-    "name": "dsfsdf",
+    "name": "lucky",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
-      "stateValue": 0,
+      "stateValue": 2,
       "bufferFighterType": 4
     },
     "type": 4,
     "specs": {
-      "damage": 19,
+      "damage": 15,
       "strength": 17,
-      "agility": 179,
-      "maxHp": 158
+      "agility": 144,
+      "maxHp": 160
     },
-    "id": 10,
-    "hp": 158
+    "id": 6,
+    "hp": 160
   }
 ]

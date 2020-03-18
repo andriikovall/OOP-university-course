@@ -76,7 +76,9 @@ export class CallbackQueryHandler {
         app.runCommand(new ChooseFighterCommand(ctx, fighterId, app), () => {
             ctx.state.user.setState(new UserSelectingEnemyState(ctx.state.user));
             const fighter = FighterStorage.getFighterById(fighterId);
-            ctx.reply('You selected ' + fighter.name + ' for fight!');
+            const reply = 'You selected ' + fighter.name + ' for fight!';
+            ctx.reply(reply);
+            ctx.answerCbQuery(reply);
         });
     }
 
