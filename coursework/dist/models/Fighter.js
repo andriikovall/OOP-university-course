@@ -68,9 +68,9 @@ class FighterSmart extends Fighter {
     attack(enemy) {
         if (this.enemyCanBeAttacked(enemy)) {
             enemy.dealDamage(this.specs.damage);
-            return `${this.name} makes a smart move and deals ${this.specs.damage} to ${enemy.name}`;
+            return `👺 ${this.name} makes a smart move and deals ${this.specs.damage} to ${enemy.name} 😈`;
         }
-        return `${this.name}'s smart move was not enough and he missed!`;
+        return `${this.name}'s smart move was not enough and he missed! 😤`;
     }
 }
 exports.FighterSmart = FighterSmart;
@@ -90,9 +90,9 @@ class FighterStrong extends Fighter {
     attack(enemy) {
         if (this.enemyCanBeAttacked(enemy)) {
             enemy.dealDamage(this.specs.damage);
-            return `${this.name} deals ${this.specs.damage} to ${enemy.name} with his spectacular punch!`;
+            return `${this.name} 👊 deals ${this.specs.damage} to ${enemy.name} with his spectacular punch!🤜`;
         }
-        return `${this.name} has missed his punch =(`;
+        return `${this.name} has missed his punch =( 🥊`;
     }
 }
 exports.FighterStrong = FighterStrong;
@@ -112,9 +112,9 @@ class FighterPowerfull extends Fighter {
     attack(enemy) {
         if (this.enemyCanBeAttacked(enemy)) {
             enemy.dealDamage(this.specs.damage);
-            return `Just look at ${this.name}. He is so powerfull and deals ${this.specs.damage} damage to ${enemy.name}!`;
+            return `Just look at ${this.name}. 👊 He is so powerfull and deals ${this.specs.damage} damage to ${enemy.name}! 🤟`;
         }
-        return `${this.name} has missed. Oh no!`;
+        return `${this.name} has missed. Oh no! 😧`;
     }
 }
 exports.FighterPowerfull = FighterPowerfull;
@@ -156,9 +156,9 @@ class FighterLucky extends Fighter {
     attack(enemy) {
         if (this.enemyCanBeAttacked(enemy)) {
             enemy.dealDamage(this.specs.damage);
-            return `${this.name} is so lucky! He deals ${this.specs.damage} damage to ${enemy.name}! Unbelieveable`;
+            return `${this.name} is so lucky 🌚! He deals ${this.specs.damage} damage to ${enemy.name}! Unbelieveable 🙅`;
         }
-        return `Even lucky ones sometimes have to miss like ${this.name} did`;
+        return `Even lucky ones sometimes have to miss like ${this.name} did 🤨`;
     }
 }
 exports.FighterLucky = FighterLucky;

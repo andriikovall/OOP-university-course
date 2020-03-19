@@ -48,7 +48,7 @@ class MDFormatter extends TextFormatter {
         return `[${text}](${encodeURI(url)})`;
     }
     toMonospace(text: string): string {
-        return '```\n' + text + '\n```';
+        return '```' + text + '```';
     }
 }
 

@@ -42,7 +42,7 @@ class MDFormatter extends TextFormatter {
         return `[${text}](${encodeURI(url)})`;
     }
     toMonospace(text) {
-        return '```\n' + text + '\n```';
+        return '```' + text + '```';
     }
 }
 class UrlBtn {
