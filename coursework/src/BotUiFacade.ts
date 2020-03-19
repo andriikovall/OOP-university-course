@@ -14,7 +14,8 @@ export enum ParseMode {
 abstract class TextFormatter {
     abstract toItalic(str: string): string;
     abstract toBold(str: string): string;
-    abstract toLink(text: string, url: string);
+    abstract toLink(text: string, url: string): string;
+    abstract toMonospace(text: string): string;
     
     toUserLink(text: string, userId: number) {
         return this.toLink(text, `tg://user?id=` + userId);
@@ -31,6 +32,9 @@ class HTMLFormatter extends TextFormatter {
     toLink(text: string, url: string) {
         return `<a href="${encodeURI(url)}">${text}</a>`;
     }
+    toMonospace(text: string): string {
+        return `<pre>${text}</pre>`;
+    }
 }
 
 class MDFormatter extends TextFormatter {
@@ -43,7 +47,9 @@ class MDFormatter extends TextFormatter {
     toLink(text: string, url: string) {
         return `[${text}](${encodeURI(url)})`;
     }
-    
+    toMonospace(text: string): string {
+        return '```\n' + text + '\n```';
+    }
 }
 
 export class UrlBtn {
@@ -63,6 +69,7 @@ interface ExtraOptions {
 interface IBotUIHelper {
     parseMode: ParseMode;
     drawFighter(fighter: Fighter): string;
+    drawFightResult(winner: Fighter, loser: Fighter): string;
     clearKeyboard(): void;
     createKeyboard(buttons: string[][]): any;
     createExtraOptions(opts: ExtraOptions): any;
@@ -87,6 +94,20 @@ class BotUI implements IBotUIHelper {
         ].join('\n');
         return msg;
         
+    }
+
+    public drawFightResult(winner: Fighter, loser: Fighter): string {
+        const formatter: TextFormatter = this.getCurrentTextFormatter();
+        const result: string = [
+
+            `${formatter.toBold('Winner:')} ${formatter.toUserLink(winner.creator?.nickName, winner.creator.id)}`, 
+            `With fighter ${formatter.toMonospace(winner.name)}`, 
+            ``, 
+            `${formatter.toBold('Loser:')} ${formatter.toUserLink(loser.creator?.nickName, loser.creator.id)}`, 
+            `With fighter ${formatter.toMonospace(loser.name)}`, 
+
+        ].join('\n');
+        return result;
     }
 
     public clearKeyboard() {
@@ -147,32 +168,36 @@ export default class BotUIProxied implements IBotUIHelper {
             [buttonsConfig.showMyFighters],
             [buttonsConfig.showEnemies],
             [buttonsConfig.startFight]]);
+        }
+        
+        public set parseMode(value: ParseMode) {
+            this.botUI.parseMode = value;
     }
-
-    public set parseMode(value: ParseMode) {
-        this.botUI.parseMode = value;
-    }
-
+    
     public get parseMode() {
         return this.botUI.parseMode
     }
-
+    
     public set user(usr: User) {
         this._user = usr;
     }
-
+    
     private botUI: BotUI;
-
+    
     constructor(private _user: User = null) {
         this.botUI = new BotUI();
         this.botUI.parseMode = ParseMode.ParseModeMarkdown;
     }
+    
+    drawFightResult(winner: Fighter, loser: Fighter): string {
+        return this.botUI.drawFightResult(winner, loser);
+    }
 
     drawFighter(fighter: Fighter): string {
         const idLine = 
-            `${this.botUI.getCurrentTextFormatter().toItalic('Id:')} ${this.botUI.getCurrentTextFormatter().toBold(fighter.id + '')}`; 
+        `${this.botUI.getCurrentTextFormatter().toItalic('Id:')} ${this.botUI.getCurrentTextFormatter().toBold(fighter.id + '')}`; 
         const botString = this.botUI.drawFighter(fighter);
-
+        
         if (fighter.creator.id === this._user.id) {
             return [
                 idLine, 

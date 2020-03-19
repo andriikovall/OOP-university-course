@@ -82,9 +82,9 @@ class FighterStrong extends Fighter {
     generateSpecs() {
         return {
             damage: helpers_1.randInt(10, 20),
-            strength: helpers_1.randInt(20, 40),
-            agility: helpers_1.randInt(10, 20),
-            maxHp: helpers_1.randInt(150, 200)
+            strength: helpers_1.randInt(50, 60),
+            agility: helpers_1.randInt(20, 40),
+            maxHp: helpers_1.randInt(300, 400)
         };
     }
     attack(enemy) {
@@ -103,9 +103,9 @@ class FighterPowerfull extends Fighter {
     }
     generateSpecs() {
         return {
-            damage: helpers_1.randInt(40, 50),
-            strength: helpers_1.randInt(10, 20),
-            agility: helpers_1.randInt(20, 30),
+            damage: helpers_1.randInt(70, 80),
+            strength: helpers_1.randInt(60, 80),
+            agility: helpers_1.randInt(15, 20),
             maxHp: helpers_1.randInt(100, 200)
         };
     }
@@ -125,10 +125,10 @@ class FighterAwesome extends Fighter {
     }
     generateSpecs() {
         return {
-            damage: helpers_1.randInt(30, 40),
+            damage: helpers_1.randInt(25, 30),
             strength: helpers_1.randInt(5, 10),
-            agility: helpers_1.randInt(50, 90),
-            maxHp: helpers_1.randInt(50, 200)
+            agility: helpers_1.randInt(50, 60),
+            maxHp: helpers_1.randInt(150, 200)
         };
     }
     attack(enemy) {
@@ -147,9 +147,9 @@ class FighterLucky extends Fighter {
     }
     generateSpecs() {
         return {
-            damage: helpers_1.randInt(10, 20),
+            damage: helpers_1.randInt(10, 15),
             strength: helpers_1.randInt(5, 10),
-            agility: helpers_1.randInt(70, 90),
+            agility: helpers_1.randInt(60, 75),
             maxHp: helpers_1.randInt(100, 200)
         };
     }

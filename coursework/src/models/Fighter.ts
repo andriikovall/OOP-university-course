@@ -105,9 +105,9 @@ export class FighterStrong extends Fighter {
     generateSpecs(): FighterSpecs {
         return {
             damage: randInt(10, 20), 
-            strength: randInt(20, 40), 
-            agility: randInt(10, 20), 
-            maxHp: randInt(150, 200)
+            strength: randInt(50, 60), 
+            agility: randInt(20, 40), 
+            maxHp: randInt(300, 400)
         }
     }
 
@@ -128,9 +128,9 @@ export class FighterPowerfull extends Fighter {
 
     generateSpecs(): FighterSpecs {
         return {
-            damage: randInt(40, 50), 
-            strength: randInt(10, 20), 
-            agility: randInt(20, 30), 
+            damage: randInt(70, 80), 
+            strength: randInt(60, 80), 
+            agility: randInt(15, 20), 
             maxHp: randInt(100, 200)
         }
     }
@@ -153,10 +153,10 @@ export class FighterAwesome extends Fighter {
 
     generateSpecs(): FighterSpecs {
         return {
-            damage: randInt(30, 40), 
+            damage: randInt(25, 30), 
             strength: randInt(5, 10), 
-            agility: randInt(50, 90), 
-            maxHp: randInt(50, 200)
+            agility: randInt(50, 60), 
+            maxHp: randInt(150, 200)
         }
     }
 
@@ -178,9 +178,9 @@ export class FighterLucky extends Fighter {
 
     generateSpecs(): FighterSpecs {
         return {
-            damage: randInt(10, 20), 
+            damage: randInt(10, 15), 
             strength: randInt(5, 10), 
-            agility: randInt(70, 90), 
+            agility: randInt(60, 75), 
             maxHp: randInt(100, 200)
         }
     }

@@ -27,6 +27,9 @@ class HTMLFormatter extends TextFormatter {
     toLink(text, url) {
         return `<a href="${encodeURI(url)}">${text}</a>`;
     }
+    toMonospace(text) {
+        return `<pre>${text}</pre>`;
+    }
 }
 class MDFormatter extends TextFormatter {
     toItalic(str) {
@@ -37,6 +40,9 @@ class MDFormatter extends TextFormatter {
     }
     toLink(text, url) {
         return `[${text}](${encodeURI(url)})`;
+    }
+    toMonospace(text) {
+        return '```\n' + text + '\n```';
     }
 }
 class UrlBtn {
@@ -70,6 +76,18 @@ class BotUI {
             ...(Object.entries(fighter.specs).map(([key, val]) => `   ${formatter.toBold(key)} ${formatter.toItalic(val)}`))
         ].join('\n');
         return msg;
+    }
+    drawFightResult(winner, loser) {
+        var _a, _b;
+        const formatter = this.getCurrentTextFormatter();
+        const result = [
+            `${formatter.toBold('Winner:')} ${formatter.toUserLink((_a = winner.creator) === null || _a === void 0 ? void 0 : _a.nickName, winner.creator.id)}`,
+            `With fighter ${formatter.toMonospace(winner.name)}`,
+            ``,
+            `${formatter.toBold('Loser:')} ${formatter.toUserLink((_b = loser.creator) === null || _b === void 0 ? void 0 : _b.nickName, loser.creator.id)}`,
+            `With fighter ${formatter.toMonospace(loser.name)}`,
+        ].join('\n');
+        return result;
     }
     clearKeyboard() {
         return this.createKeyboard([[]]);
@@ -137,6 +155,9 @@ class BotUIProxied {
     }
     set user(usr) {
         this._user = usr;
+    }
+    drawFightResult(winner, loser) {
+        return this.botUI.drawFightResult(winner, loser);
     }
     drawFighter(fighter) {
         const idLine = `${this.botUI.getCurrentTextFormatter().toItalic('Id:')} ${this.botUI.getCurrentTextFormatter().toBold(fighter.id + '')}`;

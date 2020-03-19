@@ -5,9 +5,9 @@
       "id": 379946182,
       "nickName": "ZioSmith",
       "stateValue": 0,
-      "bufferFighterType": 3,
-      "bufferFighterSelectedId": -1,
-      "bufferEmenySelectedId": -1
+      "bufferFighterType": 2,
+      "bufferFighterSelectedId": 2,
+      "bufferEmenySelectedId": 3
     },
     "type": 1,
     "specs": {
@@ -25,9 +25,9 @@
       "id": 379946182,
       "nickName": "ZioSmith",
       "stateValue": 0,
-      "bufferFighterType": 3,
-      "bufferFighterSelectedId": -1,
-      "bufferEmenySelectedId": -1
+      "bufferFighterType": 2,
+      "bufferFighterSelectedId": 2,
+      "bufferEmenySelectedId": 3
     },
     "type": 3,
     "specs": {
@@ -44,10 +44,10 @@
     "creator": {
       "id": 335283892,
       "nickName": "Droptheweapon",
-      "stateValue": 2,
+      "stateValue": 0,
       "bufferFighterType": 2,
       "bufferFighterSelectedId": -1,
-      "bufferEmenySelectedId": -1
+      "bufferEmenySelectedId": 1
     },
     "type": 2,
     "specs": {
@@ -58,5 +58,45 @@
     },
     "id": 3,
     "_hp": 193
+  },
+  {
+    "name": "powerfull Tatians",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 0,
+      "bufferFighterType": 2,
+      "bufferFighterSelectedId": 2,
+      "bufferEmenySelectedId": 3
+    },
+    "type": 2,
+    "specs": {
+      "damage": 48,
+      "strength": 15,
+      "agility": 26,
+      "maxHp": 135
+    },
+    "id": 4,
+    "_hp": 135
+  },
+  {
+    "name": "l",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 2,
+      "bufferFighterType": 0,
+      "bufferFighterSelectedId": 2,
+      "bufferEmenySelectedId": 3
+    },
+    "type": 0,
+    "specs": {
+      "damage": 13,
+      "strength": 9,
+      "agility": 50,
+      "maxHp": 137
+    },
+    "id": 5,
+    "_hp": 137
   }
 ]

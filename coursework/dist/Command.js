@@ -209,3 +209,28 @@ class BattleCommand {
     }
 }
 exports.BattleCommand = BattleCommand;
+class BattleEndedCommand {
+    constructor(ctx, app, result) {
+        this.ctx = ctx;
+        this.app = app;
+        this.result = result;
+    }
+    execute(cb) {
+        this.replyWithInterval(this.ctx, this.result.log, 500, () => {
+            const reply = this.app.botUI.drawFightResult(this.result.winner, this.result.loser);
+            this.ctx.replyWithMarkdown(reply)
+                .then(_ => cb());
+        });
+    }
+    replyWithInterval(ctx, messages, intervalMs, doneCb) {
+        for (let i = 0; i < messages.length; i++) {
+            setTimeout(() => {
+                ctx.reply(messages[i]);
+                if (i === messages.length - 1) {
+                    doneCb();
+                }
+            }, i * intervalMs);
+        }
+    }
+}
+exports.BattleEndedCommand = BattleEndedCommand;

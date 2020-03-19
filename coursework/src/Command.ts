@@ -7,7 +7,7 @@ import buttons from './config/buttons';
 import BotUI, { CallbackBtn } from './BotUiFacade';
 import { FighterType, Fighter } from './models/Fighter';
 import FighterStorage from './storage/FighterStorage';
-import { Fight } from './Fight';
+import { Fight, FightResult } from './Fight';
 
 export interface ICommand {
     ctx: ctxType,
@@ -198,5 +198,30 @@ export class BattleCommand implements ICommand {
         const battle = new Fight(f1, f2);
         const battleResult = battle.begin();
         cb(battleResult);
+    }
+}
+
+
+export class BattleEndedCommand implements ICommand {
+
+    constructor(public ctx: ctxType, public app: Application, private result: FightResult) { }
+
+    execute(cb: Function) {
+        this.replyWithInterval(this.ctx, this.result.log, 500, () => {
+            const reply = this.app.botUI.drawFightResult(this.result.winner, this.result.loser);
+            this.ctx.replyWithMarkdown(reply)
+                .then(_ => cb())
+        });
+    }
+
+    private replyWithInterval(ctx: ctxType, messages: string[], intervalMs: number, doneCb: Function) {
+        for (let i = 0; i < messages.length; i++) {
+            setTimeout(() => {
+                ctx.reply(messages[i])
+                if (i === messages.length - 1) {
+                    doneCb();
+                }
+            }, i * intervalMs);
+        }
     }
 }

@@ -69,11 +69,11 @@ class Application {
             ctx.reply('Mmm... Let the battle begin!! 💀');
             const id1 = ctx.state.user.bufferFighterSelectedId, id2 = ctx.state.user.bufferEmenySelectedId;
             this.runCommand(new Command_1.BattleCommand(ctx, this, id1, id2), (result) => {
-                console.log(result);
+                this.runCommand(new Command_1.BattleEndedCommand(ctx, this, result));
             });
         }
         else {
-            ctx.reply('You cannot start the fight before choosing your hero and the enemy! ❌');
+            ctx.replyWithMarkdown('You cannot start the fight before choosing your hero and the enemy! ❌');
         }
     }
 }
@@ -84,22 +84,13 @@ class CallbackQueryHandler {
     }
     // @todo proxy
     static chooseFighter(ctx, app, fighterId) {
-        app.runCommand(new Command_1.ChooseFighterCommand(ctx, fighterId, app), () => {
-            // ctx.state.user.setState(new UserSelectingEnemyState(ctx.state.user));
-            // const fighter = FighterStorage.getFighterById(fighterId);
-            // const reply = 'You selected ' + fighter.name + ' for fight!';
-            // ctx.reply(reply);
-            // ctx.answerCbQuery(reply);
-        });
+        app.runCommand(new Command_1.ChooseFighterCommand(ctx, fighterId, app));
     }
     static chooseEnemy(ctx, app, enemyId) {
-        app.runCommand(new Command_1.ChooseEnemyCommand(ctx, app, enemyId), () => {
-        });
+        app.runCommand(new Command_1.ChooseEnemyCommand(ctx, app, enemyId));
     }
     static deleteFighter(ctx, app, fighterId) {
-        app.runCommand(new Command_1.DeleteFighterCommand(ctx, fighterId, app), () => {
-            // ctx.state.user.setState(new UserSelectingEnemyState(ctx.state.user));
-        });
+        app.runCommand(new Command_1.DeleteFighterCommand(ctx, fighterId, app));
     }
 }
 exports.CallbackQueryHandler = CallbackQueryHandler;
