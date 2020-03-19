@@ -191,3 +191,18 @@ class ChooseEnemyCommand {
     }
 }
 exports.ChooseEnemyCommand = ChooseEnemyCommand;
+class BattleCommand {
+    constructor(ctx, app, fighter1Id, fighter2Id) {
+        this.ctx = ctx;
+        this.app = app;
+        this.fighter1Id = fighter1Id;
+        this.fighter2Id = fighter2Id;
+    }
+    execute(cb) {
+        const f1 = FighterStorage_1.default.getFighterById(this.fighter1Id);
+        const f2 = FighterStorage_1.default.getFighterById(this.fighter2Id);
+        console.log(f1 === null || f1 === void 0 ? void 0 : f1.name, f2 === null || f2 === void 0 ? void 0 : f2.name);
+        cb();
+    }
+}
+exports.BattleCommand = BattleCommand;

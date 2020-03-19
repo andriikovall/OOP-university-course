@@ -34,6 +34,9 @@ bot.hears([...Object.values(buttons_1.default.fighters)], (ctx) => {
 bot.hears(buttons_1.default.showEnemies, (ctx) => {
     index_1.app.onEmeniesShow(ctx);
 });
+bot.hears(buttons_1.default.startFight, (ctx) => {
+    index_1.app.onFight(ctx);
+});
 bot.on('text', (ctx) => {
     index_1.app.onText(ctx);
 });

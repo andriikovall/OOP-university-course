@@ -1,4 +1,4 @@
-import { ICommand, OnStartCommand, CreateFighterCommand, FighterTypeSelectedCommand, FighterNameConfirmingCommand, FighetrsShowComamnd, ChooseFighterCommand, DeleteFighterCommand, EnemiesShowCommand, ChooseEnemyCommand } from "./Command";
+import { ICommand, OnStartCommand, CreateFighterCommand, FighterTypeSelectedCommand, FighterNameConfirmingCommand, FighetrsShowComamnd, ChooseFighterCommand, DeleteFighterCommand, EnemiesShowCommand, ChooseEnemyCommand, BattleCommand } from "./Command";
 import Telegrah, { ContextMessageUpdate } from "telegraf";
 import { config, configureStorages } from './config/config';
 import { ctxType } from "./botHandlers";
@@ -65,6 +65,19 @@ export default class Application {
         console.log(cbQueryData);
         const handler: Function = CallbackQueryHandler.getQueryHandler(ctx, this, cbQueryData.methodName, cbQueryData.args);
         handler();
+    }
+
+    public onFight(ctx: ctxType) {
+        if (ctx.state.user.state.canStartFight()) {
+            ctx.reply('Mmm... Let the battle begin!! 💀');
+            const id1 = ctx.state.user.bufferFighterSelectedId, 
+                  id2 = ctx.state.user.bufferEmenySelectedId;
+            this.runCommand(new BattleCommand(ctx, this, id1, id2), () => {
+                console.log('battle ended!');
+            });
+        } else {
+            ctx.reply('You cannot start the fight before choosing your hero and the enemy! ❌');
+        }
     }
 }
 

@@ -183,3 +183,17 @@ export class ChooseEnemyCommand implements ICommand {
             .then(_ => cb());
     }
 }
+
+
+export class BattleCommand implements ICommand {
+    constructor(public ctx: ctxType, 
+                public app: Application, 
+                private fighter1Id: number, 
+                private fighter2Id: number) { }
+    execute(cb: Function) {
+        const f1 = FighterStorage.getFighterById(this.fighter1Id);
+        const f2 = FighterStorage.getFighterById(this.fighter2Id);
+        console.log(f1?.name, f2?.name);
+        cb();
+    }
+}

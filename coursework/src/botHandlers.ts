@@ -43,6 +43,10 @@ bot.hears(buttons.showEnemies, (ctx: ctxType) => {
     app.onEmeniesShow(ctx);
 });
 
+bot.hears(buttons.startFight, (ctx: ctxType) => {
+    app.onFight(ctx);
+})
+
 bot.on('text', (ctx: ctxType) => {
     app.onText(ctx);
 });
