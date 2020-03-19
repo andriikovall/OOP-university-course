@@ -3,9 +3,10 @@ import Telegrah, { ContextMessageUpdate } from "telegraf";
 import { config, configureStorages } from './config/config';
 import { ctxType } from "./botHandlers";
 import { UserSelectingFighterTypeState, UserDefaultState, UserStateEnum, UserSelectingEnemyState } from "./models/User";
-import FighterStorage from "./storage/FighterStorage";
-
+import BotUI from './BotUiFacade';
 export default class Application {
+
+    public botUI = new BotUI();
 
     public runCommand(command: ICommand, doneCb: Function = () => {}) {
         command.execute(doneCb);
@@ -17,6 +18,10 @@ export default class Application {
         return configureStorages()
             .then(() => this.bot.launch())
             .then(() => console.log('bot started'))
+    }
+
+    public onAny(ctx: ctxType) {
+        this.botUI.user = ctx.state.user;
     }
 
     public onStart(ctx: ctxType) {

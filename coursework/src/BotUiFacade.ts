@@ -1,10 +1,9 @@
 import Keyboard from 'telegraf-keyboard';
 
 import { Fighter, FighterType } from "./models/Fighter";
-// import { Extra, Markup } from 'telegraf/typings/index';
-import { ExtraEditMessage } from 'telegraf/typings/telegram-types';
 import { Markup, Extra } from 'telegraf';
-import { isArray } from 'util';
+import { User } from './models/User';
+import buttonsConfig from './config/buttons';
 
 
 export enum ParseMode {
@@ -61,15 +60,24 @@ interface ExtraOptions {
 }
 
 
+interface IBotUIHelper {
+    parseMode: ParseMode;
+    drawFighter(fighter: Fighter): string;
+    clearKeyboard(): void;
+    createKeyboard(buttons: string[][]): any;
+    createExtraOptions(opts: ExtraOptions): any;
+}
+
+
 // FACADE
-export default class BotUI {
+class BotUI implements IBotUIHelper {
 
-    public static parseMode: ParseMode = ParseMode.ParseModeMarkdown;
+    public parseMode: ParseMode = ParseMode.ParseModeMarkdown;
 
-    private static keyBoard = new Keyboard();
+    private keyBoard = new Keyboard();
     
-    public static drawFighter(fighter: Fighter): string {
-        const formatter: TextFormatter = BotUI.getCurrentTextFormatter();
+    public drawFighter(fighter: Fighter): string {
+        const formatter: TextFormatter = this.getCurrentTextFormatter();
         const msg: string = [
             `${formatter.toItalic('Name:')} ${formatter.toBold(fighter.name)}`, 
             `${formatter.toItalic('Creator:')} ${formatter.toUserLink(fighter.creator?.nickName, fighter.creator?.id)}`, 
@@ -81,24 +89,24 @@ export default class BotUI {
         
     }
 
-    public static clearKeyboard() {
-        return BotUI.createKeyboard([[]]);
+    public clearKeyboard() {
+        return this.createKeyboard([[]]);
     }
     
-    public static createKeyboard(buttons: string[][]) {
+    public createKeyboard(buttons: string[][]) {
         if (buttons.length === 1 && buttons[0]?.length === 0) {
-            return BotUI.keyBoard.clear();
+            return this.keyBoard.clear();
         }
 
-        BotUI.keyBoard.new();
+        this.keyBoard.new();
     
         for (const btnRow of buttons) {
-            BotUI.keyBoard.add(...btnRow)
+            this.keyBoard.add(...btnRow)
         }
-        return BotUI.keyBoard.draw();
+        return this.keyBoard.draw();
     }
 
-    public static createExtraOptions(opts: ExtraOptions) {
+    public createExtraOptions(opts: ExtraOptions) {
         if (!opts.markup)
         opts.markup = [];
         
@@ -113,7 +121,7 @@ export default class BotUI {
         const extra = Extra.markup(Markup.inlineKeyboard(inlineKeyboard));
         extra['caption'] = opts?.caption;
 
-        switch (BotUI.parseMode) {
+        switch (this.parseMode) {
             case ParseMode.ParseModeHTML: extra.parse_mode = 'HTML'; break;
             case ParseMode.ParseModeMarkdown: extra.parse_mode = 'Markdown'; break;
         }
@@ -121,12 +129,72 @@ export default class BotUI {
         return extra;
     }
     
-    private static getCurrentTextFormatter(): TextFormatter {
-        switch (BotUI.parseMode) {
+    public getCurrentTextFormatter(): TextFormatter {
+        switch (this.parseMode) {
             case ParseMode.ParseModeMarkdown: return new MDFormatter();
             case ParseMode.ParseModeHTML: return new HTMLFormatter();
         }
     }
+
+}
+
+// PROXY
+export default class BotUIProxied implements IBotUIHelper {
+    
+    public getMainMenuButtons() {
+        return this.createKeyboard([
+            [buttonsConfig.createNewFighter],
+            [buttonsConfig.showMyFighters],
+            [buttonsConfig.showEnemies],
+            [buttonsConfig.startFight]]);
+    }
+
+    public set parseMode(value: ParseMode) {
+        this.botUI.parseMode = value;
+    }
+
+    public get parseMode() {
+        return this.botUI.parseMode
+    }
+
+    public set user(usr: User) {
+        this._user = usr;
+    }
+
+    private botUI: BotUI;
+
+    constructor(private _user: User = null) {
+        this.botUI = new BotUI();
+        this.botUI.parseMode = ParseMode.ParseModeMarkdown;
+    }
+
+    drawFighter(fighter: Fighter): string {
+        const idLine = 
+            `${this.botUI.getCurrentTextFormatter().toItalic('Id:')} ${this.botUI.getCurrentTextFormatter().toBold(fighter.id + '')}`; 
+        const botString = this.botUI.drawFighter(fighter);
+
+        if (fighter.creator.id === this._user.id) {
+            return [
+                idLine, 
+                botString
+            ].join('\n');
+        }
+        return botString;
+    }
+    clearKeyboard(): any {
+        return this.botUI.clearKeyboard();
+    }
+    createKeyboard(buttons: string[][]) {
+        if (!this._user.state.canStartFight()) {
+            buttons = buttons.map(row => row.filter(btn => btn !== buttonsConfig.startFight));
+        }
+        
+        return this.botUI.createKeyboard(buttons);
+    }
+    createExtraOptions(opts: ExtraOptions): any {
+        return this.botUI.createExtraOptions(opts);
+    }
+
 
 }
 

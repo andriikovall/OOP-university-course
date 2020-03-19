@@ -1,11 +1,16 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("./Command");
 const config_1 = require("./config/config");
 const User_1 = require("./models/User");
+const BotUiFacade_1 = __importDefault(require("./BotUiFacade"));
 class Application {
     constructor(bot) {
         this.bot = bot;
+        this.botUI = new BotUiFacade_1.default();
     }
     runCommand(command, doneCb = () => { }) {
         command.execute(doneCb);
@@ -14,6 +19,9 @@ class Application {
         return config_1.configureStorages()
             .then(() => this.bot.launch())
             .then(() => console.log('bot started'));
+    }
+    onAny(ctx) {
+        this.botUI.user = ctx.state.user;
     }
     onStart(ctx) {
         this.runCommand(new Command_1.OnStartCommand(ctx, this));

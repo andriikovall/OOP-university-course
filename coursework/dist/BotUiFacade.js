@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const telegraf_keyboard_1 = __importDefault(require("telegraf-keyboard"));
 const Fighter_1 = require("./models/Fighter");
 const telegraf_1 = require("telegraf");
+const buttons_1 = __importDefault(require("./config/buttons"));
 var ParseMode;
 (function (ParseMode) {
     ParseMode[ParseMode["ParseModeMarkdown"] = 0] = "ParseModeMarkdown";
@@ -54,9 +55,13 @@ class CallbackBtn {
 exports.CallbackBtn = CallbackBtn;
 // FACADE
 class BotUI {
-    static drawFighter(fighter) {
+    constructor() {
+        this.parseMode = ParseMode.ParseModeMarkdown;
+        this.keyBoard = new telegraf_keyboard_1.default();
+    }
+    drawFighter(fighter) {
         var _a, _b;
-        const formatter = BotUI.getCurrentTextFormatter();
+        const formatter = this.getCurrentTextFormatter();
         const msg = [
             `${formatter.toItalic('Name:')} ${formatter.toBold(fighter.name)}`,
             `${formatter.toItalic('Creator:')} ${formatter.toUserLink((_a = fighter.creator) === null || _a === void 0 ? void 0 : _a.nickName, (_b = fighter.creator) === null || _b === void 0 ? void 0 : _b.id)}`,
@@ -66,21 +71,21 @@ class BotUI {
         ].join('\n');
         return msg;
     }
-    static clearKeyboard() {
-        return BotUI.createKeyboard([[]]);
+    clearKeyboard() {
+        return this.createKeyboard([[]]);
     }
-    static createKeyboard(buttons) {
+    createKeyboard(buttons) {
         var _a;
         if (buttons.length === 1 && ((_a = buttons[0]) === null || _a === void 0 ? void 0 : _a.length) === 0) {
-            return BotUI.keyBoard.clear();
+            return this.keyBoard.clear();
         }
-        BotUI.keyBoard.new();
+        this.keyBoard.new();
         for (const btnRow of buttons) {
-            BotUI.keyBoard.add(...btnRow);
+            this.keyBoard.add(...btnRow);
         }
-        return BotUI.keyBoard.draw();
+        return this.keyBoard.draw();
     }
-    static createExtraOptions(opts) {
+    createExtraOptions(opts) {
         if (!opts.markup)
             opts.markup = [];
         const inlineKeyboard = [];
@@ -92,7 +97,7 @@ class BotUI {
         }
         const extra = telegraf_1.Extra.markup(telegraf_1.Markup.inlineKeyboard(inlineKeyboard));
         extra['caption'] = opts === null || opts === void 0 ? void 0 : opts.caption;
-        switch (BotUI.parseMode) {
+        switch (this.parseMode) {
             case ParseMode.ParseModeHTML:
                 extra.parse_mode = 'HTML';
                 break;
@@ -102,13 +107,59 @@ class BotUI {
         }
         return extra;
     }
-    static getCurrentTextFormatter() {
-        switch (BotUI.parseMode) {
+    getCurrentTextFormatter() {
+        switch (this.parseMode) {
             case ParseMode.ParseModeMarkdown: return new MDFormatter();
             case ParseMode.ParseModeHTML: return new HTMLFormatter();
         }
     }
 }
-exports.default = BotUI;
-BotUI.parseMode = ParseMode.ParseModeMarkdown;
-BotUI.keyBoard = new telegraf_keyboard_1.default();
+// PROXY
+class BotUIProxied {
+    constructor(_user = null) {
+        this._user = _user;
+        this.botUI = new BotUI();
+        this.botUI.parseMode = ParseMode.ParseModeMarkdown;
+    }
+    getMainMenuButtons() {
+        return this.createKeyboard([
+            [buttons_1.default.createNewFighter],
+            [buttons_1.default.showMyFighters],
+            [buttons_1.default.showEnemies],
+            [buttons_1.default.startFight]
+        ]);
+    }
+    set parseMode(value) {
+        this.botUI.parseMode = value;
+    }
+    get parseMode() {
+        return this.botUI.parseMode;
+    }
+    set user(usr) {
+        this._user = usr;
+    }
+    drawFighter(fighter) {
+        const idLine = `${this.botUI.getCurrentTextFormatter().toItalic('Id:')} ${this.botUI.getCurrentTextFormatter().toBold(fighter.id + '')}`;
+        const botString = this.botUI.drawFighter(fighter);
+        if (fighter.creator.id === this._user.id) {
+            return [
+                idLine,
+                botString
+            ].join('\n');
+        }
+        return botString;
+    }
+    clearKeyboard() {
+        return this.botUI.clearKeyboard();
+    }
+    createKeyboard(buttons) {
+        if (!this._user.state.canStartFight()) {
+            buttons = buttons.map(row => row.filter(btn => btn !== buttons_1.default.startFight));
+        }
+        return this.botUI.createKeyboard(buttons);
+    }
+    createExtraOptions(opts) {
+        return this.botUI.createExtraOptions(opts);
+    }
+}
+exports.default = BotUIProxied;

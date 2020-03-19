@@ -72,6 +72,10 @@ class UserState {
     constructor(user) {
         this.user = user;
     }
+    canStartFight() {
+        var _a, _b;
+        return ((_a = this.user) === null || _a === void 0 ? void 0 : _a.bufferEmenySelectedId) > 0 && ((_b = this.user) === null || _b === void 0 ? void 0 : _b.bufferFighterSelectedId) > 0;
+    }
 }
 exports.UserState = UserState;
 class UserDefaultState extends UserState {
@@ -86,9 +90,6 @@ class UserDefaultState extends UserState {
         return false;
     }
     canChooseEnemy() {
-        return false;
-    }
-    canStartFight() {
         return false;
     }
 }
@@ -145,9 +146,6 @@ class UserSelectingEnemyState extends UserState {
     canChooseEnemy() {
         return true;
     }
-    canStartFight() {
-        return false;
-    }
 }
 exports.UserSelectingEnemyState = UserSelectingEnemyState;
 class UserAboutToStartFightState extends UserState {
@@ -162,9 +160,6 @@ class UserAboutToStartFightState extends UserState {
         return false;
     }
     canChooseEnemy() {
-        return true;
-    }
-    canStartFight() {
         return true;
     }
 }

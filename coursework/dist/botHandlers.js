@@ -13,6 +13,8 @@ bot.use((ctx, next) => {
     var _a;
     const userId = ((_a = ctx === null || ctx === void 0 ? void 0 : ctx.message) === null || _a === void 0 ? void 0 : _a.chat.id) || ctx.callbackQuery.message.chat.id;
     ctx.state.user = UserStorage_1.default.getUserById(userId);
+    console.log(ctx.state.user);
+    index_1.app.onAny(ctx);
     return next();
 });
 bot.command('start', (ctx) => {

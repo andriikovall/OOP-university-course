@@ -86,8 +86,9 @@ export abstract class UserState {
     abstract canSelectFighterType(): boolean;
     abstract canEnterFighterName(): boolean;
     abstract canChooseEnemy(): boolean;
-    abstract canStartFight(): boolean;
-    // ..
+    public canStartFight(): boolean {
+        return this.user?.bufferEmenySelectedId > 0 && this.user?.bufferFighterSelectedId > 0;
+    }
 }
 
 export class UserDefaultState extends UserState {
@@ -103,10 +104,6 @@ export class UserDefaultState extends UserState {
     }
 
     canChooseEnemy(): boolean {
-        return false;
-    }
-
-    canStartFight(): boolean {
         return false;
     }
 
@@ -170,11 +167,6 @@ export class UserSelectingEnemyState extends UserState {
     canChooseEnemy(): boolean {
         return true;
     }
-
-    canStartFight(): boolean {
-        return false;
-    }
-
 }
 
 
@@ -191,10 +183,6 @@ export class UserAboutToStartFightState extends UserState {
     }
 
     canChooseEnemy(): boolean {
-        return true;
-    }
-
-    canStartFight(): boolean {
         return true;
     }
 

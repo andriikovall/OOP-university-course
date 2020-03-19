@@ -1,7 +1,8 @@
 export default {
-    createNewFighter: '👨‍🎤 Create new fighter 👨‍🎤', 
-    showMyFighters: '⚔️ Show my fighters! ⚔️',
-    showEnemies: '* Show enemies *',
+    createNewFighter: '🤖 Create new fighter 🤖', 
+    showMyFighters: '🥋 Show my fighters! 🥋',
+    showEnemies: '😈 Show enemies 😈',
+    startFight: '⚔️ Start fight ⚔️',
     fighters: {
         smart: 'Smart 🧙‍♂️', 
         strong: 'Strong 💪', 
