@@ -22,8 +22,12 @@ export abstract class Fighter implements ICloneable {
     public id: number;
     public photoUrl: string;
 
+    public getHp(): number {
+        return this._hp;
+    }
+
+    private _hp: number;
     private static nextId = 0;
-    private hp: number;
     constructor(public name: string,
         public creator: User,
         public type: FighterType,
@@ -33,7 +37,7 @@ export abstract class Fighter implements ICloneable {
             this.specs = this.generateSpecs();
         }
         this.id = ++Fighter.nextId;
-        this.hp = this.specs.maxHp;
+        this._hp = this.specs.maxHp;
     }
 
     public enemyCanBeAttacked(enemy: Fighter, successProbabilityBonus: number = 0): boolean {
@@ -42,18 +46,27 @@ export abstract class Fighter implements ICloneable {
         return isAttackSuccess;
     }
 
-    abstract attack(enemy: Fighter): void;
+    abstract attack(enemy: Fighter): string;
     abstract generateSpecs(): FighterSpecs;
 
     public dealDamage(dmg: number) {
-        this.hp -= dmg;
+        console.log('before hit', this.getHp())
+        this._hp -= dmg;
+        console.log('after hit', this.getHp());
 
-        if (this.hp < 0)
-            this.hp = 0;
+        if (this._hp < 0)
+            this._hp = 0;
+        
     }
 
     clone(): Fighter {
-        return { ...this, specs: { ...this.specs } } as Fighter;
+        return { ...this, 
+                attack: this.attack, 
+                dealDamage: this.dealDamage, 
+                enemyCanBeAttacked: this.enemyCanBeAttacked,
+                getHp: this.getHp,
+                specs: { ...this.specs } 
+            } as this;
     }
 
     toJSON() {
@@ -75,9 +88,12 @@ export class FighterSmart extends Fighter {
         }
     }
 
-    attack(enemy: Fighter): void {
-        // @todo add good loggin into bot
-        console.log('FighterSmart -> ', enemy);
+    attack(enemy: Fighter): string {
+        if (this.enemyCanBeAttacked(enemy)) {
+            enemy.dealDamage(this.specs.damage);
+            return `${this.name} makes a smart move and deals ${this.specs.damage} to ${enemy.name}`;
+        }
+        return `${this.name}'s smart move was not enough and he missed!`;
     }
 
 }
@@ -95,9 +111,12 @@ export class FighterStrong extends Fighter {
         }
     }
 
-    attack(enemy: Fighter): void {
-        // @todo add good loggin into bot
-        console.log('FighterStrong -> ', enemy);
+    attack(enemy: Fighter): string {
+        if (this.enemyCanBeAttacked(enemy)) {
+            enemy.dealDamage(this.specs.damage);
+            return `${this.name} deals ${this.specs.damage} to ${enemy.name} with his spectacular punch!`;
+        }
+        return `${this.name} has missed his punch =(`;
     }
 
 }
@@ -116,9 +135,12 @@ export class FighterPowerfull extends Fighter {
         }
     }
 
-    attack(enemy: Fighter): void {
-        // @todo add good loggin into bot
-        console.log('FighterPowerfull -> ', enemy);
+    attack(enemy: Fighter): string {
+        if (this.enemyCanBeAttacked(enemy)) {
+            enemy.dealDamage(this.specs.damage);
+            return `Just look at ${this.name}. He is so powerfull and deals ${this.specs.damage} damage to ${enemy.name}!`;
+        }
+        return `${this.name} has missed. Oh no!`;
     }
 
 }
@@ -132,15 +154,18 @@ export class FighterAwesome extends Fighter {
     generateSpecs(): FighterSpecs {
         return {
             damage: randInt(30, 40), 
-            strength: randInt(10, 20), 
-            agility: randInt(50, 100), 
+            strength: randInt(5, 10), 
+            agility: randInt(50, 90), 
             maxHp: randInt(50, 200)
         }
     }
 
-    attack(enemy: Fighter): void {
-        // @todo add good loggin into bot
-        console.log('FighterAwesome -> ', enemy);
+    attack(enemy: Fighter): string {
+        if (this.enemyCanBeAttacked(enemy)) {
+            enemy.dealDamage(this.specs.damage);
+            return `OMG😱 ${this.name} is awesome! He deals ${this.specs.damage} damage to ${enemy.name}!`;
+        }
+        return `${this.name}'s awesomness sometimes doesn't work 😳`;
     }
 
 }
@@ -154,15 +179,18 @@ export class FighterLucky extends Fighter {
     generateSpecs(): FighterSpecs {
         return {
             damage: randInt(10, 20), 
-            strength: randInt(10, 20), 
-            agility: randInt(100, 200), 
+            strength: randInt(5, 10), 
+            agility: randInt(70, 90), 
             maxHp: randInt(100, 200)
         }
     }
 
-    attack(enemy: Fighter): void {
-        // @todo add good loggin into bot
-        console.log('FighterLongLiving -> ', enemy);
+    attack(enemy: Fighter): string {
+        if (this.enemyCanBeAttacked(enemy)) {
+            enemy.dealDamage(this.specs.damage);
+            return `${this.name} is so lucky! He deals ${this.specs.damage} damage to ${enemy.name}! Unbelieveable`;
+        }
+        return `Even lucky ones sometimes have to miss like ${this.name} did`;
     }
 
 }

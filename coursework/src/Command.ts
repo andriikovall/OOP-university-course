@@ -7,6 +7,7 @@ import buttons from './config/buttons';
 import BotUI, { CallbackBtn } from './BotUiFacade';
 import { FighterType, Fighter } from './models/Fighter';
 import FighterStorage from './storage/FighterStorage';
+import { Fight } from './Fight';
 
 export interface ICommand {
     ctx: ctxType,
@@ -27,6 +28,7 @@ export class OnStartCommand implements ICommand {
         const newUser = new User(this.ctx.chat.id, extractUsername(this.ctx.from));
         UserStorage.addUser(newUser)
             .then(_ => {
+                this.app.botUI.user = newUser; 
                 const btns = this.app.botUI.createKeyboard([[`${buttons.createNewFighter}`]]);
                 this.ctx.reply('Start a fight or create a new fighter!', btns)
                     .then(_ => cb());
@@ -193,7 +195,8 @@ export class BattleCommand implements ICommand {
     execute(cb: Function) {
         const f1 = FighterStorage.getFighterById(this.fighter1Id);
         const f2 = FighterStorage.getFighterById(this.fighter2Id);
-        console.log(f1?.name, f2?.name);
-        cb();
+        const battle = new Fight(f1, f2);
+        const battleResult = battle.begin();
+        cb(battleResult);
     }
 }

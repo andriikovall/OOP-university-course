@@ -15,7 +15,7 @@ class User {
         this.bufferFighterType = bufferFighterType;
         this.bufferFighterSelectedId = bufferFighterSelectedId;
         this.bufferEmenySelectedId = bufferEmenySelectedId;
-        this.setState(stateValue);
+        this.state = this.getStateValueFromEmun(stateValue);
     }
     setState(state) {
         if (state instanceof UserState) {

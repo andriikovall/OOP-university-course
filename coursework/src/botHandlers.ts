@@ -13,7 +13,7 @@ export interface ctxType extends ContextMessageUpdate {
 const bot = new Telegraf();
 
 bot.use((ctx: ctxType, next) => {
-    const userId = ctx?.message?.chat.id || ctx.callbackQuery.message.chat.id;
+    const userId = ctx?.message?.chat.id || ctx.callbackQuery?.message.chat.id;
     ctx.state.user = UserStorage.getUserById(userId);
     console.log(ctx.state.user);
     app.onAny(ctx);

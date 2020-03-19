@@ -24,7 +24,8 @@ export class User implements ICloneable {
                 public bufferFighterType: FighterType = FighterType.FighterAwesome, 
                 public bufferFighterSelectedId: number = -1, 
                 public bufferEmenySelectedId:   number = -1) {
-        this.setState(stateValue);
+                    
+                this.state = this.getStateValueFromEmun(stateValue)
     }
     clone(): this {
         return new User(this.id, 

@@ -7,11 +7,15 @@ const User_1 = require("../models/User");
 const fs_adapted_1 = __importDefault(require("./fs-adapted"));
 const config_1 = require("../config/config");
 class UserStorage {
-    static async loadUsers() {
+    static loadUsers() {
         console.log('loading users...');
-        const rawData = await fs_adapted_1.default.readFile(config_1.config.USERS_FILE_PATH) || '[]';
-        const users = JSON.parse(rawData);
-        users.forEach(user => UserStorage._users.set(user.id, new User_1.User(user.id, user.nickName, user.stateValue, user.bufferFighterType, user.bufferFighterSelectedId, user.bufferEmenySelectedId)));
+        return fs_adapted_1.default.readFile(config_1.config.USERS_FILE_PATH)
+            .then((rawData) => {
+            const users = JSON.parse(rawData);
+            users.forEach(user => UserStorage._users.set(user.id, new User_1.User(user.id, user.nickName, user.stateValue, user.bufferFighterType, user.bufferFighterSelectedId, user.bufferEmenySelectedId)));
+            return;
+        })
+            .then(_ => console.log(UserStorage._users));
     }
     static async saveUsers() {
         console.log('saving users');

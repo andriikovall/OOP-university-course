@@ -1,162 +1,62 @@
 [
   {
-    "name": "sm",
+    "name": "ghbfv",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
       "stateValue": 0,
-      "bufferFighterType": 0,
-      "bufferFighterSelectedId": 9,
-      "bufferEmenySelectedId": 4
+      "bufferFighterType": 3,
+      "bufferFighterSelectedId": -1,
+      "bufferEmenySelectedId": -1
     },
-    "type": 0,
+    "type": 1,
     "specs": {
-      "damage": 11,
-      "strength": 10,
-      "agility": 48,
-      "maxHp": 98
+      "damage": 13,
+      "strength": 35,
+      "agility": 16,
+      "maxHp": 173
     },
     "id": 1,
-    "hp": 98
+    "_hp": 173
   },
   {
-    "name": "str",
+    "name": "фцу\\",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
       "stateValue": 0,
-      "bufferFighterType": 0,
-      "bufferFighterSelectedId": 9,
-      "bufferEmenySelectedId": 4
-    },
-    "type": 1,
-    "specs": {
-      "damage": 14,
-      "strength": 25,
-      "agility": 20,
-      "maxHp": 182
-    },
-    "id": 2,
-    "hp": 182
-  },
-  {
-    "name": "powe",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 0,
-      "bufferFighterSelectedId": 9,
-      "bufferEmenySelectedId": 4
-    },
-    "type": 2,
-    "specs": {
-      "damage": 45,
-      "strength": 19,
-      "agility": 21,
-      "maxHp": 110
-    },
-    "id": 3,
-    "hp": 110
-  },
-  {
-    "name": "Smart",
-    "creator": {
-      "id": 774444043,
-      "nickName": "Александр ",
-      "stateValue": 0,
-      "bufferFighterType": 4,
+      "bufferFighterType": 3,
       "bufferFighterSelectedId": -1,
       "bufferEmenySelectedId": -1
-    },
-    "type": 0,
-    "specs": {
-      "damage": 13,
-      "strength": 8,
-      "agility": 49,
-      "maxHp": 91
-    },
-    "id": 4,
-    "hp": 91
-  },
-  {
-    "name": "Powr",
-    "creator": {
-      "id": 774444043,
-      "nickName": "Александр ",
-      "stateValue": 0,
-      "bufferFighterType": 4,
-      "bufferFighterSelectedId": -1,
-      "bufferEmenySelectedId": -1
-    },
-    "type": 2,
-    "specs": {
-      "damage": 48,
-      "strength": 13,
-      "agility": 24,
-      "maxHp": 138
-    },
-    "id": 5,
-    "hp": 138
-  },
-  {
-    "name": "Lucky",
-    "creator": {
-      "id": 774444043,
-      "nickName": "Александр ",
-      "stateValue": 0,
-      "bufferFighterType": 4,
-      "bufferFighterSelectedId": -1,
-      "bufferEmenySelectedId": -1
-    },
-    "type": 4,
-    "specs": {
-      "damage": 13,
-      "strength": 20,
-      "agility": 139,
-      "maxHp": 180
-    },
-    "id": 6,
-    "hp": 180
-  },
-  {
-    "name": "sada",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 0,
-      "bufferFighterSelectedId": 9,
-      "bufferEmenySelectedId": 4
-    },
-    "type": 1,
-    "specs": {
-      "damage": 15,
-      "strength": 20,
-      "agility": 11,
-      "maxHp": 160
-    },
-    "id": 7,
-    "hp": 160
-  },
-  {
-    "name": "sdfsdf",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 0,
-      "bufferFighterSelectedId": 9,
-      "bufferEmenySelectedId": 4
     },
     "type": 3,
     "specs": {
-      "damage": 40,
-      "strength": 14,
-      "agility": 73,
-      "maxHp": 137
+      "damage": 37,
+      "strength": 10,
+      "agility": 79,
+      "maxHp": 160
     },
-    "id": 8,
-    "hp": 137
+    "id": 2,
+    "_hp": 160
+  },
+  {
+    "name": "Пит",
+    "creator": {
+      "id": 335283892,
+      "nickName": "Droptheweapon",
+      "stateValue": 2,
+      "bufferFighterType": 2,
+      "bufferFighterSelectedId": -1,
+      "bufferEmenySelectedId": -1
+    },
+    "type": 2,
+    "specs": {
+      "damage": 41,
+      "strength": 17,
+      "agility": 25,
+      "maxHp": 193
+    },
+    "id": 3,
+    "_hp": 193
   }
 ]

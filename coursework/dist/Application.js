@@ -22,6 +22,8 @@ class Application {
     }
     onAny(ctx) {
         this.botUI.user = ctx.state.user;
+        if (!ctx.state.user)
+            this.onStart(ctx);
     }
     onStart(ctx) {
         this.runCommand(new Command_1.OnStartCommand(ctx, this));
@@ -43,7 +45,8 @@ class Application {
         }
     }
     onText(ctx) {
-        if (ctx.state.user.state.canEnterFighterName()) {
+        var _a, _b;
+        if ((_b = (_a = ctx.state) === null || _a === void 0 ? void 0 : _a.user) === null || _b === void 0 ? void 0 : _b.state.canEnterFighterName()) {
             this.runCommand(new Command_1.FighterNameConfirmingCommand(ctx, this), () => {
                 ctx.state.user.setState(User_1.UserStateEnum.UserDefault);
             });
@@ -65,8 +68,8 @@ class Application {
         if (ctx.state.user.state.canStartFight()) {
             ctx.reply('Mmm... Let the battle begin!! 💀');
             const id1 = ctx.state.user.bufferFighterSelectedId, id2 = ctx.state.user.bufferEmenySelectedId;
-            this.runCommand(new Command_1.BattleCommand(ctx, this, id1, id2), () => {
-                console.log('battle ended!');
+            this.runCommand(new Command_1.BattleCommand(ctx, this, id1, id2), (result) => {
+                console.log(result);
             });
         }
         else {

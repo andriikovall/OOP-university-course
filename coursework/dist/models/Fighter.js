@@ -20,7 +20,10 @@ class Fighter {
             this.specs = this.generateSpecs();
         }
         this.id = ++Fighter.nextId;
-        this.hp = this.specs.maxHp;
+        this._hp = this.specs.maxHp;
+    }
+    getHp() {
+        return this._hp;
     }
     enemyCanBeAttacked(enemy, successProbabilityBonus = 0) {
         const successProbability = (1 - (enemy.specs.strength + enemy.specs.agility) / 100) + successProbabilityBonus;
@@ -28,12 +31,20 @@ class Fighter {
         return isAttackSuccess;
     }
     dealDamage(dmg) {
-        this.hp -= dmg;
-        if (this.hp < 0)
-            this.hp = 0;
+        console.log('before hit', this.getHp());
+        this._hp -= dmg;
+        console.log('after hit', this.getHp());
+        if (this._hp < 0)
+            this._hp = 0;
     }
     clone() {
-        return { ...this, specs: { ...this.specs } };
+        return { ...this,
+            attack: this.attack,
+            dealDamage: this.dealDamage,
+            enemyCanBeAttacked: this.enemyCanBeAttacked,
+            getHp: this.getHp,
+            specs: { ...this.specs }
+        };
     }
     toJSON() {
         return { ...this, photoUrl: undefined };
@@ -55,8 +66,11 @@ class FighterSmart extends Fighter {
         };
     }
     attack(enemy) {
-        // @todo add good loggin into bot
-        console.log('FighterSmart -> ', enemy);
+        if (this.enemyCanBeAttacked(enemy)) {
+            enemy.dealDamage(this.specs.damage);
+            return `${this.name} makes a smart move and deals ${this.specs.damage} to ${enemy.name}`;
+        }
+        return `${this.name}'s smart move was not enough and he missed!`;
     }
 }
 exports.FighterSmart = FighterSmart;
@@ -74,8 +88,11 @@ class FighterStrong extends Fighter {
         };
     }
     attack(enemy) {
-        // @todo add good loggin into bot
-        console.log('FighterStrong -> ', enemy);
+        if (this.enemyCanBeAttacked(enemy)) {
+            enemy.dealDamage(this.specs.damage);
+            return `${this.name} deals ${this.specs.damage} to ${enemy.name} with his spectacular punch!`;
+        }
+        return `${this.name} has missed his punch =(`;
     }
 }
 exports.FighterStrong = FighterStrong;
@@ -93,8 +110,11 @@ class FighterPowerfull extends Fighter {
         };
     }
     attack(enemy) {
-        // @todo add good loggin into bot
-        console.log('FighterPowerfull -> ', enemy);
+        if (this.enemyCanBeAttacked(enemy)) {
+            enemy.dealDamage(this.specs.damage);
+            return `Just look at ${this.name}. He is so powerfull and deals ${this.specs.damage} damage to ${enemy.name}!`;
+        }
+        return `${this.name} has missed. Oh no!`;
     }
 }
 exports.FighterPowerfull = FighterPowerfull;
@@ -106,14 +126,17 @@ class FighterAwesome extends Fighter {
     generateSpecs() {
         return {
             damage: helpers_1.randInt(30, 40),
-            strength: helpers_1.randInt(10, 20),
-            agility: helpers_1.randInt(50, 100),
+            strength: helpers_1.randInt(5, 10),
+            agility: helpers_1.randInt(50, 90),
             maxHp: helpers_1.randInt(50, 200)
         };
     }
     attack(enemy) {
-        // @todo add good loggin into bot
-        console.log('FighterAwesome -> ', enemy);
+        if (this.enemyCanBeAttacked(enemy)) {
+            enemy.dealDamage(this.specs.damage);
+            return `OMG😱 ${this.name} is awesome! He deals ${this.specs.damage} damage to ${enemy.name}!`;
+        }
+        return `${this.name}'s awesomness sometimes doesn't work 😳`;
     }
 }
 exports.FighterAwesome = FighterAwesome;
@@ -125,14 +148,17 @@ class FighterLucky extends Fighter {
     generateSpecs() {
         return {
             damage: helpers_1.randInt(10, 20),
-            strength: helpers_1.randInt(10, 20),
-            agility: helpers_1.randInt(100, 200),
+            strength: helpers_1.randInt(5, 10),
+            agility: helpers_1.randInt(70, 90),
             maxHp: helpers_1.randInt(100, 200)
         };
     }
     attack(enemy) {
-        // @todo add good loggin into bot
-        console.log('FighterLongLiving -> ', enemy);
+        if (this.enemyCanBeAttacked(enemy)) {
+            enemy.dealDamage(this.specs.damage);
+            return `${this.name} is so lucky! He deals ${this.specs.damage} damage to ${enemy.name}! Unbelieveable`;
+        }
+        return `Even lucky ones sometimes have to miss like ${this.name} did`;
     }
 }
 exports.FighterLucky = FighterLucky;

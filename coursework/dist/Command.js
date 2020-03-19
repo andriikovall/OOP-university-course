@@ -10,6 +10,7 @@ const buttons_1 = __importDefault(require("./config/buttons"));
 const BotUiFacade_1 = require("./BotUiFacade");
 const Fighter_1 = require("./models/Fighter");
 const FighterStorage_1 = __importDefault(require("./storage/FighterStorage"));
+const Fight_1 = require("./Fight");
 function extractUsername(user) {
     return user.username || `${user.first_name || ''} ${user.last_name || ''}`;
 }
@@ -22,6 +23,7 @@ class OnStartCommand {
         const newUser = new User_1.User(this.ctx.chat.id, extractUsername(this.ctx.from));
         UserStorage_1.default.addUser(newUser)
             .then(_ => {
+            this.app.botUI.user = newUser;
             const btns = this.app.botUI.createKeyboard([[`${buttons_1.default.createNewFighter}`]]);
             this.ctx.reply('Start a fight or create a new fighter!', btns)
                 .then(_ => cb());
@@ -201,8 +203,9 @@ class BattleCommand {
     execute(cb) {
         const f1 = FighterStorage_1.default.getFighterById(this.fighter1Id);
         const f2 = FighterStorage_1.default.getFighterById(this.fighter2Id);
-        console.log(f1 === null || f1 === void 0 ? void 0 : f1.name, f2 === null || f2 === void 0 ? void 0 : f2.name);
-        cb();
+        const battle = new Fight_1.Fight(f1, f2);
+        const battleResult = battle.begin();
+        cb(battleResult);
     }
 }
 exports.BattleCommand = BattleCommand;
