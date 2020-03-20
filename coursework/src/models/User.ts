@@ -9,13 +9,13 @@ export class User implements ICloneable {
 
     public state: UserState;
 
-    public setState(state: UserState | UserStateEnum) {
+    public setState(state: UserState | UserStateEnum): Promise<any> {
         if (state instanceof UserState) {
             this.state = state;
-            UserStorage.setUserStateValue(this, this.state.enumValue);
+            return UserStorage.setUserStateValue(this, this.state.enumValue);
         } else {
             this.state = this.getStateValueFromEmun(state);
-            UserStorage.setUserStateValue(this, state);
+            return UserStorage.setUserStateValue(this, state);
         }
     }
     constructor(public id: number, 
@@ -43,6 +43,7 @@ export class User implements ICloneable {
             case UserStateEnum.UserSelectingEnemy:       return new UserSelectingEnemyState(this);
             case UserStateEnum.UserStartingFight:        return new UserSelectingFighterTypeState(this);
             case UserStateEnum.UserAboutToStartFight:    return new UserAboutToStartFightState(this);
+            case UserStateEnum.UserInFight:              return new UserInFightState(this);
             default: return new UserDefaultState(this);
         }
     }
@@ -77,7 +78,8 @@ export enum UserStateEnum {
     UserEnteringFighterName, 
     UserSelectingEnemy, 
     UserStartingFight, 
-    UserAboutToStartFight
+    UserAboutToStartFight, 
+    UserInFight
 }
 
 export abstract class UserState {
@@ -87,8 +89,9 @@ export abstract class UserState {
     abstract canSelectFighterType(): boolean;
     abstract canEnterFighterName(): boolean;
     abstract canChooseEnemy(): boolean;
+    abstract isInFight(): boolean;
     public canStartFight(): boolean {
-        return this.user?.bufferEmenySelectedId > 0 && this.user?.bufferFighterSelectedId > 0;
+        return this.user?.bufferEmenySelectedId > 0 && this.user?.bufferFighterSelectedId > 0 && !this.isInFight();
     }
 }
 
@@ -105,6 +108,10 @@ export class UserDefaultState extends UserState {
     }
 
     canChooseEnemy(): boolean {
+        return false;
+    }
+
+    isInFight(): boolean {
         return false;
     }
 
@@ -129,6 +136,10 @@ export class UserSelectingFighterTypeState extends UserState {
     canStartFight(): boolean {
         return false;
     }
+
+    isInFight(): boolean {
+        return false;
+    }
 }
 
 
@@ -151,6 +162,10 @@ export class UserEnteringFighterNameState extends UserState {
     canStartFight(): boolean {
         return false;
     }
+
+    isInFight(): boolean {
+        return false;
+    }
 }
 
 export class UserSelectingEnemyState extends UserState {
@@ -167,6 +182,10 @@ export class UserSelectingEnemyState extends UserState {
 
     canChooseEnemy(): boolean {
         return true;
+    }
+
+    isInFight(): boolean {
+        return false;
     }
 }
 
@@ -187,4 +206,29 @@ export class UserAboutToStartFightState extends UserState {
         return true;
     }
 
+    isInFight(): boolean {
+        return false;
+    }
+
+}
+
+export class UserInFightState extends UserState {
+
+    public enumValue = UserStateEnum.UserInFight;
+
+    canSelectFighterType(): boolean {
+        return false;
+    }    
+
+    canEnterFighterName(): boolean {
+        return false;
+    }
+
+    canChooseEnemy(): boolean {
+        return false;
+    }
+
+    isInFight(): boolean {
+        return true;
+    }
 }

@@ -3,17 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Fighter_1 = require("../models/Fighter");
-const UserStorage_1 = __importDefault(require("./UserStorage"));
 const config_1 = require("../config/config");
 const fs_adapted_1 = __importDefault(require("./fs-adapted"));
+const Fighter_1 = require("../models/Fighter");
 class FighterStorage {
     static async loadFighters() {
         console.log('loading fighters...');
         const rawData = await fs_adapted_1.default.readFile(config_1.config.FIGHTERS_FILE_PATH) || '[]';
         const fighters = JSON.parse(rawData);
         fighters.forEach(f => {
-            FighterStorage._fighters.set(f.id, FighterStorage.createFighter(f.name, f.creator.id, f.type, f.specs));
+            FighterStorage._fighters.set(f.id, Fighter_1.FighterFactory.createFighter(f.name, f.creator.id, f.type, f.specs));
         });
     }
     static async saveFighters() {
@@ -21,17 +20,17 @@ class FighterStorage {
         return fs_adapted_1.default.writeFile(config_1.config.FIGHTERS_FILE_PATH, serialized);
     }
     // FABRIC method
-    static createFighter(name, creatorId, type, specs = null) {
-        const creator = UserStorage_1.default.getUserById(creatorId);
-        switch (type) {
-            case Fighter_1.FighterType.FighterAwesome: return new Fighter_1.FighterAwesome(name, creator, type, specs);
-            case Fighter_1.FighterType.FighterLucky: return new Fighter_1.FighterLucky(name, creator, type, specs);
-            case Fighter_1.FighterType.FighterPowerfull: return new Fighter_1.FighterPowerfull(name, creator, type, specs);
-            case Fighter_1.FighterType.FighterSmart: return new Fighter_1.FighterSmart(name, creator, type, specs);
-            case Fighter_1.FighterType.FighterStrong: return new Fighter_1.FighterStrong(name, creator, type, specs);
-        }
-        return null;
-    }
+    // public static createFighter(name: string, creatorId: number, type: FighterType, specs: FighterSpecs = null): Fighter {
+    //     // const creator = UserStorage.getUserById(creatorId);
+    //     // switch (type) {
+    //     //     case FighterType.FighterAwesome: return    new FighterAwesome(name, creator, type, specs);
+    //     //     case FighterType.FighterLucky: return      new FighterLucky(name, creator, type, specs);
+    //     //     case FighterType.FighterPowerfull: return  new FighterPowerfull(name, creator, type, specs);
+    //     //     case FighterType.FighterSmart: return      new FighterSmart(name, creator, type, specs);
+    //     //     case FighterType.FighterStrong: return     new FighterStrong(name, creator, type, specs);
+    //     // }
+    //     // return null;
+    // }
     static getFighterById(id) {
         const fighter = FighterStorage._fighters.get(id);
         if (!fighter)

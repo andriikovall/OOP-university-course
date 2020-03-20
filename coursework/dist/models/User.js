@@ -20,11 +20,11 @@ class User {
     setState(state) {
         if (state instanceof UserState) {
             this.state = state;
-            UserStorage_1.default.setUserStateValue(this, this.state.enumValue);
+            return UserStorage_1.default.setUserStateValue(this, this.state.enumValue);
         }
         else {
             this.state = this.getStateValueFromEmun(state);
-            UserStorage_1.default.setUserStateValue(this, state);
+            return UserStorage_1.default.setUserStateValue(this, state);
         }
     }
     clone() {
@@ -37,6 +37,7 @@ class User {
             case UserStateEnum.UserSelectingEnemy: return new UserSelectingEnemyState(this);
             case UserStateEnum.UserStartingFight: return new UserSelectingFighterTypeState(this);
             case UserStateEnum.UserAboutToStartFight: return new UserAboutToStartFightState(this);
+            case UserStateEnum.UserInFight: return new UserInFightState(this);
             default: return new UserDefaultState(this);
         }
     }
@@ -67,6 +68,7 @@ var UserStateEnum;
     UserStateEnum[UserStateEnum["UserSelectingEnemy"] = 3] = "UserSelectingEnemy";
     UserStateEnum[UserStateEnum["UserStartingFight"] = 4] = "UserStartingFight";
     UserStateEnum[UserStateEnum["UserAboutToStartFight"] = 5] = "UserAboutToStartFight";
+    UserStateEnum[UserStateEnum["UserInFight"] = 6] = "UserInFight";
 })(UserStateEnum = exports.UserStateEnum || (exports.UserStateEnum = {}));
 class UserState {
     constructor(user) {
@@ -74,7 +76,7 @@ class UserState {
     }
     canStartFight() {
         var _a, _b;
-        return ((_a = this.user) === null || _a === void 0 ? void 0 : _a.bufferEmenySelectedId) > 0 && ((_b = this.user) === null || _b === void 0 ? void 0 : _b.bufferFighterSelectedId) > 0;
+        return ((_a = this.user) === null || _a === void 0 ? void 0 : _a.bufferEmenySelectedId) > 0 && ((_b = this.user) === null || _b === void 0 ? void 0 : _b.bufferFighterSelectedId) > 0 && !this.isInFight();
     }
 }
 exports.UserState = UserState;
@@ -90,6 +92,9 @@ class UserDefaultState extends UserState {
         return false;
     }
     canChooseEnemy() {
+        return false;
+    }
+    isInFight() {
         return false;
     }
 }
@@ -111,6 +116,9 @@ class UserSelectingFighterTypeState extends UserState {
     canStartFight() {
         return false;
     }
+    isInFight() {
+        return false;
+    }
 }
 exports.UserSelectingFighterTypeState = UserSelectingFighterTypeState;
 class UserEnteringFighterNameState extends UserState {
@@ -130,6 +138,9 @@ class UserEnteringFighterNameState extends UserState {
     canStartFight() {
         return false;
     }
+    isInFight() {
+        return false;
+    }
 }
 exports.UserEnteringFighterNameState = UserEnteringFighterNameState;
 class UserSelectingEnemyState extends UserState {
@@ -145,6 +156,9 @@ class UserSelectingEnemyState extends UserState {
     }
     canChooseEnemy() {
         return true;
+    }
+    isInFight() {
+        return false;
     }
 }
 exports.UserSelectingEnemyState = UserSelectingEnemyState;
@@ -162,5 +176,27 @@ class UserAboutToStartFightState extends UserState {
     canChooseEnemy() {
         return true;
     }
+    isInFight() {
+        return false;
+    }
 }
 exports.UserAboutToStartFightState = UserAboutToStartFightState;
+class UserInFightState extends UserState {
+    constructor() {
+        super(...arguments);
+        this.enumValue = UserStateEnum.UserInFight;
+    }
+    canSelectFighterType() {
+        return false;
+    }
+    canEnterFighterName() {
+        return false;
+    }
+    canChooseEnemy() {
+        return false;
+    }
+    isInFight() {
+        return true;
+    }
+}
+exports.UserInFightState = UserInFightState;

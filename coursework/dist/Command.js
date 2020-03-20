@@ -83,7 +83,7 @@ class FighterNameConfirmingCommand {
         var _a;
         const name = this.ctx.message.text;
         const creatorId = this.ctx.state.user.id;
-        const fighter = FighterStorage_1.default.createFighter(name, creatorId, (_a = this.ctx.state.user.bufferFighterType) !== null && _a !== void 0 ? _a : Fighter_1.FighterType.FighterAwesome);
+        const fighter = Fighter_1.FighterFactory.createFighter(name, creatorId, (_a = this.ctx.state.user.bufferFighterType) !== null && _a !== void 0 ? _a : Fighter_1.FighterType.FighterAwesome);
         FighterStorage_1.default.insertFighter(fighter).then(_ => {
             // nothing will change, because of BUILDER
             // this.app.botUI.parseMode = ParseMode.ParseModeHTML;

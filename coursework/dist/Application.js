@@ -66,10 +66,15 @@ class Application {
     }
     onFight(ctx) {
         if (ctx.state.user.state.canStartFight()) {
-            ctx.reply('Mmm... Let the battle begin!! 💀');
-            const id1 = ctx.state.user.bufferFighterSelectedId, id2 = ctx.state.user.bufferEmenySelectedId;
-            this.runCommand(new Command_1.BattleCommand(ctx, this, id1, id2), (result) => {
-                this.runCommand(new Command_1.BattleEndedCommand(ctx, this, result));
+            ctx.state.user.setState(new User_1.UserInFightState(ctx.state.user))
+                .then(_ => {
+                ctx.reply('Mmm... Let the battle begin!! 💀');
+                const id1 = ctx.state.user.bufferFighterSelectedId, id2 = ctx.state.user.bufferEmenySelectedId;
+                this.runCommand(new Command_1.BattleCommand(ctx, this, id1, id2), (result) => {
+                    this.runCommand(new Command_1.BattleEndedCommand(ctx, this, result), () => {
+                        ctx.state.user.setState(new User_1.UserDefaultState(ctx.state.user));
+                    });
+                });
             });
         }
         else {

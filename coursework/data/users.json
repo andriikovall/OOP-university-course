@@ -3,16 +3,16 @@
     "id": 379946182,
     "nickName": "ZioSmith",
     "stateValue": 0,
-    "bufferFighterType": 0,
-    "bufferFighterSelectedId": 2,
-    "bufferEmenySelectedId": 3
+    "bufferFighterType": 4,
+    "bufferFighterSelectedId": 14,
+    "bufferEmenySelectedId": 8
   },
   {
     "id": 335283892,
     "nickName": "Droptheweapon",
     "stateValue": 0,
-    "bufferFighterType": 2,
-    "bufferFighterSelectedId": -1,
-    "bufferEmenySelectedId": 1
+    "bufferFighterType": 4,
+    "bufferFighterSelectedId": 11,
+    "bufferEmenySelectedId": 13
   }
 ]

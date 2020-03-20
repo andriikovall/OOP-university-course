@@ -1,8 +1,8 @@
-import { Fighter, FighterSpecs, FighterType, FighterAwesome, FighterLucky, FighterPowerfull, FighterSmart, FighterStrong } from "../models/Fighter";
 import UserStorage from "./UserStorage";
 import { config } from '../config/config';
 import fs from './fs-adapted';
 import { randInt } from "../helpers";
+import { Fighter, FighterFactory } from "../models/Fighter";
 
 export default class FighterStorage {
     private static _fighters = new Map<number, Fighter>();
@@ -12,7 +12,7 @@ export default class FighterStorage {
         const rawData = await fs.readFile(config.FIGHTERS_FILE_PATH) || '[]';
         const fighters: any[] = JSON.parse(rawData);
         fighters.forEach(f => {
-            FighterStorage._fighters.set(f.id, FighterStorage.createFighter(f.name, f.creator.id, f.type, f.specs));
+            FighterStorage._fighters.set(f.id, FighterFactory.createFighter(f.name, f.creator.id, f.type, f.specs));
         });
     }
 
@@ -24,18 +24,18 @@ export default class FighterStorage {
 
 
     // FABRIC method
-    public static createFighter(name: string, creatorId: number, type: FighterType, specs: FighterSpecs = null): Fighter {
-        const creator = UserStorage.getUserById(creatorId);
-        switch (type) {
-            case FighterType.FighterAwesome: return    new FighterAwesome(name, creator, type, specs);
-            case FighterType.FighterLucky: return      new FighterLucky(name, creator, type, specs);
-            case FighterType.FighterPowerfull: return  new FighterPowerfull(name, creator, type, specs);
-            case FighterType.FighterSmart: return      new FighterSmart(name, creator, type, specs);
-            case FighterType.FighterStrong: return     new FighterStrong(name, creator, type, specs);
-        }
+    // public static createFighter(name: string, creatorId: number, type: FighterType, specs: FighterSpecs = null): Fighter {
+    //     // const creator = UserStorage.getUserById(creatorId);
+    //     // switch (type) {
+    //     //     case FighterType.FighterAwesome: return    new FighterAwesome(name, creator, type, specs);
+    //     //     case FighterType.FighterLucky: return      new FighterLucky(name, creator, type, specs);
+    //     //     case FighterType.FighterPowerfull: return  new FighterPowerfull(name, creator, type, specs);
+    //     //     case FighterType.FighterSmart: return      new FighterSmart(name, creator, type, specs);
+    //     //     case FighterType.FighterStrong: return     new FighterStrong(name, creator, type, specs);
+    //     // }
 
-        return null;
-    }
+    //     // return null;
+    // }
 
     public static getFighterById(id: number): Fighter {
         const fighter = FighterStorage._fighters.get(id);

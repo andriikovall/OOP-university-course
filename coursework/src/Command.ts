@@ -5,7 +5,7 @@ import UserStorage from './storage/UserStorage';
 import { ctxType } from './botHandlers';
 import buttons from './config/buttons';
 import BotUI, { CallbackBtn } from './BotUiFacade';
-import { FighterType, Fighter } from './models/Fighter';
+import { FighterType, Fighter, FighterFactory } from './models/Fighter';
 import FighterStorage from './storage/FighterStorage';
 import { Fight, FightResult } from './Fight';
 
@@ -79,7 +79,7 @@ export class FighterNameConfirmingCommand implements ICommand {
         const name: string = this.ctx.message.text;
         const creatorId: number = this.ctx.state.user.id;
 
-        const fighter = FighterStorage.createFighter(name, creatorId, this.ctx.state.user.bufferFighterType ?? FighterType.FighterAwesome);
+        const fighter = FighterFactory.createFighter(name, creatorId, this.ctx.state.user.bufferFighterType ?? FighterType.FighterAwesome);
         FighterStorage.insertFighter(fighter).then(_ => {
             // nothing will change, because of BUILDER
             // this.app.botUI.parseMode = ParseMode.ParseModeHTML;

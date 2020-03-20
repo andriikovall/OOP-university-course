@@ -2,7 +2,7 @@ import { ICommand, OnStartCommand, CreateFighterCommand, FighterTypeSelectedComm
 import Telegrah, { ContextMessageUpdate } from "telegraf";
 import { config, configureStorages } from './config/config';
 import { ctxType } from "./botHandlers";
-import { UserSelectingFighterTypeState, UserDefaultState, UserStateEnum, UserSelectingEnemyState } from "./models/User";
+import { UserSelectingFighterTypeState, UserDefaultState, UserStateEnum, UserSelectingEnemyState, UserState, UserInFightState } from "./models/User";
 import BotUI from './BotUiFacade';
 import { FightResult } from "./Fight";
 export default class Application {
@@ -72,12 +72,19 @@ export default class Application {
 
     public onFight(ctx: ctxType) {
         if (ctx.state.user.state.canStartFight()) {
-            ctx.reply('Mmm... Let the battle begin!! 💀');
-            const id1 = ctx.state.user.bufferFighterSelectedId, 
-                  id2 = ctx.state.user.bufferEmenySelectedId;
-            this.runCommand(new BattleCommand(ctx, this, id1, id2), (result: FightResult) => {
-                this.runCommand(new BattleEndedCommand(ctx, this, result));
-            });
+            ctx.state.user.setState(new UserInFightState(ctx.state.user))
+                .then(_ => {
+                    ctx.reply('Mmm... Let the battle begin!! 💀');
+
+                    const id1 = ctx.state.user.bufferFighterSelectedId, 
+                          id2 = ctx.state.user.bufferEmenySelectedId;
+
+                    this.runCommand(new BattleCommand(ctx, this, id1, id2), (result: FightResult) => {
+                        this.runCommand(new BattleEndedCommand(ctx, this, result), () => {
+                            ctx.state.user.setState(new UserDefaultState(ctx.state.user))
+                        });
+                    });
+                })
         } else {
             ctx.replyWithMarkdown('You cannot start the fight before choosing your hero and the enemy! ❌');
         }
