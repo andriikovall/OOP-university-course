@@ -26,6 +26,7 @@ export class OnStartCommand implements ICommand {
 
     execute(cb: Function): void {
         const newUser = new User(this.ctx.chat.id, extractUsername(this.ctx.from));
+        console.log('OnStartCommand');
         UserStorage.addUser(newUser)
             .then(_ => {
                 this.app.botUI.user = newUser; 

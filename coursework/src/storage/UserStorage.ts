@@ -19,9 +19,7 @@ export default class UserStorage {
                             user.bufferFighterType, 
                             user.bufferFighterSelectedId, 
                             user.bufferEmenySelectedId  )));
-                    return;
                 })
-                .then(_ => console.log(UserStorage._users))
     }
 
     public static async saveUsers(): Promise<void> {
@@ -38,10 +36,12 @@ export default class UserStorage {
         return user.clone();
     }
 
-    public static addUser(user: User): Promise<void> {
+    public static addUser(user: User): Promise<any> {
         if (UserStorage.getUserById(user.id) != null) {
             return UserStorage.updateUser(user);
         }
+
+        return Promise.resolve();
     }
 
     public static setUserStateValue(user: User, state: UserStateEnum): Promise<void> {

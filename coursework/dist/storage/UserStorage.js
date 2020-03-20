@@ -13,9 +13,7 @@ class UserStorage {
             .then((rawData) => {
             const users = JSON.parse(rawData);
             users.forEach(user => UserStorage._users.set(user.id, new User_1.User(user.id, user.nickName, user.stateValue, user.bufferFighterType, user.bufferFighterSelectedId, user.bufferEmenySelectedId)));
-            return;
-        })
-            .then(_ => console.log(UserStorage._users));
+        });
     }
     static async saveUsers() {
         console.log('saving users');
@@ -32,6 +30,7 @@ class UserStorage {
         if (UserStorage.getUserById(user.id) != null) {
             return UserStorage.updateUser(user);
         }
+        return Promise.resolve();
     }
     static setUserStateValue(user, state) {
         user.stateValue = state;

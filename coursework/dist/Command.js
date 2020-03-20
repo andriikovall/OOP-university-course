@@ -21,6 +21,7 @@ class OnStartCommand {
     }
     execute(cb) {
         const newUser = new User_1.User(this.ctx.chat.id, extractUsername(this.ctx.from));
+        console.log('OnStartCommand');
         UserStorage_1.default.addUser(newUser)
             .then(_ => {
             this.app.botUI.user = newUser;

@@ -16,7 +16,7 @@ bot.use((ctx: ctxType, next) => {
     const userId = ctx?.message?.chat.id || ctx.callbackQuery?.message.chat.id;
     ctx.state.user = UserStorage.getUserById(userId);
     app.onAny(ctx);
-    if (!ctx.state?.user.state.isInFight())
+    if (!ctx.state?.user?.state.isInFight())
         return next()
 });
 
