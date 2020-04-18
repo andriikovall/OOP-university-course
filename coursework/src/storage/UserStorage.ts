@@ -10,16 +10,18 @@ export default class UserStorage {
     public static loadUsers(): Promise<any> {
         console.log('loading users...');
         return fs.readFile(config.USERS_FILE_PATH)
-                .then((rawData: string) => {
-                    const users: User[] = JSON.parse(rawData);
-                    users.forEach(user => UserStorage._users.set(user.id, 
+                .then((rawData: string) => (JSON.parse(rawData) ?? []) as User[])
+                .catch(_err => [] as User[])
+                .then(users => {
+                    users.forEach(user => UserStorage._users.set(
+                        user.id, 
                         new User(user.id, 
                             user.nickName, 
                             user.stateValue, 
                             user.bufferFighterType, 
                             user.bufferFighterSelectedId, 
                             user.bufferEmenySelectedId  )));
-                })
+                });
     }
 
     public static async saveUsers(): Promise<void> {
@@ -37,7 +39,8 @@ export default class UserStorage {
     }
 
     public static addUser(user: User): Promise<any> {
-        if (UserStorage.getUserById(user.id) != null) {
+        console.log('adding user', user);
+        if (UserStorage.getUserById(user.id) == null) {
             return UserStorage.updateUser(user);
         }
 

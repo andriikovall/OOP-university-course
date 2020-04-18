@@ -5,6 +5,8 @@ import { ctxType } from "./botHandlers";
 import { UserSelectingFighterTypeState, UserDefaultState, UserStateEnum, UserSelectingEnemyState, UserState, UserInFightState } from "./models/User";
 import BotUI from './BotUiFacade';
 import { FightResult } from "./Fight";
+
+
 export default class Application {
 
     public botUI = new BotUI();
@@ -23,6 +25,7 @@ export default class Application {
 
     public onAny(ctx: ctxType) {
         this.botUI.user = ctx.state.user;
+        console.log(ctx.state.user);
         if (!ctx.state.user)
             this.onStart(ctx);
     }

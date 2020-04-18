@@ -9,7 +9,7 @@ export default class FighterStorage {
 
     public static async loadFighters(): Promise<void> {
         console.log('loading fighters...');
-        const rawData = await fs.readFile(config.FIGHTERS_FILE_PATH) || '[]';
+        const rawData = (await fs.readFile(config.FIGHTERS_FILE_PATH)) || '[]';
         const fighters: any[] = JSON.parse(rawData);
         fighters.forEach(f => {
             FighterStorage._fighters.set(f.id, FighterFactory.createFighter(f.name, f.creator.id, f.type, f.specs));

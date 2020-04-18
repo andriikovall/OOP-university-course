@@ -1,197 +1,13 @@
 [
   {
-    "name": "ghbfv",
+    "name": "fd",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 3,
-      "bufferFighterSelectedId": 2,
-      "bufferEmenySelectedId": 3
-    },
-    "type": 1,
-    "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/strong_v5eb31.png"
-    },
-    "specs": {
-      "damage": 13,
-      "strength": 35,
-      "agility": 16,
-      "maxHp": 173
-    },
-    "id": 1,
-    "_hp": 173
-  },
-  {
-    "name": "фцу\\",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 3,
-      "bufferFighterSelectedId": 2,
-      "bufferEmenySelectedId": 3
-    },
-    "type": 3,
-    "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/awesome_h2dcdc.png"
-    },
-    "specs": {
-      "damage": 37,
-      "strength": 10,
-      "agility": 79,
-      "maxHp": 160
-    },
-    "id": 2,
-    "_hp": 160
-  },
-  {
-    "name": "Пит",
-    "creator": {
-      "id": 335283892,
-      "nickName": "Droptheweapon",
-      "stateValue": 0,
-      "bufferFighterType": 2,
-      "bufferFighterSelectedId": 3,
-      "bufferEmenySelectedId": 5
-    },
-    "type": 2,
-    "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/powerfull_ccxmtc.png"
-    },
-    "specs": {
-      "damage": 41,
-      "strength": 17,
-      "agility": 25,
-      "maxHp": 193
-    },
-    "id": 3,
-    "_hp": 193
-  },
-  {
-    "name": "powerfull Tatians",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 3,
-      "bufferFighterSelectedId": 2,
-      "bufferEmenySelectedId": 3
-    },
-    "type": 2,
-    "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/powerfull_ccxmtc.png"
-    },
-    "specs": {
-      "damage": 48,
-      "strength": 15,
-      "agility": 26,
-      "maxHp": 135
-    },
-    "id": 4,
-    "_hp": 135
-  },
-  {
-    "name": "l",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 3,
-      "bufferFighterSelectedId": 2,
-      "bufferEmenySelectedId": 3
-    },
-    "type": 0,
-    "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/smart_us0tm4.png"
-    },
-    "specs": {
-      "damage": 13,
-      "strength": 9,
-      "agility": 50,
-      "maxHp": 137
-    },
-    "id": 5,
-    "_hp": 137
-  },
-  {
-    "name": "awesome Andrii",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 0,
-      "bufferFighterType": 3,
-      "bufferFighterSelectedId": 2,
-      "bufferEmenySelectedId": 3
-    },
-    "type": 3,
-    "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/awesome_h2dcdc.png"
-    },
-    "specs": {
-      "damage": 28,
-      "strength": 10,
-      "agility": 60,
-      "maxHp": 156
-    },
-    "id": 6,
-    "_hp": 156
-  },
-  {
-    "name": "power",
-    "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 2,
-      "bufferFighterType": 2,
-      "bufferFighterSelectedId": 2,
-      "bufferEmenySelectedId": 3
-    },
-    "type": 2,
-    "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/powerfull_ccxmtc.png"
-    },
-    "specs": {
-      "damage": 73,
-      "strength": 77,
-      "agility": 16,
-      "maxHp": 127
-    },
-    "id": 7,
-    "_hp": 127
-  },
-  {
-    "name": "Смарт",
-    "creator": {
-      "id": 335283892,
-      "nickName": "Droptheweapon",
-      "stateValue": 2,
-      "bufferFighterType": 0,
-      "bufferFighterSelectedId": 3,
-      "bufferEmenySelectedId": 5
-    },
-    "type": 0,
-    "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/smart_us0tm4.png"
-    },
-    "specs": {
-      "damage": 15,
-      "strength": 5,
-      "agility": 49,
-      "maxHp": 139
-    },
-    "id": 8,
-    "_hp": 139
-  },
-  {
-    "name": "Стронг",
-    "creator": {
-      "id": 335283892,
-      "nickName": "Droptheweapon",
       "stateValue": 2,
       "bufferFighterType": 1,
-      "bufferFighterSelectedId": 3,
-      "bufferEmenySelectedId": 5
+      "bufferFighterSelectedId": -1,
+      "bufferEmenySelectedId": -1
     },
     "type": 1,
     "typeFlyweight": {
@@ -200,125 +16,56 @@
     "specs": {
       "damage": 12,
       "strength": 58,
-      "agility": 25,
-      "maxHp": 394
+      "agility": 23,
+      "maxHp": 372
     },
-    "id": 9,
-    "_hp": 394
+    "id": 1,
+    "_hp": 372
   },
   {
-    "name": "Паверфул",
-    "creator": {
-      "id": 335283892,
-      "nickName": "Droptheweapon",
-      "stateValue": 2,
-      "bufferFighterType": 2,
-      "bufferFighterSelectedId": 3,
-      "bufferEmenySelectedId": 5
-    },
-    "type": 2,
-    "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/powerfull_ccxmtc.png"
-    },
-    "specs": {
-      "damage": 78,
-      "strength": 60,
-      "agility": 19,
-      "maxHp": 155
-    },
-    "id": 10,
-    "_hp": 155
-  },
-  {
-    "name": "Асам",
-    "creator": {
-      "id": 335283892,
-      "nickName": "Droptheweapon",
-      "stateValue": 2,
-      "bufferFighterType": 3,
-      "bufferFighterSelectedId": 3,
-      "bufferEmenySelectedId": 5
-    },
-    "type": 3,
-    "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/awesome_h2dcdc.png"
-    },
-    "specs": {
-      "damage": 30,
-      "strength": 10,
-      "agility": 55,
-      "maxHp": 188
-    },
-    "id": 11,
-    "_hp": 188
-  },
-  {
-    "name": "Лаки",
-    "creator": {
-      "id": 335283892,
-      "nickName": "Droptheweapon",
-      "stateValue": 2,
-      "bufferFighterType": 4,
-      "bufferFighterSelectedId": 3,
-      "bufferEmenySelectedId": 5
-    },
-    "type": 4,
-    "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/lucky_dxf1ny.png"
-    },
-    "specs": {
-      "damage": 14,
-      "strength": 6,
-      "agility": 63,
-      "maxHp": 117
-    },
-    "id": 12,
-    "_hp": 117
-  },
-  {
-    "name": "awesome",
+    "name": "dsvdsvsdv",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
       "stateValue": 2,
-      "bufferFighterType": 3,
+      "bufferFighterType": 1,
       "bufferFighterSelectedId": 1,
-      "bufferEmenySelectedId": 12
+      "bufferEmenySelectedId": -1
     },
-    "type": 3,
+    "type": 1,
     "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/awesome_h2dcdc.png"
+      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/strong_v5eb31.png"
     },
     "specs": {
-      "damage": 30,
-      "strength": 9,
-      "agility": 57,
-      "maxHp": 181
+      "damage": 14,
+      "strength": 50,
+      "agility": 35,
+      "maxHp": 367
     },
-    "id": 13,
-    "_hp": 181
+    "id": 2,
+    "_hp": 367
   },
   {
-    "name": "lucky last",
+    "name": "dsf",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
       "stateValue": 2,
-      "bufferFighterType": 4,
-      "bufferFighterSelectedId": 13,
-      "bufferEmenySelectedId": 9
+      "bufferFighterType": 0,
+      "bufferFighterSelectedId": 1,
+      "bufferEmenySelectedId": -1
     },
-    "type": 4,
+    "type": 0,
     "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/lucky_dxf1ny.png"
+      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/smart_us0tm4.png"
     },
     "specs": {
-      "damage": 14,
-      "strength": 6,
-      "agility": 74,
-      "maxHp": 138
+      "damage": 12,
+      "strength": 10,
+      "agility": 49,
+      "maxHp": 123
     },
-    "id": 14,
-    "_hp": 138
+    "id": 3,
+    "_hp": 123
   }
 ]
