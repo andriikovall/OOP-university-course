@@ -32,6 +32,7 @@ bot.hears(buttons.createNewFighter, (ctx: ctxType) => {
 });
 
 bot.hears(buttons.showMyFighters, (ctx: ctxType) => {
+    console.log('showMyFighters');
     app.onFightersShow(ctx);
 })
 

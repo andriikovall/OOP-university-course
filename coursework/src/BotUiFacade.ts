@@ -7,7 +7,7 @@ import buttonsConfig from './config/buttons';
 
 
 export enum ParseMode {
-    ParseModeMarkdown, 
+    ParseModeMarkdown,
     ParseModeHTML
 }
 
@@ -16,7 +16,7 @@ abstract class TextFormatter {
     abstract toBold(str: string): string;
     abstract toLink(text: string, url: string): string;
     abstract toMonospace(text: string): string;
-    
+
     toUserLink(text: string, userId: number) {
         return this.toLink(text, `tg://user?id=` + userId);
     }
@@ -53,11 +53,11 @@ class MDFormatter extends TextFormatter {
 }
 
 export class UrlBtn {
-    constructor(public text: string, public url: string) {}
+    constructor(public text: string, public url: string) { }
 }
 
 export class CallbackBtn {
-    constructor(public text: string, public callback: string) {}
+    constructor(public text: string, public callback: string) { }
 }
 
 interface ExtraOptions {
@@ -66,7 +66,8 @@ interface ExtraOptions {
 }
 
 
-interface IBotUIHelper {
+export interface IBotUIHelper {
+    user: User;
     parseMode: ParseMode;
     drawFighter(fighter: Fighter): string;
     drawFightResult(winner: Fighter, loser: Fighter): string;
@@ -76,35 +77,34 @@ interface IBotUIHelper {
 }
 
 
-// FACADE
 class BotUI implements IBotUIHelper {
 
     public parseMode: ParseMode = ParseMode.ParseModeMarkdown;
 
     private keyBoard = new Keyboard();
-    
+
     public drawFighter(fighter: Fighter): string {
         const formatter: TextFormatter = this.getCurrentTextFormatter();
         const msg: string = [
-            `${formatter.toItalic('Name:')} ${formatter.toBold(fighter.name)}`, 
-            `${formatter.toItalic('Creator:')} ${formatter.toUserLink(fighter.creator?.nickName, fighter.creator?.id)}`, 
+            `${formatter.toItalic('Name:')} ${formatter.toBold(fighter.name)}`,
+            `${formatter.toItalic('Creator:')} ${formatter.toUserLink(fighter.creator?.nickName, fighter.creator?.id)}`,
             `${formatter.toItalic('Type:')} ${formatter.toBold(FighterType[fighter.type])}`,
-            `${formatter.toBold('Abilities:')}`, 
+            `${formatter.toBold('Abilities:')}`,
             ...(Object.entries(fighter.specs).map(([key, val]) => `   ${formatter.toBold(key)} ${formatter.toItalic(val)}`))
         ].join('\n');
         return msg;
-        
+
     }
 
     public drawFightResult(winner: Fighter, loser: Fighter): string {
         const formatter: TextFormatter = this.getCurrentTextFormatter();
         const result: string = [
 
-            `${formatter.toBold('Winner:')} ${formatter.toUserLink(winner.creator?.nickName, winner.creator.id)}`, 
-            `With fighter ${formatter.toMonospace(winner.name)}`, 
-            ``, 
-            `${formatter.toBold('Loser:')} ${formatter.toUserLink(loser.creator?.nickName, loser.creator.id)}`, 
-            `With fighter ${formatter.toMonospace(loser.name)}`, 
+            `${formatter.toBold('Winner:')} ${formatter.toUserLink(winner.creator?.nickName, winner.creator.id)}`,
+            `With fighter ${formatter.toMonospace(winner.name)}`,
+            ``,
+            `${formatter.toBold('Loser:')} ${formatter.toUserLink(loser.creator?.nickName, loser.creator.id)}`,
+            `With fighter ${formatter.toMonospace(loser.name)}`,
 
         ].join('\n');
         return result;
@@ -113,14 +113,14 @@ class BotUI implements IBotUIHelper {
     public clearKeyboard() {
         return this.createKeyboard([[]]);
     }
-    
+
     public createKeyboard(buttons: string[][]) {
         if (buttons.length === 1 && buttons[0]?.length === 0) {
             return this.keyBoard.clear();
         }
 
         this.keyBoard.new();
-    
+
         for (const btnRow of buttons) {
             this.keyBoard.add(...btnRow)
         }
@@ -129,12 +129,12 @@ class BotUI implements IBotUIHelper {
 
     public createExtraOptions(opts: ExtraOptions) {
         if (!opts.markup)
-        opts.markup = [];
-        
+            opts.markup = [];
+
         const inlineKeyboard = [];
         for (const row of opts.markup) {
-            const mappedRow = row.map(btn => btn instanceof UrlBtn ? 
-                Markup.urlButton(btn.text, btn.url) : 
+            const mappedRow = row.map(btn => btn instanceof UrlBtn ?
+                Markup.urlButton(btn.text, btn.url) :
                 Markup.callbackButton(btn.text, btn.callback));
             inlineKeyboard.push(mappedRow);
         }
@@ -149,7 +149,7 @@ class BotUI implements IBotUIHelper {
 
         return extra;
     }
-    
+
     public getCurrentTextFormatter(): TextFormatter {
         switch (this.parseMode) {
             case ParseMode.ParseModeMarkdown: return new MDFormatter();
@@ -161,46 +161,46 @@ class BotUI implements IBotUIHelper {
 
 // PROXY
 export default class BotUIProxied implements IBotUIHelper {
-    
+
     public getMainMenuButtons() {
         return this.createKeyboard([
             [buttonsConfig.createNewFighter],
             [buttonsConfig.showMyFighters],
             [buttonsConfig.showEnemies],
             [buttonsConfig.startFight]]);
-        }
-        
-        public set parseMode(value: ParseMode) {
-            this.botUI.parseMode = value;
     }
-    
+
+    public set parseMode(value: ParseMode) {
+        this.botUI.parseMode = value;
+    }
+
     public get parseMode() {
         return this.botUI.parseMode
     }
-    
+
     public set user(usr: User) {
         this._user = usr;
     }
-    
+
     private botUI: BotUI;
-    
+
     constructor(private _user: User = null) {
         this.botUI = new BotUI();
         this.botUI.parseMode = ParseMode.ParseModeMarkdown;
     }
-    
+
     drawFightResult(winner: Fighter, loser: Fighter): string {
         return this.botUI.drawFightResult(winner, loser);
     }
 
     drawFighter(fighter: Fighter): string {
-        const idLine = 
-        `${this.botUI.getCurrentTextFormatter().toItalic('Id:')} ${this.botUI.getCurrentTextFormatter().toBold(fighter.id + '')}`; 
+        const idLine =
+            `${this.botUI.getCurrentTextFormatter().toItalic('Id:')} ${this.botUI.getCurrentTextFormatter().toBold(fighter.id + '')}`;
         const botString = this.botUI.drawFighter(fighter);
-        
+
         if (fighter.creator.id === this._user.id) {
             return [
-                idLine, 
+                idLine,
                 botString
             ].join('\n');
         }
@@ -213,7 +213,7 @@ export default class BotUIProxied implements IBotUIHelper {
         if (!this._user.state.canStartFight()) {
             buttons = buttons.map(row => row.filter(btn => btn !== buttonsConfig.startFight));
         }
-        
+
         return this.botUI.createKeyboard(buttons);
     }
     createExtraOptions(opts: ExtraOptions): any {

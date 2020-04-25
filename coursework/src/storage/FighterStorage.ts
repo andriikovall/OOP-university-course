@@ -1,7 +1,5 @@
-import UserStorage from "./UserStorage";
 import { config } from '../config/config';
 import fs from './fs-adapted';
-import { randInt } from "../helpers";
 import { Fighter, FighterFactory } from "../models/Fighter";
 
 export default class FighterStorage {

@@ -3,13 +3,13 @@ import { config } from "../config/config";
 import { randInt } from "../helpers";
 
 
-export interface FighterTypeFlyweight {
+export interface IFighterTypeFlyweight {
     photoUrl: string;
     generateSpecs(): FighterSpecs;
     attack(concreteFighter: Fighter, enemy: Fighter): string;
 }
 
-export class FighterSmart implements FighterTypeFlyweight {
+export class FighterSmart implements IFighterTypeFlyweight {
 
     public photoUrl = config.fightersImages.smart;
 
@@ -32,7 +32,7 @@ export class FighterSmart implements FighterTypeFlyweight {
 
 }
 
-export class FighterStrong implements FighterTypeFlyweight {
+export class FighterStrong implements IFighterTypeFlyweight {
 
     public photoUrl = config.fightersImages.strong;
 
@@ -56,7 +56,7 @@ export class FighterStrong implements FighterTypeFlyweight {
 }
 
 
-export class FighterPowerfull implements FighterTypeFlyweight {
+export class FighterPowerfull implements IFighterTypeFlyweight {
 
     public photoUrl = config.fightersImages.powerfull;
 
@@ -81,7 +81,7 @@ export class FighterPowerfull implements FighterTypeFlyweight {
 
 
 
-export class FighterAwesome implements FighterTypeFlyweight {
+export class FighterAwesome implements IFighterTypeFlyweight {
 
     public photoUrl = config.fightersImages.awesome;
 
@@ -106,7 +106,7 @@ export class FighterAwesome implements FighterTypeFlyweight {
 
 
 
-export class FighterLucky implements FighterTypeFlyweight {
+export class FighterLucky implements IFighterTypeFlyweight {
 
     public photoUrl = config.fightersImages.lucky;
 

@@ -1,71 +1,140 @@
 [
   {
-    "name": "fd",
+    "name": "Some name",
     "creator": {
-      "id": 379946182,
-      "nickName": "ZioSmith",
-      "stateValue": 2,
+      "id": 335283892,
+      "nickName": "Droptheweapon",
+      "stateValue": 0,
       "bufferFighterType": 1,
-      "bufferFighterSelectedId": -1,
-      "bufferEmenySelectedId": -1
+      "bufferFighterSelectedId": 7,
+      "bufferEmenySelectedId": 6
     },
     "type": 1,
     "typeFlyweight": {
       "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/strong_v5eb31.png"
     },
     "specs": {
-      "damage": 12,
+      "damage": 18,
       "strength": 58,
       "agility": 23,
-      "maxHp": 372
+      "maxHp": 305
     },
     "id": 1,
-    "_hp": 372
+    "_hp": 305
   },
   {
-    "name": "dsvdsvsdv",
+    "name": "lucky one",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
-      "stateValue": 2,
-      "bufferFighterType": 1,
-      "bufferFighterSelectedId": 1,
-      "bufferEmenySelectedId": -1
+      "stateValue": 0,
+      "bufferFighterType": 0,
+      "bufferFighterSelectedId": 3,
+      "bufferEmenySelectedId": 1
     },
-    "type": 1,
+    "type": 4,
     "typeFlyweight": {
-      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/strong_v5eb31.png"
+      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/lucky_dxf1ny.png"
     },
     "specs": {
-      "damage": 14,
-      "strength": 50,
-      "agility": 35,
-      "maxHp": 367
+      "damage": 10,
+      "strength": 10,
+      "agility": 64,
+      "maxHp": 148
     },
     "id": 2,
-    "_hp": 367
+    "_hp": 148
   },
   {
-    "name": "dsf",
+    "name": "thor",
     "creator": {
       "id": 379946182,
       "nickName": "ZioSmith",
-      "stateValue": 2,
+      "stateValue": 0,
       "bufferFighterType": 0,
-      "bufferFighterSelectedId": 1,
-      "bufferEmenySelectedId": -1
+      "bufferFighterSelectedId": 3,
+      "bufferEmenySelectedId": 1
+    },
+    "type": 2,
+    "typeFlyweight": {
+      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/powerfull_ccxmtc.png"
+    },
+    "specs": {
+      "damage": 72,
+      "strength": 67,
+      "agility": 18,
+      "maxHp": 147
+    },
+    "id": 3,
+    "_hp": 147
+  },
+  {
+    "name": "smart",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 0,
+      "bufferFighterType": 0,
+      "bufferFighterSelectedId": 3,
+      "bufferEmenySelectedId": 1
     },
     "type": 0,
     "typeFlyweight": {
       "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/smart_us0tm4.png"
     },
     "specs": {
-      "damage": 12,
-      "strength": 10,
-      "agility": 49,
-      "maxHp": 123
+      "damage": 11,
+      "strength": 7,
+      "agility": 40,
+      "maxHp": 132
     },
-    "id": 3,
-    "_hp": 123
+    "id": 4,
+    "_hp": 132
+  },
+  {
+    "name": "deadone",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 2,
+      "bufferFighterType": 3,
+      "bufferFighterSelectedId": 3,
+      "bufferEmenySelectedId": 1
+    },
+    "type": 3,
+    "typeFlyweight": {
+      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/awesome_h2dcdc.png"
+    },
+    "specs": {
+      "damage": 30,
+      "strength": 6,
+      "agility": 60,
+      "maxHp": 183
+    },
+    "id": 5,
+    "_hp": 183
+  },
+  {
+    "name": "power",
+    "creator": {
+      "id": 379946182,
+      "nickName": "ZioSmith",
+      "stateValue": 2,
+      "bufferFighterType": 2,
+      "bufferFighterSelectedId": 5,
+      "bufferEmenySelectedId": 1
+    },
+    "type": 2,
+    "typeFlyweight": {
+      "photoUrl": "https://res.cloudinary.com/webprogbase/image/upload/v1584442924/powerfull_ccxmtc.png"
+    },
+    "specs": {
+      "damage": 77,
+      "strength": 80,
+      "agility": 15,
+      "maxHp": 128
+    },
+    "id": 6,
+    "_hp": 128
   }
 ]

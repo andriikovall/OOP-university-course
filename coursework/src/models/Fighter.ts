@@ -1,7 +1,7 @@
 import { User } from "./User";
 import { ICloneable } from "./ICloneable";
 import UserStorage from "../storage/UserStorage";
-import { FighterTypeFlyweight, FighterSmart, FighterAwesome, FighterLucky, FighterPowerfull, FighterStrong } from "./FighterFlyweight";
+import { IFighterTypeFlyweight, FighterSmart, FighterAwesome, FighterLucky, FighterPowerfull, FighterStrong } from "./FighterFlyweight";
 
 export interface FighterSpecs {
     damage: number;
@@ -20,7 +20,7 @@ export enum FighterType {
 
 export class FighterFactory {
 
-    private static _cachedFlyweights = new Map<number, FighterTypeFlyweight>([
+    private static _cachedFlyweights = new Map<number, IFighterTypeFlyweight>([
         [FighterType.FighterSmart,     new FighterSmart()], 
         [FighterType.FighterPowerfull, new FighterPowerfull()], 
         [FighterType.FighterStrong,    new FighterStrong()], 
@@ -63,7 +63,7 @@ export class Fighter implements ICloneable {
     constructor(public name: string,
         public creator: User,
         public type: FighterType,
-        private typeFlyweight: FighterTypeFlyweight,
+        private typeFlyweight: IFighterTypeFlyweight,
         public specs: FighterSpecs) {
 
         if (!specs) {

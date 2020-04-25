@@ -52,7 +52,6 @@ export class User implements ICloneable {
         if (page < 0)
             page = 0;
 
-        // todo PROXY
         return FighterStorage.getUserFighters(this.id)
                 .slice((page  - 1) * config.TELEGRAM_MESSAGES_PER_SECOND);
     }
@@ -61,7 +60,6 @@ export class User implements ICloneable {
         if (page < 0)
             page = 0;
 
-        // todo PROXY
         return FighterStorage.getUserEnemies(this.id)
                 .slice((page  - 1) * config.TELEGRAM_MESSAGES_PER_SECOND);
     }

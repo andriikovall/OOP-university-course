@@ -7,39 +7,38 @@ export default class UserStorage {
 
     private static _users = new Map<number, User>();
 
-    public static loadUsers(): Promise<any> {
+    public static async loadUsers(): Promise<any> {
         console.log('loading users...');
-        return fs.readFile(config.USERS_FILE_PATH)
-                .then((rawData: string) => (JSON.parse(rawData) ?? []) as User[])
-                .catch(_err => [] as User[])
-                .then(users => {
-                    users.forEach(user => UserStorage._users.set(
-                        user.id, 
-                        new User(user.id, 
-                            user.nickName, 
-                            user.stateValue, 
-                            user.bufferFighterType, 
-                            user.bufferFighterSelectedId, 
-                            user.bufferEmenySelectedId  )));
-                });
+        try {
+            const rawData = (await fs.readFile(config.USERS_FILE_PATH)) || '[]';
+            const users: User[] = JSON.parse(rawData) as User[];
+            users.forEach(user => UserStorage._users.set(
+                user.id,
+                new User(user.id,
+                    user.nickName,
+                    user.stateValue,
+                    user.bufferFighterType,
+                    user.bufferFighterSelectedId,
+                    user.bufferEmenySelectedId)));
+        } catch {
+        }
     }
 
     public static async saveUsers(): Promise<void> {
         console.log('saving users');
         const serialized: string = JSON.stringify([...UserStorage._users.values()], null, 2);
-        return fs.writeFile(config.USERS_FILE_PATH, serialized);  
+        return fs.writeFile(config.USERS_FILE_PATH, serialized);
     }
 
     public static getUserById(id: number): User {
         const user = UserStorage._users.get(id);
         if (!user)
             return null;
-        
+
         return user.clone();
     }
 
     public static addUser(user: User): Promise<any> {
-        console.log('adding user', user);
         if (UserStorage.getUserById(user.id) == null) {
             return UserStorage.updateUser(user);
         }

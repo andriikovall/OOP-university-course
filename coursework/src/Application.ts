@@ -3,19 +3,22 @@ import Telegrah, { ContextMessageUpdate } from "telegraf";
 import { config, configureStorages } from './config/config';
 import { ctxType } from "./botHandlers";
 import { UserSelectingFighterTypeState, UserDefaultState, UserStateEnum, UserSelectingEnemyState, UserState, UserInFightState } from "./models/User";
-import BotUI from './BotUiFacade';
+import BotUI,{ IBotUIHelper }  from './BotUiFacade';
 import { FightResult } from "./Fight";
 
 
-export default class Application {
+export class Application {
 
-    public botUI = new BotUI();
+    // public botUI = new BotUI();
+    public botUI: IBotUIHelper
 
     public runCommand(command: ICommand, doneCb: Function = () => {}) {
         command.execute(doneCb);
     }
 
-    constructor(public bot: Telegrah<ContextMessageUpdate>) { }
+    constructor(public bot: Telegrah<ContextMessageUpdate>) {
+        this.botUI = new BotUI();
+     }
 
     public start(): Promise<void> {
         return configureStorages()
@@ -25,8 +28,7 @@ export default class Application {
 
     public onAny(ctx: ctxType) {
         this.botUI.user = ctx.state.user;
-        console.log(ctx.state.user);
-        if (!ctx.state.user)
+        if (!ctx.state.user && ctx.message.text !== '/start')
             this.onStart(ctx);
     }
 
@@ -68,7 +70,6 @@ export default class Application {
 
     public onCallbackQuery(ctx: ctxType) {
         const cbQueryData: CallbackQueryData = JSON.parse(ctx.callbackQuery.data);
-        console.log(cbQueryData);
         const handler: Function = CallbackQueryHandler.getQueryHandler(ctx, this, cbQueryData.methodName, cbQueryData.args);
         handler();
     }
